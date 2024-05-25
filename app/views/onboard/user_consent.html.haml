@@ -1,0 +1,170 @@
+!!!
+%html
+  %head
+    %meta{content: "width=device-width, initial-scale=1", name: "viewport"}
+    %meta{content: "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}
+    %title Customer Details
+    :css
+      body 
+        {
+          font-family: Arial, sans-serif;
+          background-color: #f8f8f8;
+          margin: 0;
+          padding: 0;
+          overflow: hidden;
+        }
+
+        input[type="text"],
+        input[type="submit"] {
+          width: 100%;
+          padding: 8px;
+          margin-bottom: 10px;
+          border: 1px solid #ccc;
+          border-radius: 4px;
+          box-sizing: border-box;
+        }
+    
+        input[type="submit"] {
+          background-color: #007bff;
+          color: white;
+          cursor: pointer;
+        }
+    
+        input[type="submit"]:hover {
+          background-color: #0056b3;
+        }
+    
+        .list-view-border {
+          overflow: hidden;
+        }
+         
+        .top_nav{
+          display: flex;
+          justify-content: space-between;
+          background-color:#1e1e2d;
+          color:#c0c4d1;
+          height:70px;
+          font-size: 1rem;
+          font-weight:500;
+          align-items:center;
+          padding: 0 !important;
+          margin: 0 !important;
+        }
+      
+        label.required::after{
+          content: "*";
+          color: red;
+          margin-left: 2px;
+          font-size: 20px;
+        }
+        .logo {
+          height: 100%;
+          margin-right: 10px;
+        }
+        .form-container {
+          width: 50%; 
+          margin: 0 auto; 
+          padding: 20px; 
+          border: 1px solid #ccc; 
+          border-radius: 5px; 
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+          background-color: #fff; 
+        }
+   
+    %body
+      .top_nav
+        = image_tag('Happy-Tide.png', class: 'logo')
+        %label.animation.user-label Hello..
+      - if @customer.present?
+        %div{ style: "text-align: center;" }
+          %h1 Consent
+        .form-container
+          = form_with(url: "/save_location", method: :post, id: "capture-location-form") do |form|
+            = form.hidden_field :mobile, value: @customer.mobile
+            = form.hidden_field :latitude, id: "latitude"
+            = form.hidden_field :longitude, id: "longitude"
+            %br
+            .form-group
+              = form.label :first_name, 'First Name', class: 'required'
+              = form.text_field :first_name, required: true, class: 'form-control', value: @customer.first_name
+            .form-group
+              = form.label :last_name, 'Last Name', class: 'required'
+              = form.text_field :last_name, required: true, class: 'form-control', value: @customer.last_name
+            .form-group
+              = form.label :mobile, 'Mobile (10 digits)', class: 'required'
+              = form.text_field :mobile, required: true, pattern: '\d{10}', class: 'form-control', readonly: true, value: @customer.mobile
+            %br/
+            %input{ type: "submit", value: "Submit" }
+      - else
+        %div{id: 'not-found-message', style: 'text-align: center; margin-top: 20vh; font-weight: bold; font-size: 2em;'}
+          %p Customer data not present. Please click on the below button to apply for a loan.
+          %div{id: 'success-message-text'}
+            %a{href: '/onboard', id: 'onboardNewButton'} Apply Loan
+            
+      %div{id: 'success-message', style: 'text-align: center; margin-top: 20vh; font-weight: bold; font-size: 2em;'}
+
+
+    :javascript
+       document.addEventListener('DOMContentLoaded', function() {
+        var form = document.getElementById('capture-location-form');
+      
+        navigator.geolocation.getCurrentPosition(function(pos) {
+          var crd = pos.coords;
+          var latitudeInput = form.querySelector('#latitude');
+          var longitudeInput = form.querySelector('#longitude');
+          if (latitudeInput && longitudeInput) {
+            latitudeInput.value = crd.latitude;
+            longitudeInput.value = crd.longitude;
+          }
+        }, function(err) {
+          alert('Please refresh the page and allow to access location.');
+        });
+      
+        form.addEventListener('submit', async function(event) {
+          event.preventDefault();
+      
+          var latitudeInput = form.querySelector('#latitude');
+          var longitudeInput = form.querySelector('#longitude');
+          if (!latitudeInput || !longitudeInput) {
+            alert('Latitude or longitude input not found.');
+            return;
+          }
+      
+          if (!latitudeInput.value || !longitudeInput.value) {
+            alert('Please refresh the page and allow to access location.');
+            return;
+          }
+      
+          var formData = new FormData(form);
+          await fetch(form.action, {
+            method: form.method,
+            body: formData
+          }).then(response => {
+            if (!response.ok) {
+              throw new Error('Failed to submit form. Please try again.');
+            }
+            return response.json();
+          }).then(data => {
+            var notFoundMessage = document.getElementById('success-message');
+            if (notFoundMessage) {
+              notFoundMessage.innerHTML = `
+                <p>${data.message}</p>
+              `;
+              form.reset();
+              form.style.display = 'none';
+              notFoundMessage.style.display = 'block'; // Corrected variable name
+            } 
+          }).catch(error => {
+            console.error('Error:', error);
+            alert(error.message);
+          });
+        });
+      
+        var onboardNewButton = document.getElementById('onboardNewButton');
+        if (onboardNewButton) {
+          onboardNewButton.addEventListener('click', function(event) {
+            event.preventDefault();
+            window.location.reload();
+          });
+        } 
+      });

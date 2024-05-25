@@ -1,0 +1,15 @@
+cron_tasks_every_1hr:
+  cron: '2 * * * *'
+  class: MessageServiceHourlyWorkerJob
+  queue: cron
+  description: "Enqueues tasks every 1 hour"
+  args: []
+
+cron_tasks_every_12_hour:
+  cron: '2 */12 * * *'
+  class: UpdateTemplateWorkerJob
+  queue: cron
+  description: "Enqueues tasks once in 12 hrs"
+  args: []
+
+# Define other recurring jobs as needed

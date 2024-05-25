@@ -1,0 +1,34 @@
+{
+    "name": "open-flights",
+    "private": true,
+    "dependencies": {
+        "@babel/preset-react": "^7.8.3",
+        "@fortawesome/fontawesome-free": "^6.5.2",
+        "@rails/webpacker": "5.4.4",
+        "axios": "^1.6.0",
+        "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
+        "bootstrap": "^5.3.3",
+        "chart.js": "^4.4.3",
+        "classnames": "^2.5.1",
+        "perfect-scrollbar": "^1.5.5",
+        "prop-types": "^15.7.2",
+        "rc-pagination": "^4.1.0",
+        "react": "^16.12.0",
+        "react-bootstrap": "^2.10.2",
+        "react-chartist": "^0.14.4",
+        "react-chartjs-2": "^5.2.0",
+        "react-dom": "^16.12.0",
+        "react-router-dom": "^5.1.2",
+        "reactstrap": "^9.2.2",
+        "sass": "^1.77.2",
+        "styled-components": "^5.0.1",
+        "yarn": "^1.22.22"
+    },
+    "scripts": {
+        "compile-scss": "sass src/assets/scss/black-dashboard-react.scss src/assets/css/black-dashboard-react.css",
+        "minify-scss": "sass src/assets/scss/black-dashboard-react.scss src/assets/css/black-dashboard-react.min.css --style compressed"
+    },
+    "devDependencies": {
+        "webpack-dev-server": "^3.10.3"
+    }
+}

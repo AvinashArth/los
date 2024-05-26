@@ -4,8 +4,8 @@ class Lendingkart < Base
   attr_reader :user, :loan
 
   def perform(mobile)
-    @user = CustomerLead.find_by(mobile: mobile)
-    @loan = CustomerLenderMapping.find_or_create_by(customer_lead_id: @user.id, lender_name: "LENDINGKART")
+    @user = CustomerInfo.find_by(mobile: mobile)
+    @loan = LoanProfile.find_or_create_by(customer_info_id: @user.id, lender_name: "LENDINGKART")
     lead_creation unless dedupe_check
   end
 
@@ -26,7 +26,7 @@ class Lendingkart < Base
     endpoint = "https://api.lendingkart.com/v2/partner/leads/applicationStatus/#{application_id}"
     response = get(endpoint, headers, nil)
     if response && response["applicationStatus"].present?
-      data = CustomerLenderMapping.find_by(external_loan_id: application_id)
+      data = LoanProfile.find_by(external_loan_id: application_id)
       data.status = response["applicationStatus"]
       data.rejection_reason = response["rejectionReasons"]&.first if response["rejectionReasons"].present?
       data.save

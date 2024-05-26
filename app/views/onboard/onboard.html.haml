@@ -166,7 +166,7 @@
             %video#video-element{autoplay: "", style: "width: 100%; max-width: 300px; height: auto; margin: 10px auto 10px 0; display: none;"}
             %canvas.captured-image{style: "display: none; margin-top: 10px;width: 100%; max-width: 300px; height: auto; max-height:300px"}
       .form-container
-        = form_with(model: @customer_lead, url: onboard_create_path, method: :post,id: 'new_customer_lead_form') do |form|
+        = form_with(model: @customer_info, url: onboard_create_path, method: :post,id: 'new_customer_info_form') do |form|
           = form.hidden_field :authenticity_token, value: form_authenticity_token 
           %br
           .form-group
@@ -434,7 +434,7 @@
               document.getElementById('container').style.display = 'block'; 
             }
 
-            var form = document.getElementById('new_customer_lead_form');
+            var form = document.getElementById('new_customer_info_form');
             form.addEventListener('submit', async function(event) {
               event.preventDefault();
               if (!lat || !long) {

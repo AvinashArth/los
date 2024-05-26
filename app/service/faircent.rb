@@ -3,11 +3,11 @@
 class Faircent
   def register_lead(mobile)
     endpoint = "https://api.faircent.com/v1/api/aggregrator/register/user"
-    user = CustomerLead.find_by(mobile: mobile)
-    loan = CustomerLenderMapping.find_or_create_by(customer_lead_id: user.id, lender_name: "FAIRCENT")
+    user = CustomerInfo.find_by(mobile: mobile)
+    loan = LoanProfile.find_or_create_by(customer_info_id: user.id, lender_name: "FAIRCENT", mobile: user.mobile)
 
     unless user && user.monthly_income >= 25_000 && user.age >= 23 && user.age <= 58
-      loan.update(response: "Age norms not met", status: "rejected")
+      loan.update(rejection_reason: "Age norms not met", status: "rejected", name: user.full_name)
       return
     end
 
@@ -15,11 +15,16 @@ class Faircent
     response = post(endpoint, payload, headers)
 
     if response["result"].present?
-      status = response.dig("result", "status") || "rejected"
-      reason = response.dig("result", "msg") || "Customer not eligible"
-      loan.update(response: response, status: status, external_loan_id: response.dig("result", "loan_id"), lender_name: "FAIRCENT", rejection_reason: reason)
+      status = response.dig("result", "status") || "Reject"
+      reason = status.downcase == "reject" ? (response.dig("result", "msg") || "Bureau Rejected") : "Bureau Rejected"
+      amount_offered = response.dig("result", "offer_amount") || 0
+      offer_roi = response.dig("result", "offer_roi") || 0
+      offer_pf = response.dig("result", "offer_pf") || 0
+
+      loan.update(response: response, status: status, external_loan_id: response.dig("result", "loan_id"), rejection_reason: reason, amount_offered: amount_offered, roi: offer_roi, processing_fees: offer_pf, name: user.full_name)
     else
-      loan.update(response: response, status: "rejected", rejection_reason: response["message"])
+      reason = "Duplicate Lead" if response["message"] == "PAN Already Exists"
+      loan.update(response: response, status: "rejected", rejection_reason: reason, name: user.full_name)
     end
   end
 

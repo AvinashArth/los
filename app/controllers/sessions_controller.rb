@@ -35,9 +35,35 @@ class SessionsController < ApplicationController
     render json: {status: "Logged out successfully"}, status: :ok
   end
 
+  # GET /get
+  def fetch_user
+    @user = User.find(params[:id])
+    if @user
+      render json: {user: @user}, status: :ok
+    else
+      render json: {errors: "User data no present"}, status: :unauthorized
+    end
+  end
+
+  # POST /user/query
+  def user_query
+    user_query = UserQuery.new(user_id: params[:id])
+    user_query.assign_attributes(query_params)
+
+    if user_query.save
+      render json: {msg: "We received your query, our team will contact you shortly"}, status: :ok
+    else
+      render json: {errors: user_query.errors.full_messages}, status: :unprocessable_entity
+    end
+  end
+
   private
 
+  def query_params
+    params.require(:sessions).permit(:email, :role, :number, :message, :address, :website, :company_name)
+  end
+
   def user_params
-    params.require(:session).permit(:name, :mobile, :email, :password, :role, :logo, :address, :city, :state)
+    params.require(:sessions).permit(:name, :mobile, :email, :password, :role, :logo, :address, :city, :state)
   end
 end

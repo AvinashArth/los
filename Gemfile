@@ -21,7 +21,7 @@ gem "mini_magick"
 gem "pg", "~> 1.1"
 gem "rack-cors"
 gem "react-rails"
-gem "rubocop"
+gem "rubocop", "~> 1.64"
 gem "sidekiq"
 gem "sidekiq-cron"
 gem "sidekiq-scheduler"
@@ -78,3 +78,4 @@ group :development do
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem "spring"
 end
+

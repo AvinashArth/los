@@ -18,9 +18,11 @@ Rails.application.routes.draw do
   post "/upload_image_to_s3", to: "onboard#upload_image_to_s3"
 
   # customer apis
-  get "customer/list", to: "customer#customer_list"
-  get "filter/customer/list", to: "customer#filter_list"
-  post "update/customer/info", to: "customer#update"
+  scope '/', module: 'customers', format: :json do
+    get "customer/list", to: "customer#customer_list"
+    get "filter/customer/list", to: "customer#filter_list"
+    post "update/customer/info", to: "customer#update"
+  end
 
   get "*path", to: "pages#index", via: :all
 end

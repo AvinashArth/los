@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_05_24_095822) do
+ActiveRecord::Schema[7.1].define(version: 20_240_526_100_008) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -193,6 +193,20 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_24_095822) do
     t.datetime "updated_at", null: false
   end
 
+  create_table 'user_queries', force: :cascade do |t|
+    t.bigint 'user_id', null: false
+    t.string 'email'
+    t.string 'role'
+    t.string 'number'
+    t.text 'message'
+    t.string 'address'
+    t.string 'website'
+    t.string 'company_name'
+    t.datetime 'created_at', null: false
+    t.datetime 'updated_at', null: false
+    t.index ['user_id'], name: 'index_user_queries_on_user_id'
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "name"
     t.string "mobile"
@@ -220,4 +234,5 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_24_095822) do
 
   add_foreign_key "loan_profiles", "customer_infos"
   add_foreign_key "loan_profiles", "partners"
+  add_foreign_key 'user_queries', 'users'
 end

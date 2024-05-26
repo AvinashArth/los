@@ -22,9 +22,9 @@ gem "pg", "~> 1.1"
 gem "rack-cors"
 gem "react-rails"
 gem "rubocop"
-gem "sidekiq"
-gem "sidekiq-cron"
-gem "sidekiq-scheduler"
+# gem "sidekiq"
+# gem "sidekiq-cron"
+# gem "sidekiq-scheduler"
 gem "webpacker"
 
 # Use the Puma web server [https://github.com/puma/puma]

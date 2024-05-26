@@ -18,7 +18,7 @@ function Auth(props) {
   const location = useLocation();
   const mainPanelRef = React.useRef(null);
   const history = useHistory();
-
+  console.log("jdjddj")
   React.useEffect(
     () => {
       if (localStorage.getItem("apiToken") != null) {

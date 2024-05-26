@@ -100,15 +100,10 @@ GEM
       railties (>= 6.1)
     drb (2.2.1)
     erubi (1.12.0)
-    et-orbi (1.2.11)
-      tzinfo
     execjs (2.9.1)
     ffi (1.16.3)
     font-awesome-sass (6.5.2)
       sassc (~> 2.0)
-    fugit (1.11.0)
-      et-orbi (~> 1, >= 1.2.11)
-      raabro (~> 1.4)
     globalid (1.2.1)
       activesupport (>= 6.1)
     haml (6.3.0)
@@ -192,7 +187,6 @@ GEM
       stringio
     puma (6.4.2)
       nio4r (~> 2.0)
-    raabro (1.4.0)
     racc (1.8.0)
     rack (3.0.11)
     rack-cors (2.0.2)
@@ -268,24 +262,9 @@ GEM
     rubocop-ast (1.31.3)
       parser (>= 3.3.1.0)
     ruby-progressbar (1.13.0)
-    rufus-scheduler (3.9.1)
-      fugit (~> 1.1, >= 1.1.6)
     sassc (2.4.0)
       ffi (~> 1.9)
     semantic_range (3.0.0)
-    sidekiq (7.2.4)
-      concurrent-ruby (< 2)
-      connection_pool (>= 2.3.0)
-      rack (>= 2.2.4)
-      redis-client (>= 0.19.0)
-    sidekiq-cron (1.12.0)
-      fugit (~> 1.8)
-      globalid (>= 1.0.1)
-      sidekiq (>= 6)
-    sidekiq-scheduler (5.0.3)
-      rufus-scheduler (~> 3.2)
-      sidekiq (>= 6, < 8)
-      tilt (>= 1.4.0)
     sprockets (4.2.1)
       concurrent-ruby (~> 1.0)
       rack (>= 2.2.4, < 4)
@@ -352,9 +331,6 @@ DEPENDENCIES
   react-rails
   redis (>= 4.0.1)
   rubocop
-  sidekiq
-  sidekiq-cron
-  sidekiq-scheduler
   sprockets-rails
   stimulus-rails
   turbo-rails

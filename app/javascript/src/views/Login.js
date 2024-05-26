@@ -20,7 +20,7 @@ import {
 
 import { User } from "../backend-sdk/user.sdk";
 import { Image} from "react-bootstrap";
-import logo from '../assets/img/header.jpg';
+import logo from '../assets/img/logo.jpg';
 function Login(props) {
   const history = useHistory();
   const [email, setEmail] = useState("");
@@ -60,7 +60,8 @@ function Login(props) {
         <Card>
           <Form>
             <CardHeader>
-            <img style={{marginLeft:"20%", maxWidth:"50%"}} src={logo} />             
+            <img style={{maxWidth:"38%", marginLeft:'20%'}} src={logo} />             
+          
              {/* <CardTitle tag="h3">Wellcome To Login</CardTitle> */}
             </CardHeader>
             <CardBody>

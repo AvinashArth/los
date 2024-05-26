@@ -11,6 +11,20 @@
       static async getChartData(token) {
           return Task.remote.call("Task.getChartData", token)  
       }
+      static async customerList(id, token) {
+        const jsonData = { id: id};
+            const response = await fetch(`http://localhost:3000/customer/list`, {
+                keepalive: true,
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(jsonData),
+            });
+            console.log("kk", token)
+            return response.json();
+        }
   
       static async getAll(token) {
           return Task.remote.call("Task.getAll", token)  

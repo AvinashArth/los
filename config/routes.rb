@@ -20,8 +20,10 @@ Rails.application.routes.draw do
   # customer apis
   scope "/", module: "customers", format: :json do
     get "customer/list", to: "customer#customer_list"
-    get "filter/customer/list", to: "customer#filter_list"
+    post "filter/customer/list", to: "customer#filter_list"
     post "update/customer/info", to: "customer#update"
+
+    get "funnel/stats", to: "dashboard#funnel_data"
   end
 
   get "*path", to: "pages#index", via: :all

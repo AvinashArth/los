@@ -5,7 +5,8 @@ class Lendingkart < Base
 
   def perform(mobile)
     @user = CustomerInfo.find_by(mobile: mobile)
-    @loan = LoanProfile.find_or_create_by(customer_info_id: @user.id, lender_name: "LENDINGKART", mobile: user.mobile)
+    partner = Partner.find_by(code: user.partner_code)
+    @loan = LoanProfile.find_or_create_by(customer_info_id: @user.id, lender_name: "LENDINGKART", mobile: user.mobile, partner_id: partner.id, partner_code: partner.code)
     lead_creation unless dedupe_check
   end
 

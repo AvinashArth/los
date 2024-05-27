@@ -4,6 +4,8 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   helper_method :current_user
 
+  attr_reader :current_user
+
   def encode_token(payload)
     JWT.encode(payload, Rails.application.secrets.secret_key_base, "HS256")
   end
@@ -18,6 +20,7 @@ class ApplicationController < ActionController::Base
     header = header.split.last if header
     decoded = decode_token(header)
     @current_user = User.find(decoded[:user_id]) if decoded
+    @current_user.present?
   rescue ActiveRecord::RecordNotFound, JWT::DecodeError
     render json: {errors: "Unauthorized request"}, status: :unauthorized
   end
@@ -33,10 +36,6 @@ class ApplicationController < ActionController::Base
   private
 
   def allowed_origin?
-    request.headers["HTTP_ORIGIN"] == ENV["AI_ATHOS_API_URL"]
-  end
-
-  def current_user
-    @current_user ||= Users.find_by(id: session[:user_id])
+    request.headers["HTTP_ORIGIN"] == ENV["AI_LOS_API_URL"]
   end
 end

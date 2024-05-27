@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class CustomerInfo < ApplicationRecord
-  belongs_to :partner
+  belongs_to :partner, optional: true
   belongs_to :lender, optional: true
   has_many :partners
   has_many :loan_profiles

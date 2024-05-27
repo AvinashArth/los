@@ -4,7 +4,8 @@ class Faircent
   def register_lead(mobile)
     endpoint = "https://api.faircent.com/v1/api/aggregrator/register/user"
     user = CustomerInfo.find_by(mobile: mobile)
-    loan = LoanProfile.find_or_create_by(customer_info_id: user.id, lender_name: "FAIRCENT", mobile: user.mobile)
+    partner = Partner.find_by(code: user.partner_code)
+    loan = LoanProfile.find_or_create_by(customer_info_id: user.id, lender_name: "FAIRCENT", mobile: user.mobile, partner_id: partner.id, partner_code: partner.code)
 
     unless user && user.monthly_income >= 25_000 && user.age >= 23 && user.age <= 58
       loan.update(rejection_reason: "Age norms not met", status: "rejected", name: user.full_name)

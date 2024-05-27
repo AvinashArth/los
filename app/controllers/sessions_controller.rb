@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class SessionsController < ApplicationController
-  # before_action :authorize_request, only: [:logout]
+  before_action :authorize_request, only: %i[logout user_query]
   skip_before_action :verify_authenticity_token, only: %i[create login logout]
 
   # POST /signup

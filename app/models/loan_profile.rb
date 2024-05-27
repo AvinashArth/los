@@ -2,7 +2,7 @@
 
 class LoanProfile < ApplicationRecord
   belongs_to :customer_info
-  belongs_to :partner
+  belongs_to :partner, optional: true
   belongs_to :lender, optional: true
   has_many :customer_infos
   has_many :partners

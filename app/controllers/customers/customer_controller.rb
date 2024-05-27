@@ -2,15 +2,7 @@
 
 module Customers
   class CustomerController < ApplicationController
-    before_action :require_login
-    # before_action :verify_user
-
-    def dashboard
-      @customers = CustomerInfo.all
-      @customer_data = @customers.group_by_month(:created_at).count.map do |date, count|
-        [date.to_time.to_i * 1000, count]
-      end
-    end
+    before_action :authorize_request
 
     def customer_list
       @loan_profiles = if current_user.role.downcase == "admin"

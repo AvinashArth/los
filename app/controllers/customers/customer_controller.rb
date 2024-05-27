@@ -3,10 +3,13 @@
 module Customers
   class CustomerController < ApplicationController
     before_action :require_login
+    # before_action :verify_user
 
     def dashboard
       @customers = CustomerInfo.all
-      @customer_data = @customers.group_by_month(:created_at).count.map {|date, count| [date.to_time.to_i * 1000, count] }
+      @customer_data = @customers.group_by_month(:created_at).count.map do |date, count|
+        [date.to_time.to_i * 1000, count]
+      end
     end
 
     def customer_list
@@ -40,14 +43,16 @@ module Customers
                                     .order("customer_info_id DESC")
                                     .page(params[:page]).per(10)
                        else
-                         LoanProfile.select(:customer_info_id, :name, :mobile, :lender_code, :status, :amount_offered, :external_loan_id, :message, :rejection_reason, :created_at)
+                         LoanProfile.select(:customer_info_id, :name, :mobile, :lender_code, :status, :amount_offered,
+                                            :external_loan_id, :message, :rejection_reason, :created_at)
                                     .where(partner_code: current_user.code)
                                     .where(key => value)
                                     .order("customer_info_id DESC")
                                     .page(params[:page]).per(10)
                        end
 
-      render json: @loan_profiles.as_json(only: %i[customer_info_id name mobile partner_code lender_code status amount_offered external_loan_id message rejection_reason created_at])
+      render json: @loan_profiles.as_json(only: %i[customer_info_id name mobile partner_code lender_code status
+                                                   amount_offered external_loan_id message rejection_reason created_at])
     end
 
     def update
@@ -60,13 +65,6 @@ module Customers
     end
 
     private
-
-    def require_login
-      return if current_user
-
-      flash[:error] = "You must be logged in to access this page."
-      redirect_to "/user_login"
-    end
 
     def customer_info_params
       params.require(:customer_info).permit(:first_name, :last_name, :dob, :pan_number, :mobile, :email, :guardian_name, :gender, :education_level, :home_city, :home_state, :business_city, :loan_amount,

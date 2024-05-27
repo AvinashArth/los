@@ -8,7 +8,8 @@ class Cashe
   def perform(mobile)
     @auth_key = "'`h_+x|cTvUg;Md%"
     @user = CustomerInfo.find_by(mobile: mobile)
-    @loan = LoanProfile.find_or_create_by(customer_info_id: @user.id, lender_name: "CASHE")
+    partner = Partner.find_by(code: user.partner_code)
+    @loan = LoanProfile.find_or_create_by(customer_info_id: @user.id, lender_name: "CASHE", mobile: user.mobile, partner_id: partner.id, partner_code: partner.code)
     dedupe_check
   end
 
@@ -194,7 +195,7 @@ class Cashe
   end
 
   def dob(user)
-    user.dob.strftime("%Y-%m-%d")
+    user.dob.strftime("%Y-%m-%d 00:00:00")
   end
 
   def headers(key)

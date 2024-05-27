@@ -13,21 +13,18 @@ module Customers
     end
 
     def customer_list
-      @loan_profiles = if current_user.role.downcase == 'admin'
-                         LoanProfile.select(:customer_info_id, :name, :mobile, :partner_code, :lender_code, :status,
-                                            :amount_offered, :external_loan_id, :message, :rejection_reason, :created_at)
-                                    .order('customer_info_id DESC')
+      @loan_profiles = if current_user.role.downcase == "admin"
+                         LoanProfile.select(:customer_info_id, :name, :mobile, :partner_code, :lender_code, :status, :amount_offered, :external_loan_id, :message, :rejection_reason, :created_at)
+                                    .order("customer_info_id DESC")
                                     .page(params[:page]).per(10)
                        else
-                         LoanProfile.select(:customer_info_id, :name, :mobile, :lender_code, :status, :amount_offered,
-                                            :external_loan_id, :message, :rejection_reason, :created_at)
+                         LoanProfile.select(:customer_info_id, :name, :mobile, :lender_code, :status, :amount_offered, :external_loan_id, :message, :rejection_reason, :created_at)
                                     .where(partner_code: current_user.code)
-                                    .order('customer_info_id DESC')
+                                    .order("customer_info_id DESC")
                                     .page(params[:page]).per(10)
                        end
 
-      render json: @loan_profiles.as_json(only: %i[customer_info_id name mobile partner_code lender_code status
-                                                   amount_offered external_loan_id message rejection_reason created_at])
+      render json: @loan_profiles.as_json(only: %i[customer_info_id name mobile partner_code lender_code status amount_offered external_loan_id message rejection_reason created_at])
     end
 
     def filter_list
@@ -36,22 +33,21 @@ module Customers
 
       valid_keys = %w[customer_info_id partner_code lender_code external_loan_id mobile name status]
       unless valid_keys.include?(key)
-        render json: { error: 'Invalid key for filtering' }, status: :bad_request
+        render json: {error: "Invalid key for filtering"}, status: :bad_request
         return
       end
 
-      @loan_profiles = if current_user.role.downcase == 'admin'
-                         LoanProfile.select(:customer_info_id, :name, :mobile, :partner_code, :lender_code, :status,
-                                            :amount_offered, :external_loan_id, :message, :rejection_reason, :created_at)
+      @loan_profiles = if current_user.role.downcase == "admin"
+                         LoanProfile.select(:customer_info_id, :name, :mobile, :partner_code, :lender_code, :status, :amount_offered, :external_loan_id, :message, :rejection_reason, :created_at)
                                     .where(key => value)
-                                    .order('customer_info_id DESC')
+                                    .order("customer_info_id DESC")
                                     .page(params[:page]).per(10)
                        else
                          LoanProfile.select(:customer_info_id, :name, :mobile, :lender_code, :status, :amount_offered,
                                             :external_loan_id, :message, :rejection_reason, :created_at)
                                     .where(partner_code: current_user.code)
                                     .where(key => value)
-                                    .order('customer_info_id DESC')
+                                    .order("customer_info_id DESC")
                                     .page(params[:page]).per(10)
                        end
 

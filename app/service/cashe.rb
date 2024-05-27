@@ -7,15 +7,15 @@ require "base64"
 class Cashe
   def perform(mobile)
     @auth_key = "'`h_+x|cTvUg;Md%"
-    @user = CustomerLead.find_by(mobile: mobile)
-    @loan = CustomerLenderMapping.find_or_create_by(customer_lead_id: @user.id, lender_name: "CASHE")
+    @user = CustomerInfo.find_by(mobile: mobile)
+    @loan = LoanProfile.find_or_create_by(customer_info_id: @user.id, lender_name: "CASHE")
     dedupe_check
   end
 
   attr_reader :user, :loan, :auth_key
 
   def dedupe_check
-    endpoint = "https://test-partners.cashe.co.in/partner/checkDuplicateCustomerLead"
+    endpoint = "https://test-partners.cashe.co.in/partner/checkDuplicateCustomerInfo"
     payload = dedupe_params
     key = hmac_encrypt(payload, auth_key)
     headers = headers(key)

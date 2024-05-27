@@ -25,15 +25,46 @@ import {
   CardTitle,
   Table,
   Row,
+  Input, FormGroup,
+  CardFooter,
+  Button,
+  Form,
   Col
 } from "reactstrap";
-import "./Contact.css"
+import "./Contact.css";
+import { Task } from "../backend-sdk/task.sdk";
+
 const Contact = () => {
     const [email, setEmail] = useState("");
     const [mobileNumber, setMobileNumber] = useState("");
     const [address,setAddess] = useState("");
-    const handleSubmit = () => {
+    const [message,setMessage] = useState("");
+    const [userDetails, setUserDetails] = useState(null)
+    useEffect(() => {
+        const items = JSON.parse(localStorage.getItem('user'));
+        setUserDetails(items);
+       },[])
 
+    const handleSubmit = () => {
+        // const userdetails = JSON.parse(localStorage.getItem("user"))
+        const data={
+            email: email,
+            mobile: mobileNumber,
+            address: address,
+            message: message,
+            role: userDetails && userDetails.role,
+            id:userDetails && userDetails.id
+        }
+        console.log("jjfj", data);
+        Task.contactForm(data, userDetails && userDetails.token)
+        .then((res) => {
+          console.log("jjdj", res);
+        })
+        .catch((err) => {
+          setError(err.msg);
+          console.log(err.error);
+          setIsSubmitting(false);
+        });
     }
   return (
     <>
@@ -93,39 +124,87 @@ const Contact = () => {
           </div> */}
         </div>
 
-        <div class="contact-form">
+        <div class="">
           <span class="circle one"></span>
           <span class="circle two"></span>
-
-          <form action="index.html" autocomplete="off">
-            <h3 class="title">Contact us</h3>
-            <div class="input-container">
-              <input type="text" name="Email" value={email} onChange={(e) => setEmail(e.target.value)} class="input" />
-              <label for="">Email</label>
-              <span>Email</span>
-            </div>
-            {/* <div class="input-container">
-              <input type="" name="email" class="input" />
-              <label for="">Email</label>
-              <span>Email</span>
-            </div> */}
-            <div class="input-container">
-              <input type="tel" name="phone" value={mobileNumber} onChange={(e) => setMobileNumber(e.target.value)} class="input" />
-              <label for="">Phone</label>
-              <span>Phone</span>
-            </div>
-            <div class="input-container textarea">
-              <textarea name="address" class="input" value={address} onChange={(e) => setAddess(e.target.value)}></textarea>
-              <label for="">addess</label>
-              <span>Address</span>
-            </div>
-            <input type="submit" onClick={handleSubmit} value="Send" class="btn" />
-          </form>
+          <Row>
+          <Col md="12">
+            <Card>
+            <CardHeader>
+                <CardTitle tag="h4">Contact Us</CardTitle>
+              </CardHeader>
+              <CardBody>
+                <Form >
+                  <Row>
+                    <Col className="pl-md-1" md="12">
+                      <FormGroup>
+                        <label htmlFor="exampleInputEmail1">
+                          Email address
+                        </label>
+                        <Input required placeholder="mike@email.com" type="email"  value={email} onChange={(e) => setEmail(e.target.value)}/>
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col className="pr-md-1" md="12">
+                      <FormGroup>
+                        <label>Mobile Number</label>
+                        <Input
+                        required
+                          // defaultValue="Mike"
+                          placeholder="mobile Number"
+                          type="number"
+                          value={mobileNumber}
+                          onChange={(e) => setMobileNumber(e.target.value)}
+                        />
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col md="12">
+                      <FormGroup>
+                        <label>Address</label>
+                        <Input
+                        required
+                        //  cols="80"
+                        //  rows="4"
+                         type="text"
+                          placeholder="Home Address"
+                          value={address}
+                          onChange={(e) => setAddess(e.target.value)}
+                        />
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col md="12">
+                      <FormGroup>
+                        <label>Message</label>
+                        <Input
+                        required
+                         cols="80"
+                         rows="4"
+                         type="textarea"
+                          placeholder="Message"
+                          value={message}
+                          onChange={(e) => setMessage(e.target.value)}
+                        />
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                </Form>
+              </CardBody>
+              <CardFooter>
+                <Button   className="btn-fill btn" onClick={handleSubmit} color="primary" type="submit">
+                  Save
+                </Button>
+              </CardFooter>
+            </Card>
+          </Col>
+        </Row>
         </div>
       </div>
     </div>
-              {/* </CardBody>
-            </Card> */}
           </Col>
           
         </Row>

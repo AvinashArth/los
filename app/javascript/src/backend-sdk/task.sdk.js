@@ -20,11 +20,37 @@
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                 },
-                body: JSON.stringify(jsonData),
             });
             console.log("kk", token)
             return response.json();
         }
+        static async customerListFilter(id, token) {
+            const jsonData = { id: id};
+                const response = await fetch(`http://localhost:3000/filter/customer/list`, {
+                    keepalive: true,
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                });
+                // console.log("kk", token)
+                return response.json();
+        }
+        static async contactForm(data, token) {
+                const response = await fetch(`http://localhost:3000/update/customer/info`, {
+                    keepalive: true,
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(data),
+
+                });
+                return response.json();
+            }
+      
   
       static async getAll(token) {
           return Task.remote.call("Task.getAll", token)  

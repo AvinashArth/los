@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
 class UpdateLoanStatusService
-  attr_reader :customer_lead_id, :error_code, :result
+  attr_reader :customer_info_id, :error_code, :result
 
-  def initialize(customer_lead_id)
-    @customer_lead_id = customer_lead_id
+  def initialize(customer_info_id)
+    @customer_info_id = customer_info_id
     @error_code = "INVALID"
   end
 
   def prequalification
-    endpoint = full_url("pre_qualification/#{customer_lead_id}")
+    endpoint = full_url("pre_qualification/#{customer_info_id}")
     serv = get(endpoint, headers(endpoint), nil)
     if serv["response"] && serv["response"]["prequalification"]
       check_offer(serv["response"])
@@ -19,7 +19,7 @@ class UpdateLoanStatusService
   end
 
   def fetch_loan_details
-    endpoint = full_url("loan/profile/#{customer_lead_id}")
+    endpoint = full_url("loan/profile/#{customer_info_id}")
     serv = get(endpoint, headers(endpoint), nil)
     if serv["response"] && serv["response"]["loan_status"]
       update(serv["response"])
@@ -70,7 +70,7 @@ class UpdateLoanStatusService
   end
 
   def update(response)
-    customer_lead = CustomerLead.find(customer_lead_id)
+    customer_info = CustomerInfo.find(customer_info_id)
     attributes = {
       lender_code:      response["lender_code"],
       status:           response["status"],
@@ -90,15 +90,15 @@ class UpdateLoanStatusService
       disbursed_at:     response["disbursed_at"]
     }
 
-    if customer_lead.update(attributes.compact)
-      [@customer_lead_id, true]
+    if customer_info.update(attributes.compact)
+      [@customer_info_id, true]
     else
-      [@customer_lead_id, false]
+      [@customer_info_id, false]
     end
   end
 
   def check_offer(response)
-    customer_lead = CustomerLead.find(customer_lead_id)
+    customer_info = CustomerInfo.find(customer_info_id)
     attributes = {
       status:         response["status"],
       offered_at:     response["offered_at"],
@@ -109,10 +109,10 @@ class UpdateLoanStatusService
       journey_link:   response["journey_link"]
     }
 
-    if customer_lead.update(attributes.compact)
-      [@customer_lead_id, true]
+    if customer_info.update(attributes.compact)
+      [@customer_info_id, true]
     else
-      [@customer_lead_id, false]
+      [@customer_info_id, false]
     end
   end
 end

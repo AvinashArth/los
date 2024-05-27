@@ -23,7 +23,11 @@ import {
   CardHeader,
   CardBody,
   CardTitle,
+  Label,
   Table,
+  Form,
+  Input, FormGroup,
+  Button,
   Row,
   Col
 } from "reactstrap";
@@ -34,129 +38,155 @@ const Tables = () => {
     const datatableUsers = [
     {
       "name": "Currey Slee",
-      "position": "Food Chemist",
+      "partner_name": "Food Chemist",
       "gender": "Male",
-      "office": "Damietta",
+      "lender_name": "Damietta",
       "email": "cslee0@netlog.com",
-      "phone": "532 179 1377",
-      "salary": "$49491.60",
-      "id": 1
+      "mobile": "532 179 1377",
+      "amount_offered": "$49491.60",
+       "status":"Approved",
+      "customer_info_id": 1,
+      "created_at":"23-05-2024"
     },
     {
       "name": "Chrissie MacInerney",
-      "position": "Account Executive",
+      "partner_name": "Account Executive",
       "gender": "Male",
-      "office": "Ferreiras",
+      "lender_name": "Ferreiras",
       "email": "cmacinerney1@youtu.be",
-      "phone": "383 685 3274",
-      "salary": "$17269.83",
-      "id": 2
+      "mobile": "383 685 3274",
+      "amount_offered": "$17269.83",
+      "status":"Approved",
+      "customer_info_id": 2,
+      "created_at":"23-05-2024"
     },
     {
       "name": "Karly Okeshott",
-      "position": "Cost Accountant",
+      "partner_name": "Cost Accountant",
       "gender": "Female",
-      "office": "Cornillon",
+      "lender_name": "Cornillon",
       "email": "kokeshott2@bravesites.com",
-      "phone": "927 119 1091",
-      "salary": "$26878.49",
-      "id": 3
+      "mobile": "927 119 1091",
+      "amount_offered": "$26878.49",
+      "status":"Approved",
+      "customer_info_id": 3,
+      "created_at":"23-05-2024"
     },
     {
       "name": "Hermia Dayton",
-      "position": "VP Sales",
+      "partner_name": "VP Sales",
       "gender": "Female",
-      "office": "Chernoyerkovskaya",
+      "lender_name": "Chernoyerkovskaya",
       "email": "hdayton3@un.org",
-      "phone": "518 243 8139",
-      "salary": "$40424.12",
-      "id": 4
+      "mobile": "518 243 8139",
+      "amount_offered": "$40424.12",
+      "status":"Approved",
+      "customer_info_id": 4,
+      "created_at":"23-05-2024"
     },
     {
       "name": "Willem O'Hdirscoll",
-      "position": "Recruiting Manager",
+      "partner_name": "Recruiting Manager",
       "gender": "Female",
-      "office": "Sukatani",
+      "lender_name": "Sukatani",
       "email": "wohdirscoll4@businessinsider.com",
-      "phone": "976 264 4693",
-      "salary": "$43236.35",
-      "id": 5
+      "mobile": "976 264 4693",
+      "amount_offered": "$43236.35",
+      "status":"Approved",
+      "customer_info_id": 5,
+      "created_at":"23-05-2024"
     },
     {
       "name": "Jose Caswall",
-      "position": "Environmental Tech",
+      "partner_name": "Environmental Tech",
       "gender": "Female",
-      "office": "Concepcion",
+      "lender_name": "Concepcion",
       "email": "jcaswall5@e-recht24.de",
-      "phone": "623 142 0771",
-      "salary": "$47377.66",
-      "id": 6
+      "mobile": "623 142 0771",
+      "amount_offered": "$47377.66",
+      "status":"Approved",
+      "customer_info_id": 6,
+      "created_at":"23-05-2024"
     },
     {
       "name": "Cal Russell",
-      "position": "Computer Systems Analyst II",
+      "partner_name": "Computer Systems Analyst II",
       "gender": "Female",
-      "office": "Melíssi",
+      "lender_name": "Melíssi",
       "email": "crussell6@histats.com",
-      "phone": "643 259 1412",
-      "salary": "$8542.68",
-      "id": 7
+      "mobile": "643 259 1412",
+      "amount_offered": "$8542.68",
+      "status":"Approved",
+      "customer_info_id": 7,
+      "created_at":"23-05-2024"
     },
     {
       "name": "Lavinia Atwill",
-      "position": "Occupational Therapist",
+      "partner_name": "Occupational Therapist",
       "gender": "Male",
-      "office": "Mendeleyevo",
+      "lender_name": "Mendeleyevo",
       "email": "latwill7@hexun.com",
-      "phone": "479 589 7945",
-      "salary": "$13361.55",
-      "id": 8
+      "mobile": "479 589 7945",
+      "amount_offered": "$13361.55",
+      "status":"Approved",
+      "customer_info_id": 8,
+      "created_at":"23-05-2024"
     },
     {
       "name": "Sophronia De Hooch",
-      "position": "Account Representative II",
+      "partner_name": "Account Representative II",
       "gender": "Female",
-      "office": "Verkhnyaya Toyma",
+      "lender_name": "Verkhnyaya Toyma",
       "email": "sde8@mozilla.org",
-      "phone": "592 831 1701",
-      "salary": "$35778.22",
-      "id": 9
+      "mobile": "592 831 1701",
+      "amount_offered": "$35778.22",
+      "status":"Approved",
+      "customer_info_id": 9,
+      "created_at":"23-05-2024"
     },
     {
       "name": "Harmon Argente",
-      "position": "Media Manager IV",
+      "partner_name": "Media Manager IV",
       "gender": "Male",
-      "office": "Azeitão",
+      "lender_name": "Azeitão",
       "email": "hargente9@vistaprint.com",
-      "phone": "823 917 4216",
-      "salary": "$42515.25",
-      "id": 10
+      "mobile": "823 917 4216",
+      "amount_offered": "$42515.25",
+      "status":"Approved",
+      "customer_info_id": 10,
+      "created_at":"23-05-2024"
     },
     {
       "name": "Andreana Hablot",
-      "position": "Geological Engineer",
+      "partner_name": "Geological Engineer",
       "gender": "Male",
-      "office": "Rameshki",
+      "lender_name": "Rameshki",
       "email": "ahablota@digg.com",
-      "phone": "425 484 6588",
-      "salary": "$51025.31",
-      "id": 11
+      "mobile": "425 484 6588",
+      "amount_offered": "$51025.31",
+      "status":"Approved",
+      "customer_info_id": 11,
+      "created_at":"23-05-2024"
     },
     {
       "name": "Elbertina Hinnerk",
-      "position": "Account Coordinator",
+      "partner_name": "Account Coordinator",
       "gender": "Female",
-      "office": "Fujishiro",
+      "lender_name": "Fujishiro",
       "email": "ehinnerkb@typepad.com",
-      "phone": "629 484 9269",
-      "salary": "$39220.72",
-      "id": 12
+      "mobile": "629 484 9269",
+      "amount_offered": "$39220.72",
+      "status":"Approved",
+      "customer_info_id": 12,
+      "created_at":"23-05-2024"
     }
      ]
      const [perPage, setPerPage] = useState(10);
      const [size, setSize] = useState(perPage);
      const [current, setCurrent] = useState(1);
      const [userDetails, setUserDetails] = useState(null);
+     const [filterInput,setFilterInput] = useState("");
+     const [filterValue, setFilterValue] = useState("");
      const customerDetailsList = (id, token) => {
       Task.customerList(id, token)
       .then((res) => {
@@ -170,8 +200,7 @@ const Tables = () => {
      useEffect(() => {
       const items = JSON.parse(localStorage.getItem('user'));
       setUserDetails(items);
-       console.log("jff", items && items.id, JSON.parse(localStorage.getItem('token')))
-      customerDetailsList(items && items.id, JSON.parse(localStorage.getItem('token')))
+      customerDetailsList(items && items.id, items && items.token)
      },[])
      const userDetail = {
        "role":"admin"
@@ -208,9 +237,82 @@ const Tables = () => {
       <div className="content">
         <Row>
           <Col md="12">
+          <Card>
+              <CardHeader>
+                <CardTitle tag="h4">Filter</CardTitle>
+              </CardHeader>
+              <CardBody>
+              <Form>
+                  <Row>
+                    <Col className="px-md-1" md="2">
+                      <FormGroup>
+                      {/* <Label for="exampleSelect">
+                        Select
+                      </Label> */}
+                       <Input
+                       className="form-control"
+                        // id="exampleSelect"
+                        // name="select"
+                        type="select"
+                        value={filterInput}
+                        onChange={(e) => setFilterInput(e.target.value)}
+                        >
+                        <option>
+                         Customer Id
+                        </option>
+                        <option>
+                        Customer Name
+                        </option>
+                        <option>
+                          Mobile Number
+                       </option>
+                       <option>
+                       Loan Amount
+                       </option>
+                       <option>
+                          Status
+                       </option>
+                       </Input>
+                      </FormGroup>
+                    </Col>
+                    <Col className="px-md-1" md="4">
+                      <FormGroup>
+                        {/* <label> Name</label> */}
+                        <Input
+                          // defaultValue="michael23"
+                          placeholder={filterInput}
+                          type="text"
+                          value={filterValue}
+                          onChange={(e) => setFilterValue(e.target.value)}
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col className="px-md-1" md="2">
+                    <FormGroup>
+                    <Button className="btn-fill" color="primary" type="submit">
+                      Filter
+                     </Button>
+                     </FormGroup>
+                    </Col>
+                    <Col className="px-md-1" md="2">
+                      <FormGroup>
+                    <Button className="btn-fill" color="" type="submit">
+                      Clear
+                     </Button>
+                     </FormGroup>
+                    </Col>
+                    
+                  </Row>
+                </Form>
+              </CardBody>
+              </Card>
+          </Col>
+        </Row>
+        <Row>
+          <Col md="12">
             <Card>
               <CardHeader>
-                <CardTitle tag="h4">Simple Table</CardTitle>
+                <CardTitle tag="h4">Customer List</CardTitle>
               </CardHeader>
               <CardBody>
                 <div className="table-responsive">
@@ -225,20 +327,22 @@ const Tables = () => {
                                             {userDetails && userDetails.role !== null && userDetails.role === "Admin" ? <th>Partner Name</th> : null}
                                             <th>Lender Name</th>
                                             <th>Status</th>
+                                            <th>Onboarding At</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {
                                             getData(current, size).map((data, index) => {
                                                 return (
-                                                    <tr key={data.id}>
-                                                        <td>{data.id}</td>
+                                                    <tr key={data.customer_info_id}>
+                                                        <td>{data.customer_info_id}</td>
                                                         <td>{data.name}</td>
-                                                        <td>{data.position}</td>
-                                                        <td>{data.gender}</td>
-                                                        {userDetails && userDetails.role !== null && userDetails.role === "Admin" ? <td>{data.email}</td> : null}
-                                                        <td>{data.email}</td>
-                                                        <td>{data.salary}</td>
+                                                        <td>{data.mobile}</td>
+                                                        <td>{data.amount_offered}</td>
+                                                        {userDetails && userDetails.role !== null && userDetails.role === "Admin" ? <td>{data.partner_name}</td> : null}
+                                                        <td>{data.lender_name}</td>
+                                                        <td>{data.status}</td>
+                                                        <td>{data.created_at}</td>
                                                     </tr>
                                                 )
                                             })

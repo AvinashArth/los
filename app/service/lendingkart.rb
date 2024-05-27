@@ -5,21 +5,25 @@ class Lendingkart < Base
 
   def perform(mobile)
     @user = CustomerInfo.find_by(mobile: mobile)
-    @loan = LoanProfile.find_or_create_by(customer_info_id: @user.id, lender_name: "LENDINGKART")
+    @loan = LoanProfile.find_or_create_by(customer_info_id: @user.id, lender_name: "LENDINGKART", mobile: user.mobile)
     lead_creation unless dedupe_check
   end
 
   def dedupe_check
     endpoint = "https://api.lendingkart.com/v2/partner/leads/lead-exists-status"
     response = post(endpoint, dedupe_payload, headers)
-    loan.update(response: response, status: response["leadExists"])
-    response["leadExists"]
+    if response["leadExists"]
+      loan.update(response: response, status: "Rejected", rejection_reason: "Duplicate Lead", name: user.full_name)
+      true
+    else
+      response["leadExists"]
+    end
   end
 
   def lead_creation
     endpoint = "https://api.lendingkart.com/v2/partner/leads/create-application"
     response = post(endpoint, lead_creation_payload, headers)
-    loan.update(response: response, status: response["message"], external_loan_id: response["applicationId"], lender_name: "LENDINGKART") if response
+    loan.update(response: response, status: response["message"], external_loan_id: response["applicationId"], name: user.full_name) if response
   end
 
   def fetch_status(application_id)

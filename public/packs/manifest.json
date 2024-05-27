@@ -2,17 +2,16 @@
   "entrypoints": {
     "index": {
       "js": [
-        "/packs/js/index-89c5b08b872333cea87f.js"
+        "/packs/js/index-c4dc124cba14c1e1673a.js"
       ],
       "js.map": [
-        "/packs/js/index-89c5b08b872333cea87f.js.map"
+        "/packs/js/index-c4dc124cba14c1e1673a.js.map"
       ]
     }
   },
-  "index.js": "/packs/js/index-89c5b08b872333cea87f.js",
-  "index.js.map": "/packs/js/index-89c5b08b872333cea87f.js.map",
+  "index.js": "/packs/js/index-c4dc124cba14c1e1673a.js",
+  "index.js.map": "/packs/js/index-c4dc124cba14c1e1673a.js.map",
   "media/assets/img/anime3.png": "/packs/media/assets/img/anime3-4438e5067f2029f9e058dbf059d29ab5.png",
-  "media/images/Happy-Tide.png": "/packs/media/images/Happy-Tide-47a23c0a.png",
   "media/src/assets/fonts/nucleo.eot": "/packs/media/src/assets/fonts/nucleo-bd5cce8bf40be5947637d44c0ff5284e.eot",
   "media/src/assets/fonts/nucleo.ttf": "/packs/media/src/assets/fonts/nucleo-35b08447277ca7bf9f0971c97497892d.ttf",
   "media/src/assets/fonts/nucleo.woff": "/packs/media/src/assets/fonts/nucleo-5c65ef4d6434bb8062a322cc8c666807.woff",

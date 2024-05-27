@@ -1,7 +1,7 @@
 .container {
     position: relative;
     width: 100%;
-    min-height: 100vh;
+    min-height: 0vh;
     padding: 2rem;
     background-color: #fafafa;
     overflow: hidden;
@@ -329,6 +329,7 @@
   @media (max-width: 480px) {
     .container {
       padding: 1.5rem;
+      min-height: 0vh;
     }
   
     .contact-info:before {

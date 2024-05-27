@@ -40,7 +40,7 @@ import {
   ModalHeader
 } from "reactstrap";
 import CardImg from "reactstrap";
-import imageLeads from "../../../../assets/images/Happy-Tide.png"
+// import imageLeads from "../../../../assets/images/Happy-Tide.png"
 
 function AdminNavbar(props) {
   const [collapseOpen, setcollapseOpen] = React.useState(false);
@@ -51,7 +51,7 @@ function AdminNavbar(props) {
   
   React.useEffect(() => {
     const items = JSON.parse(localStorage.getItem('user'));
-    setCompanyLogo(items && items.logo === null ? {logo} : `../../../../assets/images/${items.logo}`);
+   // setCompanyLogo(items && items.logo === null ? {logo} : `../../../../assets/images/${items.logo}`);
   },[])
 
   React.useEffect(() => {
@@ -112,7 +112,7 @@ function AdminNavbar(props) {
             </div>
             <NavbarBrand href="#pablo" onClick={(e) => e.preventDefault()}>
               {/* {props.brandText} */}
-              <img style={{maxWidth:"38%"}} src={comapnaylogo} />             
+              <img style={{maxWidth:"38%"}} src={logo} />             
 
               {/* <CardImg src={logo}  /> */}
             </NavbarBrand>

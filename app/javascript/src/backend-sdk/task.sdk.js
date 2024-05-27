@@ -24,21 +24,112 @@
             console.log("kk", token)
             return response.json();
         }
-        static async customerListFilter(id, token) {
-            const jsonData = { id: id};
+        static async customerListFilter(id, token, label, value) {
+            console.log("filter", id, token, value, label)
+            let payload = {};
+        
+             if (label === "email") {
+               payload = {
+                "key": "email",
+                 "value": value
+                };
                 const response = await fetch(`http://localhost:3000/filter/customer/list`, {
-                    keepalive: true,
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    },
-                });
-                // console.log("kk", token)
-                return response.json();
+         keepalive: true,
+         method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+             'Authorization': `Bearer ${token}`
+           },
+         body: JSON.stringify(payload),
+        });
+        return response.json()
+             } else if (label === "Customer Id") {
+                payload = {
+                  "key": "customer_info_id",
+                   "value": value
+                 };
+                 const response = await fetch(`http://localhost:3000/filter/customer/list`, {
+         keepalive: true,
+         method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+             'Authorization': `Bearer ${token}`
+           },
+         body: JSON.stringify(payload),
+        });
+        return response.json()
+             } 
+        //      else if (label === "Customer Name") {
+        //        payload = {
+        //         "key": "name",
+        //         "value": value
+        //         };
+        //         const response = await fetch(`http://localhost:3000/filter/customer/list`, {
+        //  keepalive: true,
+        //  method: 'POST',
+        //   headers: {
+        //     'Content-Type': 'application/json',
+        //      'Authorization': `Bearer ${token}`
+        //    },
+        //  body: JSON.stringify(payload),
+        // });
+        // return response.json()
+        //     } 
+            else if (label === "Mobile Number") {
+              payload = {
+              "key": "mobile",
+              "value": value
+               };
+               const response = await fetch(`http://localhost:3000/filter/customer/list`, {
+         keepalive: true,
+         method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+             'Authorization': `Bearer ${token}`
+           },
+         body: JSON.stringify(payload),
+        });
+        return response.json()
+            } else if (label === "Loan Amount") {
+                payload = {
+                "key": "amount_offered",
+                "value": value
+                };
+                const response = await fetch(`http://localhost:3000/filter/customer/list`, {
+         keepalive: true,
+         method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+             'Authorization': `Bearer ${token}`
+           },
+         body: JSON.stringify(payload),
+        });
+        return response.json()
+             } else if (label === "Status") {
+               payload = {
+               "key": "status",
+                "value": value
+              };
+              const response = await fetch(`http://localhost:3000/filter/customer/list`, {
+         keepalive: true,
+         method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+             'Authorization': `Bearer ${token}`
+           },
+         body: JSON.stringify(payload),
+        });
+        return response.json()
+            }
+
+        // console.log("filterpayload", payload);
+
+// Fetch code for sending payload as POST request
+        
         }
+        
         static async contactForm(data, token) {
-                const response = await fetch(`http://localhost:3000/update/customer/info`, {
+                const response = await fetch(`http://localhost:3000/user/query`, {
                     keepalive: true,
                     method: 'POST',
                     headers: {

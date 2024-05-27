@@ -47,139 +47,8 @@ const Tables = () => {
        "status":"Approved",
       "customer_info_id": 1,
       "created_at":"23-05-2024"
-    },
-    {
-      "name": "Chrissie MacInerney",
-      "partner_name": "Account Executive",
-      "gender": "Male",
-      "lender_name": "Ferreiras",
-      "email": "cmacinerney1@youtu.be",
-      "mobile": "383 685 3274",
-      "amount_offered": "$17269.83",
-      "status":"Approved",
-      "customer_info_id": 2,
-      "created_at":"23-05-2024"
-    },
-    {
-      "name": "Karly Okeshott",
-      "partner_name": "Cost Accountant",
-      "gender": "Female",
-      "lender_name": "Cornillon",
-      "email": "kokeshott2@bravesites.com",
-      "mobile": "927 119 1091",
-      "amount_offered": "$26878.49",
-      "status":"Approved",
-      "customer_info_id": 3,
-      "created_at":"23-05-2024"
-    },
-    {
-      "name": "Hermia Dayton",
-      "partner_name": "VP Sales",
-      "gender": "Female",
-      "lender_name": "Chernoyerkovskaya",
-      "email": "hdayton3@un.org",
-      "mobile": "518 243 8139",
-      "amount_offered": "$40424.12",
-      "status":"Approved",
-      "customer_info_id": 4,
-      "created_at":"23-05-2024"
-    },
-    {
-      "name": "Willem O'Hdirscoll",
-      "partner_name": "Recruiting Manager",
-      "gender": "Female",
-      "lender_name": "Sukatani",
-      "email": "wohdirscoll4@businessinsider.com",
-      "mobile": "976 264 4693",
-      "amount_offered": "$43236.35",
-      "status":"Approved",
-      "customer_info_id": 5,
-      "created_at":"23-05-2024"
-    },
-    {
-      "name": "Jose Caswall",
-      "partner_name": "Environmental Tech",
-      "gender": "Female",
-      "lender_name": "Concepcion",
-      "email": "jcaswall5@e-recht24.de",
-      "mobile": "623 142 0771",
-      "amount_offered": "$47377.66",
-      "status":"Approved",
-      "customer_info_id": 6,
-      "created_at":"23-05-2024"
-    },
-    {
-      "name": "Cal Russell",
-      "partner_name": "Computer Systems Analyst II",
-      "gender": "Female",
-      "lender_name": "Melíssi",
-      "email": "crussell6@histats.com",
-      "mobile": "643 259 1412",
-      "amount_offered": "$8542.68",
-      "status":"Approved",
-      "customer_info_id": 7,
-      "created_at":"23-05-2024"
-    },
-    {
-      "name": "Lavinia Atwill",
-      "partner_name": "Occupational Therapist",
-      "gender": "Male",
-      "lender_name": "Mendeleyevo",
-      "email": "latwill7@hexun.com",
-      "mobile": "479 589 7945",
-      "amount_offered": "$13361.55",
-      "status":"Approved",
-      "customer_info_id": 8,
-      "created_at":"23-05-2024"
-    },
-    {
-      "name": "Sophronia De Hooch",
-      "partner_name": "Account Representative II",
-      "gender": "Female",
-      "lender_name": "Verkhnyaya Toyma",
-      "email": "sde8@mozilla.org",
-      "mobile": "592 831 1701",
-      "amount_offered": "$35778.22",
-      "status":"Approved",
-      "customer_info_id": 9,
-      "created_at":"23-05-2024"
-    },
-    {
-      "name": "Harmon Argente",
-      "partner_name": "Media Manager IV",
-      "gender": "Male",
-      "lender_name": "Azeitão",
-      "email": "hargente9@vistaprint.com",
-      "mobile": "823 917 4216",
-      "amount_offered": "$42515.25",
-      "status":"Approved",
-      "customer_info_id": 10,
-      "created_at":"23-05-2024"
-    },
-    {
-      "name": "Andreana Hablot",
-      "partner_name": "Geological Engineer",
-      "gender": "Male",
-      "lender_name": "Rameshki",
-      "email": "ahablota@digg.com",
-      "mobile": "425 484 6588",
-      "amount_offered": "$51025.31",
-      "status":"Approved",
-      "customer_info_id": 11,
-      "created_at":"23-05-2024"
-    },
-    {
-      "name": "Elbertina Hinnerk",
-      "partner_name": "Account Coordinator",
-      "gender": "Female",
-      "lender_name": "Fujishiro",
-      "email": "ehinnerkb@typepad.com",
-      "mobile": "629 484 9269",
-      "amount_offered": "$39220.72",
-      "status":"Approved",
-      "customer_info_id": 12,
-      "created_at":"23-05-2024"
     }
+    
      ]
      const [perPage, setPerPage] = useState(10);
      const [size, setSize] = useState(perPage);
@@ -187,10 +56,16 @@ const Tables = () => {
      const [userDetails, setUserDetails] = useState(null);
      const [filterInput,setFilterInput] = useState("");
      const [filterValue, setFilterValue] = useState("");
+     const [customerDetailsInfo, setCustomerDetailsInfo] = useState([]);
+
      const customerDetailsList = (id, token) => {
       Task.customerList(id, token)
       .then((res) => {
-        console.log(res)
+        // if(res.length > 0){
+          setCustomerDetailsInfo(res);
+          console.log(res)
+        // }
+        
       })
       .catch((err) => {
         console.log(err.error);
@@ -202,12 +77,30 @@ const Tables = () => {
       setUserDetails(items);
       customerDetailsList(items && items.id, items && items.token)
      },[])
+     function convertDateTime(dateTimeString) {
+      // Create a new Date object with the given string
+      const date = new Date(dateTimeString);
+  
+      // Extract individual components
+      const year = date.getFullYear();
+      const month = date.getMonth() + 1; // January is 0
+      const day = date.getDate();
+      // const hours = date.getHours();
+      // const minutes = date.getMinutes();
+      // const seconds = date.getSeconds();
+  
+      // Format the output as needed
+      const formattedDateTime = `${year}-${month}-${day}`;
+  
+      return formattedDateTime;
+  }
+
      const userDetail = {
        "role":"admin"
      }
     const PerPageChange = (value) => {
         setSize(value);
-        const newPerPage = Math.ceil(datatableUsers.length / value);
+        const newPerPage = Math.ceil(customerDetailsInfo.length / value);
         if (current > newPerPage) {
             setCurrent(newPerPage);
         }
@@ -215,7 +108,7 @@ const Tables = () => {
 
     const getData = (current, pageSize) => {
         // Normally you should get the data from the server
-        return datatableUsers.slice((current - 1) * pageSize, current * pageSize);
+        return customerDetailsInfo.slice((current - 1) * pageSize, current * pageSize);
     };
 
     const PaginationChange = (page, pageSize) => {
@@ -232,14 +125,34 @@ const Tables = () => {
         }
         return originalElement;
     }
+    const handleCustomerFilter = () => {
+      console.log(userDetails && userDetails.id, userDetails && userDetails.token)
+      // const customerDetailsList = (id, token) => {
+        Task.customerListFilter(userDetails && userDetails.id, userDetails && userDetails.token, filterInput, filterValue)
+        .then((res) => {
+          console.log("fkfk", res)
+          // if(res.length > 0){
+            setCustomerDetailsInfo(res);
+            console.log(res)
+          // }
+          
+        })
+        .catch((err) => {
+          // console.log(err.error);
+        });
+      //  }
+    }
+    const handleclearFilter= () => {
+      customerDetailsList(userDetails && userDetails.id, userDetails && userDetails.token) 
+    }
   return (
     <>
       <div className="content">
         <Row>
           <Col md="12">
-          <Card>
+            <Card>
               <CardHeader>
-                <CardTitle tag="h4">Filter</CardTitle>
+                <CardTitle tag="h4">Customer List</CardTitle>
               </CardHeader>
               <CardBody>
               <Form>
@@ -258,11 +171,14 @@ const Tables = () => {
                         onChange={(e) => setFilterInput(e.target.value)}
                         >
                         <option>
-                         Customer Id
+                         Please Select
                         </option>
                         <option>
-                        Customer Name
+                         Customer Id
                         </option>
+                        {/* <option>
+                        Customer Name
+                        </option> */}
                         <option>
                           Mobile Number
                        </option>
@@ -288,33 +204,22 @@ const Tables = () => {
                       </FormGroup>
                     </Col>
                     <Col className="px-md-1" md="2">
-                    <FormGroup>
-                    <Button className="btn-fill" color="primary" type="submit">
+                    {/* <FormGroup> */}
+                    <Button className="btn-fill" onClick={handleCustomerFilter} color="primary" >
                       Filter
                      </Button>
-                     </FormGroup>
+                     {/* </FormGroup> */}
                     </Col>
                     <Col className="px-md-1" md="2">
-                      <FormGroup>
-                    <Button className="btn-fill" color="" type="submit">
+                      {/* <FormGroup> */}
+                    <Button className="btn-fill" onClick={handleclearFilter} color="" type="submit">
                       Clear
                      </Button>
-                     </FormGroup>
+                     {/* </FormGroup> */}
                     </Col>
                     
                   </Row>
                 </Form>
-              </CardBody>
-              </Card>
-          </Col>
-        </Row>
-        <Row>
-          <Col md="12">
-            <Card>
-              <CardHeader>
-                <CardTitle tag="h4">Customer List</CardTitle>
-              </CardHeader>
-              <CardBody>
                 <div className="table-responsive">
                 {/* customer_id, name, mobile, loan_amoun, onboard_at,partner name, lender_name,message,status, */}
                                 <table className="table table-text-small mb-0">
@@ -339,10 +244,10 @@ const Tables = () => {
                                                         <td>{data.name}</td>
                                                         <td>{data.mobile}</td>
                                                         <td>{data.amount_offered}</td>
-                                                        {userDetails && userDetails.role !== null && userDetails.role === "Admin" ? <td>{data.partner_name}</td> : null}
-                                                        <td>{data.lender_name}</td>
+                                                        {userDetails && userDetails.role !== null && userDetails.role === "Admin" ? <td>{data.partner_code}</td> : null}
+                                                        <td>{data.lender_code}</td>
                                                         <td>{data.status}</td>
-                                                        <td>{data.created_at}</td>
+                                                        <td>{data.created_at !== null ? convertDateTime(data.created_at):""}</td>
                                                     </tr>
                                                 )
                                             })
@@ -356,7 +261,7 @@ const Tables = () => {
                                     className="pagination-data"
                                     showTotal={(total, range) => `Showing ${range[0]}-${range[1]} of ${total}`}
                                     onChange={PaginationChange}
-                                    total={datatableUsers.length}
+                                    total={customerDetailsInfo.length}
                                     current={current}
                                     pageSize={size}
                                     showSizeChanger={false}

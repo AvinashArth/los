@@ -23,6 +23,7 @@ import {
   CardHeader,
   CardBody,
   CardTitle,
+  Alert,
   Table,
   Row,
   Input, FormGroup,
@@ -39,32 +40,64 @@ const Contact = () => {
     const [mobileNumber, setMobileNumber] = useState("");
     const [address,setAddess] = useState("");
     const [message,setMessage] = useState("");
-    const [userDetails, setUserDetails] = useState(null)
+    const [userDetails, setUserDetails] = useState(null);
+    const [visible, setVisible] = useState(false);
+    const [error, setError] = useState("");
+    const onDismiss = () => setVisible(false);
     useEffect(() => {
         const items = JSON.parse(localStorage.getItem('user'));
         setUserDetails(items);
        },[])
-
+    const verficationHandleing = () => {
+      if(email === "" || mobileNumber === "" || message === "" || address === ""){
+        setVisible(true);
+        setError("All fields are required.");
+        setTimeout(() => {
+          setIsVisible(false); // Set visibility to false after 1 second
+        }, 1000);
+        return false;
+      }
+      return true;
+    }
     const handleSubmit = () => {
-        // const userdetails = JSON.parse(localStorage.getItem("user"))
+      if(verficationHandleing()){
         const data={
-            email: email,
-            mobile: mobileNumber,
-            address: address,
-            message: message,
-            role: userDetails && userDetails.role,
-            id:userDetails && userDetails.id
-        }
-        console.log("jjfj", data);
-        Task.contactForm(data, userDetails && userDetails.token)
-        .then((res) => {
-          console.log("jjdj", res);
-        })
-        .catch((err) => {
-          setError(err.msg);
-          console.log(err.error);
-          setIsSubmitting(false);
-        });
+          email: email,
+          number: mobileNumber,
+          address: address,
+          message: message,
+          role: userDetails && userDetails.role,
+          id:userDetails && userDetails.id
+      }
+      // console.log("jjfj", data);
+      Task.contactForm(data, userDetails && userDetails.token)
+      .then((res) => {
+        setVisible(true);
+        setError(res.msg);
+        setAddess("");
+        setEmail("");
+        setMobileNumber("");
+        setMessage("");
+        setTimeout(() => {
+          setIsVisible(false); // Set visibility to false after 1 second
+        }, 1000);
+        // console.log("jjdj", res);
+      })
+      .catch((err) => {
+        setVisible(true);
+        setError(err.msg);
+        setAddess("");
+        setEmail("");
+        setMobileNumber("");
+        setMessage("");
+        setTimeout(() => {
+          setIsVisible(false); // Set visibility to false after 1 second
+        }, 1000);
+        console.log(err.error);
+      });
+      }
+        // const userdetails = JSON.parse(localStorage.getItem("user"))
+        
     }
   return (
     <>
@@ -133,7 +166,11 @@ const Contact = () => {
             <CardHeader>
                 <CardTitle tag="h4">Contact Us</CardTitle>
               </CardHeader>
+              
               <CardBody>
+              <Alert isOpen={visible} toggle={onDismiss} color="danger">
+                {error}
+              </Alert>
                 <Form >
                   <Row>
                     <Col className="pl-md-1" md="12">

@@ -25,7 +25,7 @@ function Footer() {
   return (
     <footer className="footer">
       <Container fluid>
-        <Nav>
+        {/* <Nav>
           <NavItem>
             <NavLink href="https://www.creative-tim.com/?ref=bdr-user-archive-footer">
               Creative Tim
@@ -41,17 +41,17 @@ function Footer() {
               Blog
             </NavLink>
           </NavItem>
-        </Nav>
+        </Nav> */}
         <div className="copyright">
           © {new Date().getFullYear()} made with{" "}
           <i className="tim-icons icon-heart-2" /> by{" "}
           <a
-            href="https://www.creative-tim.com/?ref=bdr-user-archive-footer"
+            href=""
             target="_blank"
           >
-            Creative Tim
+            Happy 
           </a>{" "}
-          for a better web.
+          {/* for a better web. */}
         </div>
       </Container>
     </footer>

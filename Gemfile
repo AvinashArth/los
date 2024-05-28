@@ -26,6 +26,7 @@ gem "sidekiq"
 gem "sidekiq-cron"
 gem "sidekiq-scheduler"
 gem "webpacker"
+gem 'groupdate'
 
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", ">= 5.0"

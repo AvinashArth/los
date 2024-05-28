@@ -15,7 +15,7 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React from "react";
+import React,{useEffect, useState} from "react";
 
 // reactstrap components
 import {
@@ -32,20 +32,60 @@ import {
   Col
 } from "reactstrap";
 
-function UserProfile() {
+const UserProfile = ()  => {
+  const[name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [mobileNumber, setMobileNumber] = useState("");
+  const [address, setAddress] = useState("");
+  const [companyName, setCompany] = useState("");
+  const [city, setCity] = useState("");
+  const [role, setRole] = useState("");
+  const [createdat, setCreatedat] = useState("");
+  const [customerId, setCustomerId] = useState();
+
+  function convertDateTime(dateTimeString) {
+    // Create a new Date object with the given string
+    const date = new Date(dateTimeString);
+
+    // Extract individual components
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1; // January is 0
+    const day = date.getDate();
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    const seconds = date.getSeconds();
+
+    // Format the output as needed
+    const formattedDateTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+
+    return formattedDateTime;
+}
+
+  useEffect(() => {
+    const items = JSON.parse(localStorage.getItem('user'));
+    setAddress(items && items.address === null ? "" : items.address);
+    setCity(items && items.city === null ? "" : items.city);
+    setCompany(items && items.company_name === null ? "" : items.company_name);
+    setEmail(items && items.email === null ? "" : items.email);
+    setMobileNumber(items && items.mobile === null ? "" : items.mobile);
+    setRole(items && items.role === null ? "" : items.role);
+    setCreatedat(items && items.created_at === null ? "" : convertDateTime(items.created_at));
+    setCustomerId(items && items.id === null ? "" : items.id)
+    setName(items && items.name === null ? "" : items.name);
+  },[])
   return (
     <>
       <div className="content">
         <Row>
-          <Col md="8">
+          <Col md="12">
             <Card>
               <CardHeader>
-                <h5 className="title">Edit Profile</h5>
+                <h5 className="title">User Profile</h5>
               </CardHeader>
               <CardBody>
                 <Form>
                   <Row>
-                    <Col className="pr-md-1" md="5">
+                    {/* <Col className="pr-md-1" md="5">
                       <FormGroup>
                         <label>Company (disabled)</label>
                         <Input
@@ -55,44 +95,58 @@ function UserProfile() {
                           type="text"
                         />
                       </FormGroup>
-                    </Col>
-                    <Col className="px-md-1" md="3">
+                    </Col> */}
+                    <Col className="px-md-1" md="2">
                       <FormGroup>
-                        <label>Username</label>
+                        <label> Customer Id</label>
                         <Input
-                          defaultValue="michael23"
-                          placeholder="Username"
+                          // defaultValue="michael23"
+                          placeholder="customer Id"
                           type="text"
+                          value={customerId}
                         />
                       </FormGroup>
                     </Col>
-                    <Col className="pl-md-1" md="4">
+                    <Col className="px-md-1" md="4">
+                      <FormGroup>
+                        <label> Name</label>
+                        <Input
+                          // defaultValue="michael23"
+                          placeholder="Name"
+                          type="text"
+                          value={name}
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col className="pl-md-1" md="6">
                       <FormGroup>
                         <label htmlFor="exampleInputEmail1">
                           Email address
                         </label>
-                        <Input placeholder="mike@email.com" type="email" />
+                        <Input placeholder="mike@email.com" type="email"  value={email}/>
                       </FormGroup>
                     </Col>
                   </Row>
                   <Row>
                     <Col className="pr-md-1" md="6">
                       <FormGroup>
-                        <label>First Name</label>
+                        <label>Mobile Number</label>
                         <Input
-                          defaultValue="Mike"
-                          placeholder="Company"
-                          type="text"
+                          // defaultValue="Mike"
+                          placeholder="mobile Number"
+                          type="number"
+                          value={mobileNumber}
                         />
                       </FormGroup>
                     </Col>
                     <Col className="pl-md-1" md="6">
                       <FormGroup>
-                        <label>Last Name</label>
+                        <label>Company Name</label>
                         <Input
-                          defaultValue="Andrew"
-                          placeholder="Last Name"
+                          // defaultValue="Andrew"
+                          placeholder="Comapny Name"
                           type="text"
+                          value={companyName}
                         />
                       </FormGroup>
                     </Col>
@@ -102,9 +156,10 @@ function UserProfile() {
                       <FormGroup>
                         <label>Address</label>
                         <Input
-                          defaultValue="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09"
+                          // defaultValue="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09"
                           placeholder="Home Address"
                           type="text"
+                          value={address}
                         />
                       </FormGroup>
                     </Col>
@@ -114,13 +169,36 @@ function UserProfile() {
                       <FormGroup>
                         <label>City</label>
                         <Input
-                          defaultValue="Mike"
+                          // defaultValue="Mike"
                           placeholder="City"
                           type="text"
+                          value={city}
                         />
                       </FormGroup>
                     </Col>
                     <Col className="px-md-1" md="4">
+                      <FormGroup>
+                        <label>Role</label>
+                        <Input
+                          // defaultValue="Andrew"
+                          placeholder="Role"
+                          type="text"
+                          value={role}
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col className="px-md-1" md="4">
+                      <FormGroup>
+                        <label>Created at</label>
+                        <Input
+                          // defaultValue="Andrew"
+                          placeholder="Created at"
+                          type="text"
+                          value={createdat}
+                        />
+                      </FormGroup>
+                    </Col>
+                    {/* <Col className="px-md-1" md="4">
                       <FormGroup>
                         <label>Country</label>
                         <Input
@@ -135,9 +213,9 @@ function UserProfile() {
                         <label>Postal Code</label>
                         <Input placeholder="ZIP Code" type="number" />
                       </FormGroup>
-                    </Col>
+                    </Col> */}
                   </Row>
-                  <Row>
+                  {/* <Row>
                     <Col md="8">
                       <FormGroup>
                         <label>About Me</label>
@@ -151,17 +229,17 @@ function UserProfile() {
                         />
                       </FormGroup>
                     </Col>
-                  </Row>
+                  </Row> */}
                 </Form>
               </CardBody>
-              <CardFooter>
+              {/* <CardFooter>
                 <Button className="btn-fill" color="primary" type="submit">
                   Save
                 </Button>
-              </CardFooter>
+              </CardFooter> */}
             </Card>
           </Col>
-          <Col md="4">
+          {/* <Col md="4">
             <Card className="card-user">
               <CardBody>
                 <CardText />
@@ -200,7 +278,7 @@ function UserProfile() {
                 </div>
               </CardFooter>
             </Card>
-          </Col>
+          </Col> */}
         </Row>
       </div>
     </>

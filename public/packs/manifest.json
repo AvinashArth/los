@@ -2,21 +2,20 @@
   "entrypoints": {
     "index": {
       "js": [
-        "/packs/js/index-86f00c681d7bbde5490f.js"
+        "/packs/js/index-401b252eb7b9c6702b81.js"
       ],
       "js.map": [
-        "/packs/js/index-86f00c681d7bbde5490f.js.map"
+        "/packs/js/index-401b252eb7b9c6702b81.js.map"
       ]
     }
   },
-  "index.js": "/packs/js/index-86f00c681d7bbde5490f.js",
-  "index.js.map": "/packs/js/index-86f00c681d7bbde5490f.js.map",
+  "index.js": "/packs/js/index-401b252eb7b9c6702b81.js",
+  "index.js.map": "/packs/js/index-401b252eb7b9c6702b81.js.map",
   "media/assets/img/anime3.png": "/packs/media/assets/img/anime3-4438e5067f2029f9e058dbf059d29ab5.png",
-  "media/assets/img/emilyz.jpg": "/packs/media/assets/img/emilyz-105ff23d3d4b065ca8504b991a7ce55c.jpg",
   "media/src/assets/fonts/nucleo.eot": "/packs/media/src/assets/fonts/nucleo-bd5cce8bf40be5947637d44c0ff5284e.eot",
   "media/src/assets/fonts/nucleo.ttf": "/packs/media/src/assets/fonts/nucleo-35b08447277ca7bf9f0971c97497892d.ttf",
   "media/src/assets/fonts/nucleo.woff": "/packs/media/src/assets/fonts/nucleo-5c65ef4d6434bb8062a322cc8c666807.woff",
   "media/src/assets/fonts/nucleo.woff2": "/packs/media/src/assets/fonts/nucleo-6dfb4833e3a0132fd1fcefdfd138b48b.woff2",
-  "media/src/assets/img/header.jpg": "/packs/media/src/assets/img/header-9ee5a121426ba4b078bdc90ad3ccf9c6.jpg",
+  "media/src/assets/img/logo.jpg": "/packs/media/src/assets/img/logo-ebe4e1228e41843a3ad2c43d5ebda3fd.jpg",
   "media/src/assets/img/react-logo.png": "/packs/media/src/assets/img/react-logo-561f1671ed326d663356d146f4149acf.png"
 }

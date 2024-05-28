@@ -107,9 +107,10 @@ function Sidebar(props) {
       );
     }
   }
+  const color = "blue"
   return (
-    <BackgroundColorContext.Consumer>
-      {({ color }) => (
+    // <BackgroundColorContext.Consumer>
+    //   {({ color }) => (
         <div className="sidebar" data={color}>
           <div className="sidebar-wrapper" ref={sidebarRef}>
             {logoImg !== null || logoText !== null ? (
@@ -120,7 +121,11 @@ function Sidebar(props) {
             ) : null}
             <Nav>
               {routes.map((prop, key) => {
-                if (prop.redirect) return null;
+                if(prop.name === "Login" || prop.name === "CustomerDetailsForm") {
+                  return null
+                }
+                else {
+                  if (prop.redirect) return null;
                 return (
                   <li
                     className={
@@ -139,12 +144,14 @@ function Sidebar(props) {
                     </NavLink>
                   </li>
                 );
+                }
+                
               })}
             </Nav>
           </div>
         </div>
-      )}
-    </BackgroundColorContext.Consumer>
+    //   )}
+    // </BackgroundColorContext.Consumer>
   );
 }
 

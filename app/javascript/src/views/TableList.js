@@ -15,20 +15,136 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React from "react";
-
+import React, { useState, useEffect } from "react";
+import Pagination  from "rc-pagination";
 // reactstrap components
 import {
   Card,
   CardHeader,
   CardBody,
   CardTitle,
+  Label,
   Table,
+  Form,
+  Input, FormGroup,
+  Button,
   Row,
   Col
 } from "reactstrap";
+import "./Tables.css"
+import { Task } from "../backend-sdk/task.sdk";
 
-function Tables() {
+const Tables = () => {
+    const datatableUsers = [
+    {
+      "name": "Currey Slee",
+      "partner_name": "Food Chemist",
+      "gender": "Male",
+      "lender_name": "Damietta",
+      "email": "cslee0@netlog.com",
+      "mobile": "532 179 1377",
+      "amount_offered": "$49491.60",
+       "status":"Approved",
+      "customer_info_id": 1,
+      "created_at":"23-05-2024"
+    }
+    
+     ]
+     const [perPage, setPerPage] = useState(10);
+     const [size, setSize] = useState(perPage);
+     const [current, setCurrent] = useState(1);
+     const [userDetails, setUserDetails] = useState(null);
+     const [filterInput,setFilterInput] = useState("");
+     const [filterValue, setFilterValue] = useState("");
+     const [customerDetailsInfo, setCustomerDetailsInfo] = useState([]);
+
+     const customerDetailsList = (id, token) => {
+      Task.customerList(id, token)
+      .then((res) => {
+        // if(res.length > 0){
+          setCustomerDetailsInfo(res);
+          console.log(res)
+        // }
+        
+      })
+      .catch((err) => {
+        console.log(err.error);
+      });
+     }
+     //customerList
+     useEffect(() => {
+      const items = JSON.parse(localStorage.getItem('user'));
+      setUserDetails(items);
+      customerDetailsList(items && items.id, items && items.token)
+     },[])
+     function convertDateTime(dateTimeString) {
+      // Create a new Date object with the given string
+      const date = new Date(dateTimeString);
+  
+      // Extract individual components
+      const year = date.getFullYear();
+      const month = date.getMonth() + 1; // January is 0
+      const day = date.getDate();
+      // const hours = date.getHours();
+      // const minutes = date.getMinutes();
+      // const seconds = date.getSeconds();
+  
+      // Format the output as needed
+      const formattedDateTime = `${year}-${month}-${day}`;
+  
+      return formattedDateTime;
+  }
+
+     const userDetail = {
+       "role":"admin"
+     }
+    const PerPageChange = (value) => {
+        setSize(value);
+        const newPerPage = Math.ceil(customerDetailsInfo.length / value);
+        if (current > newPerPage) {
+            setCurrent(newPerPage);
+        }
+    }
+
+    const getData = (current, pageSize) => {
+        // Normally you should get the data from the server
+        return customerDetailsInfo.slice((current - 1) * pageSize, current * pageSize);
+    };
+
+    const PaginationChange = (page, pageSize) => {
+        setCurrent(page);
+        setSize(pageSize)
+    }
+
+    const PrevNextArrow = (current, type, originalElement) => {
+        if (type === 'prev') {
+            return <button><i className="fa fa-angle-double-left"></i></button>;
+        }
+        if (type === 'next') {
+            return <button><i className="fa fa-angle-double-right"></i></button>;
+        }
+        return originalElement;
+    }
+    const handleCustomerFilter = () => {
+      console.log(userDetails && userDetails.id, userDetails && userDetails.token)
+      // const customerDetailsList = (id, token) => {
+        Task.customerListFilter(userDetails && userDetails.id, userDetails && userDetails.token, filterInput, filterValue)
+        .then((res) => {
+          console.log("fkfk", res)
+          // if(res.length > 0){
+            setCustomerDetailsInfo(res);
+            console.log(res)
+          // }
+          
+        })
+        .catch((err) => {
+          // console.log(err.error);
+        });
+      //  }
+    }
+    const handleclearFilter= () => {
+      customerDetailsList(userDetails && userDetails.id, userDetails && userDetails.token) 
+    }
   return (
     <>
       <div className="content">
@@ -36,130 +152,127 @@ function Tables() {
           <Col md="12">
             <Card>
               <CardHeader>
-                <CardTitle tag="h4">Simple Table</CardTitle>
+                <CardTitle tag="h4">Customer List</CardTitle>
               </CardHeader>
               <CardBody>
-                <Table className="tablesorter" responsive>
-                  <thead className="text-primary">
-                    <tr>
-                      <th>Name</th>
-                      <th>Country</th>
-                      <th>City</th>
-                      <th className="text-center">Salary</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>Dakota Rice</td>
-                      <td>Niger</td>
-                      <td>Oud-Turnhout</td>
-                      <td className="text-center">$36,738</td>
-                    </tr>
-                    <tr>
-                      <td>Minerva Hooper</td>
-                      <td>Curaçao</td>
-                      <td>Sinaai-Waas</td>
-                      <td className="text-center">$23,789</td>
-                    </tr>
-                    <tr>
-                      <td>Sage Rodriguez</td>
-                      <td>Netherlands</td>
-                      <td>Baileux</td>
-                      <td className="text-center">$56,142</td>
-                    </tr>
-                    <tr>
-                      <td>Philip Chaney</td>
-                      <td>Korea, South</td>
-                      <td>Overland Park</td>
-                      <td className="text-center">$38,735</td>
-                    </tr>
-                    <tr>
-                      <td>Doris Greene</td>
-                      <td>Malawi</td>
-                      <td>Feldkirchen in Kärnten</td>
-                      <td className="text-center">$63,542</td>
-                    </tr>
-                    <tr>
-                      <td>Mason Porter</td>
-                      <td>Chile</td>
-                      <td>Gloucester</td>
-                      <td className="text-center">$78,615</td>
-                    </tr>
-                    <tr>
-                      <td>Jon Porter</td>
-                      <td>Portugal</td>
-                      <td>Gloucester</td>
-                      <td className="text-center">$98,615</td>
-                    </tr>
-                  </tbody>
-                </Table>
-              </CardBody>
+              <Form>
+                  <Row>
+                    <Col className="px-md-1" md="2">
+                      <FormGroup>
+                      {/* <Label for="exampleSelect">
+                        Select
+                      </Label> */}
+                       <Input
+                       className="form-control"
+                        // id="exampleSelect"
+                        // name="select"
+                        type="select"
+                        value={filterInput}
+                        onChange={(e) => setFilterInput(e.target.value)}
+                        >
+                        <option>
+                         Please Select
+                        </option>
+                        <option>
+                         Customer Id
+                        </option>
+                        {/* <option>
+                        Customer Name
+                        </option> */}
+                        <option>
+                          Mobile Number
+                       </option>
+                       <option>
+                       Loan Amount
+                       </option>
+                       <option>
+                          Status
+                       </option>
+                       </Input>
+                      </FormGroup>
+                    </Col>
+                    <Col className="px-md-1" md="4">
+                      <FormGroup>
+                        {/* <label> Name</label> */}
+                        <Input
+                          // defaultValue="michael23"
+                          placeholder={filterInput}
+                          type="text"
+                          value={filterValue}
+                          onChange={(e) => setFilterValue(e.target.value)}
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col className="px-md-1" md="2">
+                    {/* <FormGroup> */}
+                    <Button className="btn-fill" onClick={handleCustomerFilter} color="primary" >
+                      Filter
+                     </Button>
+                     {/* </FormGroup> */}
+                    </Col>
+                    <Col className="px-md-1" md="2">
+                      {/* <FormGroup> */}
+                    <Button className="btn-fill" onClick={handleclearFilter} color="" type="submit">
+                      Clear
+                     </Button>
+                     {/* </FormGroup> */}
+                    </Col>
+                    
+                  </Row>
+                </Form>
+                <div className="table-responsive">
+                {/* customer_id, name, mobile, loan_amoun, onboard_at,partner name, lender_name,message,status, */}
+                                <table className="table table-text-small mb-0">
+                                    <thead className="thead-primary table-sorting">
+                                        <tr>
+                                            <th>Customer Id</th>
+                                            <th>Customer Name</th>
+                                            <th>Mobile Number</th>
+                                            <th>Loan Amount</th>
+                                            {userDetails && userDetails.role !== null && userDetails.role === "Admin" ? <th>Partner Name</th> : null}
+                                            <th>Lender Name</th>
+                                            <th>Status</th>
+                                            <th>Onboarding At</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {
+                                            getData(current, size).map((data, index) => {
+                                                return (
+                                                    <tr key={data.customer_info_id}>
+                                                        <td>{data.customer_info_id}</td>
+                                                        <td>{data.name}</td>
+                                                        <td>{data.mobile}</td>
+                                                        <td>{data.amount_offered}</td>
+                                                        {userDetails && userDetails.role !== null && userDetails.role === "Admin" ? <td>{data.partner_code}</td> : null}
+                                                        <td>{data.lender_code}</td>
+                                                        <td>{data.status}</td>
+                                                        <td>{data.created_at !== null ? convertDateTime(data.created_at):""}</td>
+                                                    </tr>
+                                                )
+                                            })
+                                        }
+                                    </tbody>
+                                </table>
+                 </div>
+                  <div className="table-filter-info">
+                                
+                                <Pagination
+                                    className="pagination-data"
+                                    showTotal={(total, range) => `Showing ${range[0]}-${range[1]} of ${total}`}
+                                    onChange={PaginationChange}
+                                    total={customerDetailsInfo.length}
+                                    current={current}
+                                    pageSize={size}
+                                    showSizeChanger={false}
+                                    itemRender={PrevNextArrow}
+                                    onShowSizeChange={PerPageChange}
+                                />
+                  </div>                        
+            </CardBody>
             </Card>
           </Col>
-          <Col md="12">
-            <Card className="card-plain">
-              <CardHeader>
-                <CardTitle tag="h4">Table on Plain Background</CardTitle>
-                <p className="category">Here is a subtitle for this table</p>
-              </CardHeader>
-              <CardBody>
-                <Table className="tablesorter" responsive>
-                  <thead className="text-primary">
-                    <tr>
-                      <th>Name</th>
-                      <th>Country</th>
-                      <th>City</th>
-                      <th className="text-center">Salary</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>Dakota Rice</td>
-                      <td>Niger</td>
-                      <td>Oud-Turnhout</td>
-                      <td className="text-center">$36,738</td>
-                    </tr>
-                    <tr>
-                      <td>Minerva Hooper</td>
-                      <td>Curaçao</td>
-                      <td>Sinaai-Waas</td>
-                      <td className="text-center">$23,789</td>
-                    </tr>
-                    <tr>
-                      <td>Sage Rodriguez</td>
-                      <td>Netherlands</td>
-                      <td>Baileux</td>
-                      <td className="text-center">$56,142</td>
-                    </tr>
-                    <tr>
-                      <td>Philip Chaney</td>
-                      <td>Korea, South</td>
-                      <td>Overland Park</td>
-                      <td className="text-center">$38,735</td>
-                    </tr>
-                    <tr>
-                      <td>Doris Greene</td>
-                      <td>Malawi</td>
-                      <td>Feldkirchen in Kärnten</td>
-                      <td className="text-center">$63,542</td>
-                    </tr>
-                    <tr>
-                      <td>Mason Porter</td>
-                      <td>Chile</td>
-                      <td>Gloucester</td>
-                      <td className="text-center">$78,615</td>
-                    </tr>
-                    <tr>
-                      <td>Jon Porter</td>
-                      <td>Portugal</td>
-                      <td>Gloucester</td>
-                      <td className="text-center">$98,615</td>
-                    </tr>
-                  </tbody>
-                </Table>
-              </CardBody>
-            </Card>
-          </Col>
+         
         </Row>
       </div>
     </>

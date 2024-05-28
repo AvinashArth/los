@@ -143,7 +143,7 @@
             }
       
   //funnel/stats
-  static async dashboardList(token) {
+  static async dashboardList(id,token) {
         const response = await fetch(`http://localhost:3000/funnel/stats`, {
             keepalive: true,
             method: 'GET',

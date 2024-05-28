@@ -35,21 +35,7 @@ import "./Tables.css"
 import { Task } from "../backend-sdk/task.sdk";
 
 const Tables = () => {
-    const datatableUsers = [
-    {
-      "name": "Currey Slee",
-      "partner_name": "Food Chemist",
-      "gender": "Male",
-      "lender_name": "Damietta",
-      "email": "cslee0@netlog.com",
-      "mobile": "532 179 1377",
-      "amount_offered": "$49491.60",
-       "status":"Approved",
-      "customer_info_id": 1,
-      "created_at":"23-05-2024"
-    }
-    
-     ]
+   
      const [perPage, setPerPage] = useState(10);
      const [size, setSize] = useState(perPage);
      const [current, setCurrent] = useState(1);
@@ -130,10 +116,10 @@ const Tables = () => {
       // const customerDetailsList = (id, token) => {
         Task.customerListFilter(userDetails && userDetails.id, userDetails && userDetails.token, filterInput, filterValue)
         .then((res) => {
-          console.log("fkfk", res)
+         
           // if(res.length > 0){
             setCustomerDetailsInfo(res);
-            console.log(res)
+          
           // }
           
         })

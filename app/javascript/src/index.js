@@ -32,6 +32,7 @@ import "../src/assets/css/nucleo-icons.css"
 //import "@fortawesome/fontawesome-free/css/all.min.css";
 
  import ThemeContextWrapper from "./components/ThemeWrapper/ThemeWrapper";
+ import CustomerDetailsForm from "./views/onBoard/CustomerForm.js";
  import BackgroundColorWrapper from "./components/BackgroundColorWrapper/BackgroundColorWrapper";
 
 //const root = ReactDOM.createRoot(document.getElementById("root"));
@@ -44,6 +45,7 @@ const app = () => {
           <Route path="/admin" render={(props) => <AdminLayout {...props} />} />
           <Route path="/rtl" render={(props) => <RTLLayout {...props} />} />
           <Route path="/auth" render={(props) => <AuthLayout {...props} />} />
+          {/* <Route path="/onboards" component={<CustomerDetailsForm/>} /> */}
           <Redirect from="/" to="/auth/login" />
         </Switch>
       </BrowserRouter>

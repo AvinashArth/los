@@ -135,11 +135,11 @@ function Admin(props) {
           <div className="wrapper">
             <Sidebar
               routes={routes}
-              logo={{
-                outterLink: "https://www.creative-tim.com/",
-                text: "Creative Tim",
-                imgSrc: logo,
-              }}
+              // logo={{
+              //   outterLink: "/",
+              //   text: "Happy Dashboard",
+              //   imgSrc: "",
+              // }}
               toggleSidebar={toggleSidebar}
             />
             <div className="main-panel" ref={mainPanelRef} data={color}>

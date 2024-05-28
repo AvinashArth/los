@@ -23,9 +23,10 @@ import Dashboard from "./views/Dashboard";
 import TableList from "./views/TableList.js";
 // import Typography from "views/Typography.js";
 import UserProfile from "./views/UserProfile.js";
+import Contact from "./views/Contact.js";
 import Login from "./views/Login";
 import Register from "./views/Register";
-
+import CustomerDetailsForm from "./views/onBoard/CustomerForm.js";
 var routes = [
   {
     path: "/dashboard",
@@ -68,29 +69,29 @@ var routes = [
     layout: "/admin",
   },
   {
-    path: "/tables",
-    name: "Table List",
+    path: "/CustomerList",
+    name: "Customer List",
     rtlName: "قائمة الجدول",
     icon: "tim-icons icon-puzzle-10",
     component: TableList,
     layout: "/admin",
   },
   // {
-  //   path: "/typography",
+  //   path: "/invoice",
   //   name: "Typography",
   //   rtlName: "طباعة",
   //   icon: "tim-icons icon-align-center",
   //   component: Typography,
   //   layout: "/admin",
   // },
-  // {
-  //   path: "/rtl-support",
-  //   name: "RTL Support",
-  //   rtlName: "ار تي ال",
-  //   icon: "tim-icons icon-world",
-  //   component: Rtl,
-  //   layout: "/rtl",
-  // },
+  {
+    path: "/Contact-us",
+    name: "Contact Us",
+    rtlName: "ار تي ال",
+    icon: "tim-icons icon-world",
+    component: Contact,
+    layout: "/admin",
+  },
   {
     path: "/login",
     name: "Login",
@@ -100,11 +101,11 @@ var routes = [
     layout: "/auth",
   },
   {
-    path: "/register",
-    name: "Register",
+    path: "/onboard",
+    name: "CustomerDetailsForm",
     rtlName: "لوحة القيادة",
     icon: "tim-icons icon-chart-pie-36",
-    component: Register,
+    component: CustomerDetailsForm,
     layout: "/auth",
   },
 ];

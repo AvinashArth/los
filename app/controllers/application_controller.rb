@@ -7,12 +7,18 @@ class ApplicationController < ActionController::Base
   attr_reader :current_user
 
   def encode_token(payload)
-    JWT.encode(payload, Rails.application.secrets.secret_key_base, "HS256")
+    secret_key = Rails.application.secrets.secret_key_base
+    encoded_token = JWT.encode(payload, secret_key, 'HS256')
+    encoded_token
   end
 
   def decode_token(token)
-    JWT.decode(token, Rails.application.credentials.secret_key_base)[0]
-    HashWithIndifferentAccess.new(decoded[0])
+    secret_key = Rails.application.secrets.secret_key_base
+    decoded_token = JWT.decode(token, secret_key, true, algorithm: 'HS256')[0]
+    HashWithIndifferentAccess.new(decoded_token)
+  rescue JWT::DecodeError => e
+    puts "JWT Decode Error: #{e.message}"
+    nil
   end
 
   def authorize_request
@@ -29,7 +35,7 @@ class ApplicationController < ActionController::Base
     if request.format.json?
       true
     else
-      super
+      true
     end
   end
 

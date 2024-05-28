@@ -66,7 +66,7 @@ class UpdateLoanStatusService
   end
 
   def base_url
-    ENV.fetch("ADL_PARTNER_URL", nil)
+    ENV.fetch("ARTH_BASE_URL")
   end
 
   def request_ref

@@ -2,7 +2,7 @@
 
 class Base
   def post(endpoint, data, headers)
-    uri = URI(endpoint)
+    uri = URI(base_url + endpoint)
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true
     request = Net::HTTP::Post.new(uri.path, headers)
@@ -12,7 +12,7 @@ class Base
   end
 
   def adl_post(endpoint, headers, data)
-    uri = URI(endpoint)
+    uri = URI(base_url + endpoint)
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true
     request = Net::HTTP::Post.new(uri, headers)
@@ -25,7 +25,7 @@ class Base
     uri = URI(base_url + endpoint)
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true
-    request = Net::HTTP::Get.new(uri.request_uri, headers)
+    request = Net::HTTP::Get.new(uri, headers)
     response = http.request(request)
     JSON.parse(response.body)
   end

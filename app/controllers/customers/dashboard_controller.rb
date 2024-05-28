@@ -5,19 +5,20 @@ module Customers
     before_action :authorize_request
 
     def funnel_data
-      result = []
+      result = {}
       if current_user.role.downcase == "admin"
         total_data = all_data("admin")
         partner_leads = month_wise_lead("admin")
-        loans_stats = loan_stats("admin")
+        loan_stats("admin")
       else
         total_data = all_data(current_user.role_code)
         partner_leads = month_wise_lead(current_user.role_code)
-        loans_stats = loan_stats(current_user.role_code)
+        loan_stats(current_user.role_code)
       end
-      result << total_data
-      result << partner_leads
-      result << loans_stats
+      result.merge!(total_data)
+      result.merge!(partner_leads)
+      # result.merge!(loans_stats)
+      render json: result
     end
 
     def all_data(code)
@@ -25,11 +26,11 @@ module Customers
       total_disburse_amount = code == "admin" ? LoanProfile.sum(:amount_disbursed) : LoanProfile.where(partner_code: code).sum(:amount_disbursed)
       total_disburse_lead = code == "admin" ? LoanProfile.where(status: "disbursed").count : LoanProfile.where(status: "disbursed", partner_code: code).count
 
-      [{
+      {
         all_cust:              all_cust,
         total_disburse_amount: total_disburse_amount,
         total_disburse_lead:   total_disburse_lead
-      }]
+      }
     end
 
     def month_wise_lead(code)
@@ -38,51 +39,59 @@ module Customers
       query = query.where(partner_code: code) unless code.eql?("admin")
 
       if code.eql?("admin")
+        partners_data = {}
         partners = CustomerInfo.distinct.pluck(:partner_code)
-        monthly_leads = {}
         partners.each do |partner|
-          monthly_leads[partner] = query.where(partner_code: partner).group_by_month(:created_at, format: "%B %Y").count
+          monthly_data = query.where(partner_code: partner)
+                              .group_by_month(:created_at, format: "%B %Y")
+                              .count
+          all_months_data = Date::MONTHNAMES[1..].to_h {|month| [month, 0] }
+          monthly_data.each {|month, count| all_months_data[Date.parse(month).strftime("%B")] = count }
+          partners_data[partner] = {
+            labels:   all_months_data.keys,
+            datasets: all_months_data.values
+          }
         end
+        partners_data
       else
-        monthly_leads = query.group_by_month(:created_at, format: "%B %Y").count
-      end
-
-      monthly_leads.map do |partner, data|
-        data.map do |month, count|
-          {partner_code: partner, month: month, total: count}
-        end
-      end.flatten
-    end
-
-    def loan_stats(code)
-      current_year = Date.current.year
-      monthly_data = LoanProfile.where("extract(year from created_at) = ?", current_year)
-      monthly_data = monthly_data.where(partner_code: code) unless code.eql?("admin")
-                                                                       .group("DATE_TRUNC('month', created_at)")
-                                                                       .select(
-                                                                         "DATE_TRUNC('month', created_at) as month",
-                                                                         "count(*) as total_leads",
-                                                                         "sum(case when status = 'disburse' then 1 else 0 end) as disburse_count",
-                                                                         "sum(case when status = 'disburse' then disbursed_amount else 0 end) as disbursed_amount"
-                                                                       )
-      leads_array = monthly_data.map do |data|
+        monthly_data = query.group_by_month(:created_at, format: "%B %Y").count
+        all_months_data = Date::MONTHNAMES[1..].to_h {|month| [month, 0] }
+        monthly_data.each {|month, count| all_months_data[Date.parse(month).strftime("%B")] = count }
         {
-          month:            data.month.strftime("%B %Y"),
-          total_leads:      data.total_leads,
-          disburse_count:   data.disburse_count,
-          disbursed_amount: data.disbursed_amount
+          labels:   all_months_data.keys,
+          datasets: all_months_data.values
         }
       end
-      total_leads = leads_array.sum {|data| data[:total_leads] }
-      total_disburse_count = leads_array.sum {|data| data[:disburse_count] }
-      total_disbursed_amount = leads_array.sum {|data| data[:disbursed_amount] }
-      leads_array << {
-        total_case:             total_leads,
-        total_disburse_count:   total_disburse_count,
-        total_disbursed_amount: total_disbursed_amount
-      }
+    end
 
-      leads_array
+    def fetch_funnel_data(_code)
+      partners = if current_user.role == "admin"
+                   Partner.pluck(:code)
+                 else
+                   [current_user.code]
+                 end
+      lenders = Lender.pluck(:name)
+
+      data = {}
+      partners.each do |partner|
+        partner_data = {}
+        partner_data[:total] = LoanProfile.where(partner_name: partner, created_at: 1.month.ago.beginning_of_day..1.month.ago.end_of_day).count
+
+        lender_data = {}
+        lenders.each do |lender|
+          lender_data[lender] = {
+            total_sent: LoanProfile.where(partner_name: partner, lender_name: lender, created_at: 1.month.ago.beginning_of_day..1.month.ago.end_of_day).count,
+            approved:   LoanProfile.where(partner_name: partner, lender_name: lender, status: "APPROVED", created_at: 1.month.ago.beginning_of_day..1.month.ago.end_of_day).count,
+            disbursed:  LoanProfile.where(partner_name: partner, lender_name: lender, status: "DISBURSED", created_at: 1.month.ago.beginning_of_day..1.month.ago.end_of_day).count,
+            rejected:   LoanProfile.where(partner_name: partner, lender_name: lender, status: "REJECTED", created_at: 1.month.ago.beginning_of_day..1.month.ago.end_of_day).count
+          }
+        end
+
+        partner_data[:lenders] = lender_data
+        data[partner] = partner_data
+      end
+
+      data
     end
   end
 end

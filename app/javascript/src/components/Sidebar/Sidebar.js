@@ -121,7 +121,7 @@ function Sidebar(props) {
             ) : null}
             <Nav>
               {routes.map((prop, key) => {
-                if(prop.name === "Login") {
+                if(prop.name === "Login" || prop.name === "CustomerDetailsForm") {
                   return null
                 }
                 else {

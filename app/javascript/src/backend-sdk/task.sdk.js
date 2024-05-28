@@ -21,7 +21,7 @@
                     'Authorization': `Bearer ${token}`
                 },
             });
-            console.log("kk", token)
+            // console.log("kk", token)
             return response.json();
         }
         static async customerListFilter(id, token, label, value) {
@@ -142,7 +142,32 @@
                 return response.json();
             }
       
-  
+  //funnel/stats
+  static async dashboardList(token) {
+        const response = await fetch(`http://localhost:3000/funnel/stats`, {
+            keepalive: true,
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+        });
+        // console.log("kk", token)
+        return response.json();
+    }
+    //onboard/create
+    static async createOnboard(data) {
+      console.log("mkfk")
+          const response = await fetch(`http://localhost:3000/onboard/create`, {
+              keepalive: true,
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(data),
+          });
+          return response.json();
+      }
       static async getAll(token) {
           return Task.remote.call("Task.getAll", token)  
       }

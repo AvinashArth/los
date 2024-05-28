@@ -15,12 +15,12 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React from "react";
+import React,{useEffect, useState} from "react";
 // nodejs library that concatenates classes
 import classNames from "classnames";
 // react plugin used to create charts
 import { Line } from "react-chartjs-2";
-
+import { BarChart } from "./Barchart/BarChart.js";
 // reactstrap components
 import {
   Button,
@@ -50,26 +50,94 @@ import {
   chartExample3,
   chartExample4,
 } from "../variables/charts.js";
-import { Product } from "../backend-sdk/product.sdk";
-import { Order } from "../backend-sdk/order.sdk";
-import { Article } from "../backend-sdk/article.sdk";
 import { Task } from "../backend-sdk/task.sdk";
-import { LineChartView } from "../backedComponents/LineChart/LineChartView";
-import { LineChart } from "../backedComponents/LineChart/LineChart";
-import { BarChartView } from "../backedComponents/BarChart/BarChartView";
-import { BarChart } from "../backedComponents/BarChart/BarChart";
-import { SimpleTableView } from "../backedComponents/SimpleTable/SimpleTableView";
-import { SimpleTable } from "../backedComponents/SimpleTable/SimpleTable";
+import { Doughnut } from 'react-chartjs-2';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 
-function Dashboard(props) {
+ChartJS.register(ArcElement, Tooltip, Legend);
+
+
+const Dashboard = () => {
+ //dashboardList
+ const [customerDetailsInfo, setCustomerDetailsInfo] = useState({});
+ const [userDetails, setUserDetails] = useState(null);
+ const [chartData, setChartData] = useState({});
+ const handleChartFunction = (labels, datas) => {
+  console.log(labels, datas)
+  const data = {
+    labels: labels,
+    datasets: [
+      {
+        label: '# of Votes',
+        data: datas,
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(54, 162, 235, 0.2)',
+          'rgba(255, 206, 86, 0.2)',
+          'rgba(75, 192, 192, 0.2)',
+          'rgba(153, 102, 255, 0.2)',
+          'rgba(255, 159, 64, 0.2)',
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(54, 162, 235, 0.2)',
+          'rgba(255, 206, 86, 0.2)',
+          'rgba(75, 192, 192, 0.2)',
+          'rgba(153, 102, 255, 0.2)',
+          'rgba(255, 159, 64, 0.2)',
+        ],
+        borderColor: [
+          'rgba(255, 99, 132, 1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(75, 192, 192, 1)',
+          'rgba(153, 102, 255, 1)',
+          'rgba(255, 159, 64, 1)',
+          'rgba(255, 99, 132, 1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(75, 192, 192, 1)',
+          'rgba(153, 102, 255, 1)',
+          'rgba(255, 159, 64, 1)',
+        ],
+        borderWidth: 1,
+      },
+    ],
+  };
+  setChartData(data)
+ }
  
+
+ const customerDetailsList = (id, token) => {
+  Task.dashboardList(token)
+    .then((res) => {
+      setCustomerDetailsInfo(res);
+      handleChartFunction(res && res.TIDE && res.TIDE.labels, res && res.TIDE && res.TIDE.datasets);
+    })
+    .catch((err) => {
+      console.log(err.error);
+    });
+};
+
+useEffect(() => {
+  const items = JSON.parse(localStorage.getItem('user'));
+  setUserDetails(items);
+  if (items) {
+    customerDetailsList(items.id, items.token);
+  }
+}, []);
+
+ const handlebarChart = () => {
+  console.log(chartData)
+    return (<>
+        <Doughnut data={chartData} />
+    </>)
+ }
 
   return (
     <>
       <div className="content">
       <div className="content">
         <Row>
-          <Col lg="3" md="6" sm="6">
+          <Col lg="4" md="4" sm="4">
             <Card className="card-stats">
               <CardBody>
                 <Row>
@@ -81,21 +149,21 @@ function Dashboard(props) {
                   <Col md="8" xs="7">
                     <div className="numbers">
                       <p className="card-category">Total Leads</p>
-                      <CardTitle tag="p">150GB</CardTitle>
+                      <CardTitle tag="p">{customerDetailsInfo && customerDetailsInfo.all_cust}</CardTitle>
                       <p />
                     </div>
                   </Col>
                 </Row>
               </CardBody>
-              <CardFooter>
+              {/* <CardFooter>
                 <hr />
                 <div className="stats">
                   <i className="fas fa-sync-alt" /> Update Now
                 </div>
-              </CardFooter>
+              </CardFooter> */}
             </Card>
           </Col>
-          <Col lg="3" md="6" sm="6">
+          <Col lg="4" md="4" sm="4">
             <Card className="card-stats">
               <CardBody>
                 <Row>
@@ -107,21 +175,21 @@ function Dashboard(props) {
                   <Col md="8" xs="7">
                     <div className="numbers">
                       <p className="card-category">total disbursed amount</p>
-                      <CardTitle tag="p">$ 1,345</CardTitle>
+                      <CardTitle tag="p">{customerDetailsInfo && customerDetailsInfo.total_disburse_amount}</CardTitle>
                       <p />
                     </div>
                   </Col>
                 </Row>
               </CardBody>
-              <CardFooter>
+              {/* <CardFooter>
                 <hr />
                 <div className="stats">
                   <i className="far fa-calendar" /> Last day
                 </div>
-              </CardFooter>
+              </CardFooter> */}
             </Card>
           </Col>
-          <Col lg="3" md="6" sm="6">
+          <Col lg="4" md="4" sm="4">
             <Card className="card-stats">
               <CardBody>
                 <Row>
@@ -133,61 +201,27 @@ function Dashboard(props) {
                   <Col md="8" xs="7">
                     <div className="numbers">
                       <p className="card-category">total disbursed leads</p>
-                      <CardTitle tag="p">23</CardTitle>
+                      <CardTitle tag="p">{customerDetailsInfo && customerDetailsInfo.total_disburse_lead}</CardTitle>
                       <p />
                     </div>
                   </Col>
                 </Row>
               </CardBody>
-              <CardFooter>
-                <hr />
-                <div className="stats">
-                  <i className="far fa-clock" /> In the last hour
-                </div>
-              </CardFooter>
             </Card>
           </Col>
-          <Col lg="3" md="6" sm="6">
-            <Card className="card-stats">
-              <CardBody>
-                <Row>
-                  <Col md="4" xs="5">
-                    <div className="icon-big text-center icon-warning">
-                      <i className="nc-icon nc-favourite-28 text-primary" />
-                    </div>
-                  </Col>
-                  <Col md="8" xs="7">
-                    <div className="numbers">
-                      <p className="card-category">Followers</p>
-                      <CardTitle tag="p">+45K</CardTitle>
-                      <p />
-                    </div>
-                  </Col>
-                </Row>
-              </CardBody>
-              <CardFooter>
-                <hr />
-                <div className="stats">
-                  <i className="fas fa-sync-alt" /> Update now
-                </div>
-              </CardFooter>
-            </Card>
-          </Col>
+          
         </Row>
         <Row>
-          <Col md="12">
+          <Col md="6">
             <Card>
               <CardHeader>
                 <CardTitle tag="h5">Users Behavior</CardTitle>
                 <p className="card-category">24 Hours performance</p>
               </CardHeader>
               <CardBody>
-                {/* <Line
-                  data={dashboard24HoursPerformanceChart.data}
-                  options={dashboard24HoursPerformanceChart.options}
-                  width={400}
-                  height={100}
-                /> */}
+              {/* {console.log(customerDetailsInfo && customerDetailsInfo.TIDE && customerDetailsInfo.TIDE.labels, customerDetailsInfo && customerDetailsInfo.TIDE && customerDetailsInfo.TIDE.datasets)}
+              {chartData && (<></>)}
+              <Doughnut data={chartData} /> */}
               </CardBody>
               <CardFooter>
                 <hr />

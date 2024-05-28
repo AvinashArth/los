@@ -53,7 +53,7 @@ const Contact = () => {
         setVisible(true);
         setError("All fields are required.");
         setTimeout(() => {
-          setIsVisible(false); // Set visibility to false after 1 second
+          setVisible(false); // Set visibility to false after 1 second
         }, 1000);
         return false;
       }
@@ -79,7 +79,7 @@ const Contact = () => {
         setMobileNumber("");
         setMessage("");
         setTimeout(() => {
-          setIsVisible(false); // Set visibility to false after 1 second
+          setVisible(false); // Set visibility to false after 1 second
         }, 1000);
         // console.log("jjdj", res);
       })
@@ -91,7 +91,7 @@ const Contact = () => {
         setMobileNumber("");
         setMessage("");
         setTimeout(() => {
-          setIsVisible(false); // Set visibility to false after 1 second
+          setVisible(false); // Set visibility to false after 1 second
         }, 1000);
         console.log(err.error);
       });

@@ -26,7 +26,7 @@ import UserProfile from "./views/UserProfile.js";
 import Contact from "./views/Contact.js";
 import Login from "./views/Login";
 import Register from "./views/Register";
-
+import CustomerDetailsForm from "./views/onBoard/CustomerForm.js";
 var routes = [
   {
     path: "/dashboard",
@@ -100,13 +100,13 @@ var routes = [
     component: Login,
     layout: "/auth",
   },
-  // {
-  //   path: "/register",
-  //   name: "Register",
-  //   rtlName: "لوحة القيادة",
-  //   icon: "tim-icons icon-chart-pie-36",
-  //   component: Register,
-  //   layout: "/auth",
-  // },
+  {
+    path: "/onboard",
+    name: "CustomerDetailsForm",
+    rtlName: "لوحة القيادة",
+    icon: "tim-icons icon-chart-pie-36",
+    component: CustomerDetailsForm,
+    layout: "/auth",
+  },
 ];
 export default routes;

@@ -79,7 +79,7 @@ function AdminNavbar(props) {
               </NavbarToggler>
             </div>
             <NavbarBrand href="#pablo" onClick={(e) => e.preventDefault()}>
-              {props.brandText}
+              {/* {props.brandText} */}
             </NavbarBrand>
           </div>
           <NavbarToggler onClick={toggleCollapse}>

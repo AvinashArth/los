@@ -21,17 +21,25 @@ class Cashe
     key = hmac_encrypt(payload, auth_key)
     headers = headers(key)
     response = post(endpoint, payload, headers)
-    loan.update(response: response, status: "Rejected", rejection_reason: "Duplicate lead received from some other domain.") if response["duplicateStatusCode"] == 3
-    response["duplicateStatusCode"]
+    if response["duplicateStatusCode"] == 3
+      loan.update(response: response, status: "Rejected", rejection_reason: "Duplicate lead", name: user.full_name)
+    else
+      pre_approval
+    end
   end
 
-  def pres_approval
+  def pre_approval
     endpoint = "https://test-partners.cashe.co.in/report/getLoanApprovalDetails"
     payload = pre_approval_params
     key = hmac_encrypt(payload, auth_key)
     headers = headers(key)
     response = post(endpoint, payload, headers)
-    loan.update(response: response, status: response["payLoad"]["status"], amount: response["payLoad"]["amount"] || 0) if response["payLoad"].present?
+    if response["payLoad"].present? && %w[pre_approved pre_qualified_high pre_qualified_low].include?(response["payLoad"]["status"])
+      loan.update(response: response, status: "Approved", amount: response["payLoad"]["amount"] || 0, name: user.full_name)
+      create_customer
+    else
+      loan.update(response: response, status: response["payLoad"]["status"], rejection_reason: "Ineligible", name: user.full_name)
+    end
   end
 
   def fetch_plan
@@ -74,7 +82,7 @@ class Cashe
       pan:                user.pan_number.upcase,
       mobileNo:           user.mobile,
       emailId:            user.email.strip,
-      state:              user.home_state.upcase,
+      state:              state_mapping[user.home_state],
       city:               user.home_city,
       addressLine1:       user.home_address,
       locality:           user.home_address,
@@ -105,7 +113,7 @@ class Cashe
         "Landmark (Address Line 3)":        user.home_address,
         Pincode:                            user.home_pincode,
         City:                               user.home_city,
-        State:                              user.home_state,
+        State:                              state_mapping[user.home_state],
         "Type of Accommodation":            "",
         PAN:                                user.pan_number,
         Aadhaar:                            "",
@@ -173,6 +181,53 @@ class Cashe
     }
   end
 
+  def state_mapping
+    {
+      "andamanandnicobarislands" => "ANDAMAN & NICOBAR ISLANDS",
+      "andaman&nicobar"          => "ANDAMAN & NICOBAR ISLANDS",
+      "andhrapradesh"            => "ANDHRA PRADESH",
+      "arunachalpradesh"         => "ARUNACHAL PRADESH",
+      "assam"                    => "ASSAM",
+      "bihar"                    => "BIHAR",
+      "chandigarh"               => "CHANDIGARH",
+      "chattisgarh"              => "CHATTISGARH",
+      "dadraandnagarhaveli"      => "DADRA & NAGAR HAVELI",
+      "damananddiu"              => "DAMAN & DIU",
+      "daman&diu"                => "DAMAN & DIU",
+      "delhi"                    => "DELHI",
+      "goa"                      => "GOA",
+      "gujarat"                  => "GUJARAT",
+      "haryana"                  => "HARYANA",
+      "himachalpradesh"          => "HIMACHAL PRADESH",
+      "jammuandkashmir"          => "JAMMU AND KASHMIR",
+      "jammu&kashmir"            => "JAMMU AND KASHMIR",
+      "jharkhand"                => "JHARKHAND",
+      "karnataka"                => "KARNATAKA",
+      "kerala"                   => "KERALA",
+      "lakshadweepislands"       => "LAKSHADWEEP",
+      "lakshadweep"              => "LAKSHADWEEP",
+      "madhyapradesh"            => "MADHYA PRADESH",
+      "maharashtra"              => "MAHARASHTRA",
+      "manipur"                  => "MANIPUR",
+      "meghalaya"                => "MEGHALAYA",
+      "mizoram"                  => "MIZORAM",
+      "nagaland"                 => "NAGALAND",
+      "odisha"                   => "ODISHA",
+      "orissa"                   => "ODISHA",
+      "pondicherry"              => "PUDUCHERRY",
+      "punjab"                   => "PUNJAB",
+      "rajasthan"                => "RAJASTHAN",
+      "sikkim"                   => "SIKKIM",
+      "tamilnadu"                => "TAMIL NADU",
+      "telangana"                => "TELANGANA",
+      "tripura"                  => "TRIPURA",
+      "uttarpradesh"             => "UTTAR PRADESH",
+      "uttarakhand"              => "UTTARAKHAND",
+      "uttaranchal"              => "UTTARAKHAND",
+      "westbengal"               => "WEST BENGAL"
+    }
+  end
+
   def loan_amount(salary)
     case salary
     when 25_000..40_000
@@ -211,14 +266,7 @@ class Cashe
     Base64.strict_encode64(hmac)
   end
 
-  def post(endpoint, data, headers)
-    uri = URI.parse(endpoint)
-    http = Net::HTTP.new(uri.host, uri.port)
-    http.use_ssl = true
-    request = Net::HTTP::Post.new(uri, headers)
-    request.body = data.to_json
-    puts(http.set_debug_output($stdout))
-    response = http.request(request)
-    JSON.parse(response.read_body)
+  def base_url
+    ENV.fetch("CASHE_BASE_URL", nil)
   end
 end

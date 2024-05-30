@@ -14,7 +14,7 @@ class Lendingkart < Base
     endpoint = "https://api.lendingkart.com/v2/partner/leads/lead-exists-status"
     response = post(endpoint, dedupe_payload, headers)
     if response["leadExists"]
-      loan.update(response: response, status: "Rejected", rejection_reason: "Duplicate Lead", name: user.full_name)
+      loan.update(response: response, status: "REJECTED", rejection_reason: "Duplicate Lead", name: user.full_name, message: "Duplicate Lead")
       true
     else
       response["leadExists"]
@@ -24,19 +24,34 @@ class Lendingkart < Base
   def lead_creation
     endpoint = "https://api.lendingkart.com/v2/partner/leads/create-application"
     response = post(endpoint, lead_creation_payload, headers)
-    loan.update(response: response, status: response["message"], external_loan_id: response["applicationId"], name: user.full_name) if response
+    if response["message"] == "ELIGIBLE"
+      loan.update(response: response, status: response["message"], external_loan_id: response["applicationId"], name: user.full_name)
+    else
+      loan.update(response: response, rejection_reason: response["message"], status: "INELIGIBLE", message: response["message"], name: user.full_name)
+    end
   end
 
   def fetch_status(application_id)
     endpoint = "https://api.lendingkart.com/v2/partner/leads/applicationStatus/#{application_id}"
     response = get(endpoint, headers, nil)
-    if response && response["applicationStatus"].present?
-      data = LoanProfile.find_by(external_loan_id: application_id)
-      data.status = response["applicationStatus"]
-      data.rejection_reason = response["rejectionReasons"]&.first if response["rejectionReasons"].present?
-      data.save
-    end
-    response
+
+    return unless response && response["applicationStatus"].present?
+
+    data = LoanProfile.find_by(external_loan_id: application_id)
+
+    status = if ["Application in Progress", "Application under Evaluation", "Terms Created", "TnC - Approved", "Agreement Stage", "Agreement Signed"].include?(response["applicationStatus"])
+               "INPROGRESS"
+             elsif response["applicationStatus"] == "Disbursed"
+               "DISBURSED"
+             elsif response["applicationStatus"] == "Application Rejected"
+               "REJECTED"
+             else
+               "ERROR"
+             end
+
+    data.status = status
+    data.rejection_reason = data.message = response["rejectionReasons"]&.first if response["rejectionReasons"].present?
+    data.save
   end
 
   def base_url
@@ -76,6 +91,8 @@ class Lendingkart < Base
 
   def loan_amount(salary)
     case salary
+    when 1..24_999
+      25_000
     when 25_000..40_000
       50_000
     when 40_001..50_000

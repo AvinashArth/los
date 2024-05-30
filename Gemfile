@@ -14,6 +14,7 @@ gem "sprockets-rails"
 gem "bcrypt"
 gem "dotenv-rails"
 gem "font-awesome-sass"
+gem "groupdate"
 gem "haml-rails"
 gem "jwt"
 gem "kaminari"
@@ -26,7 +27,6 @@ gem "sidekiq"
 gem "sidekiq-cron"
 gem "sidekiq-scheduler"
 gem "webpacker"
-gem 'groupdate'
 
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", ">= 5.0"

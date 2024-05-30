@@ -6,7 +6,7 @@ require "base64"
 
 class Cashe
   def perform(mobile)
-    @auth_key = "'`h_+x|cTvUg;Md%"
+    @auth_key = ENV.fetch("ARTH_API_KEY", nil)
     @user = CustomerInfo.find_by(mobile: mobile)
     partner = Partner.find_by(code: user.partner_code)
     @loan = LoanProfile.find_or_create_by(customer_info_id: @user.id, lender_name: "CASHE", mobile: user.mobile, partner_id: partner.id, partner_code: partner.code)
@@ -16,42 +16,42 @@ class Cashe
   attr_reader :user, :loan, :auth_key
 
   def dedupe_check
-    endpoint = "https://test-partners.cashe.co.in/partner/checkDuplicateCustomerInfo"
+    endpoint = "#{ENV.fetch('CASHE_BASE_URL', nil)}/partner/checkDuplicateCustomerInfo"
     payload = dedupe_params
     key = hmac_encrypt(payload, auth_key)
     headers = headers(key)
     response = post(endpoint, payload, headers)
     if response["duplicateStatusCode"] == 3
-      loan.update(response: response, status: "Rejected", rejection_reason: "Duplicate lead", name: user.full_name)
+      loan.update(response: response, status: "REJECTED", rejection_reason: "Duplicate lead", name: user.full_name, message: "Duplicate lead")
     else
       pre_approval
     end
   end
 
   def pre_approval
-    endpoint = "https://test-partners.cashe.co.in/report/getLoanApprovalDetails"
+    endpoint = "#{ENV.fetch('CASHE_BASE_URL', nil)}/report/getLoanApprovalDetails"
     payload = pre_approval_params
     key = hmac_encrypt(payload, auth_key)
     headers = headers(key)
     response = post(endpoint, payload, headers)
     if response["payLoad"].present? && %w[pre_approved pre_qualified_high pre_qualified_low].include?(response["payLoad"]["status"])
-      loan.update(response: response, status: "Approved", amount: response["payLoad"]["amount"] || 0, name: user.full_name)
+      loan.update(response: response, status: "APPROVED", amount: response["payLoad"]["amount"] || 0, name: user.full_name)
       create_customer
     else
-      loan.update(response: response, status: response["payLoad"]["status"], rejection_reason: "Ineligible", name: user.full_name)
+      loan.update(response: response, status: response["payLoad"]["status"], rejection_reason: "Ineligible", name: user.full_name, message: "Ineligible")
     end
   end
 
   def fetch_plan
-    endpoint = "https://test-partners.cashe.co.in/partner/fetchCashePlans/salary"
-    payload = {partner_name: "Happyness_partner_qa", salary: user.monthly_income}
+    endpoint = "#{ENV.fetch('CASHE_BASE_URL', nil)}/partner/fetchCashePlans/salary"
+    payload = {partner_name: ENV.fetch("CASHE_APPLICATION_NAME", nil), salary: user.monthly_income}
     key = hmac_encrypt(payload, auth_key)
     headers = headers(key)
     post(endpoint, payload, headers)
   end
 
   def create_customer
-    endpoint = "https://api.lendingkart.com/v2/partner/leads/create-application"
+    endpoint = "#{ENV.fetch('CASHE_BASE_URL', nil)}/partner/create_customer"
     payload = create_customer_params
     key = hmac_encrypt(payload, auth_key)
     headers = headers(key)
@@ -59,8 +59,8 @@ class Cashe
   end
 
   def check_status
-    endpoint = "https://test-partners.cashe.co.in/partner/customer_status"
-    payload = {partner_name: "Happyness_partner_qa", partner_customer_id: loan.external_loan_id}
+    endpoint = "#{ENV.fetch('CASHE_BASE_URL', nil)}/partner/customer_status"
+    payload = {partner_name: ENV.fetch("CASHE_APPLICATION_NAME", nil), partner_customer_id: loan.external_loan_id}
     key = hmac_encrypt(payload, auth_key)
     headers = headers(key)
     post(endpoint, payload, headers)
@@ -68,7 +68,7 @@ class Cashe
 
   def dedupe_params
     {
-      partner_name: "Happyness_partner_qa",
+      partner_name: ENV.fetch("CASHE_APPLICATION_NAME", nil),
       mobile_no:    user.mobile,
       email_id:     user.email
     }
@@ -76,7 +76,7 @@ class Cashe
 
   def pre_approval_params
     {
-      partner_name:       "Happyness_partner_qa",
+      partner_name:       ENV.fetch("CASHE_APPLICATION_NAME", nil),
       name:               use.first_name + user.last_name,
       dob:                dob(user),
       pan:                user.pan_number.upcase,
@@ -98,84 +98,31 @@ class Cashe
 
   def create_customer_params
     {
-      partner_name:            "Happyness_partner_qa",
-      reference_Id:            "",
+      partner_name:            ENV.fetch("CASHE_APPLICATION_NAME", nil),
       applicant_id:            user.id.to_s,
       loan_amount:             loan_amount(user.monthly_income),
-      product_type_name:       "CASHe_90",
       "Personal Information":  {
-        "First Name":                       user.first_name,
-        "Last Name":                        user.last_name,
-        DOB:                                dob(user),
-        Gender:                             user.gender.strip[0].capitalize,
-        "Address Line 1":                   user.home_address,
-        "Address Line 2":                   user.home_address,
-        "Landmark (Address Line 3)":        user.home_address,
-        Pincode:                            user.home_pincode,
-        City:                               user.home_city,
-        State:                              state_mapping[user.home_state],
-        "Type of Accommodation":            "",
-        PAN:                                user.pan_number,
-        Aadhaar:                            "",
-        "Highest Qualification":            user.education_level,
-        residing_with:                      "",
-        number_of_years_at_current_address: "",
-        marital_status:                     "",
-        spouse_employment_status:           "",
-        number_of_kids:                     ""
+        "First Name":     user.first_name,
+        "Last Name":      user.last_name,
+        DOB:              user.dob.strftime("%d-%m-%Y"),
+        Gender:           user.gender.capitalize,
+        "Address Line 1": user.home_address,
+        Pincode:          user.home_pincode,
+        City:             user.home_city,
+        State:            state_mapping[user.home_state.downcase],
+        PAN:              user.pan_number
       },
       "Applicant Information": {
-        "Company Name":                    user.company_name,
-        "Office Phone no":                 "",
-        Designation:                       "",
-        "Monthly Income":                  user.monthly_income,
-        "Number of Years in Current Work": "",
-        "Official Email":                  "",
-        "Office Address 1":                "",
-        "Office Address 2":                "",
-        "Landmark (Office)":               "",
-        "Office Pincode":                  "",
-        "Office City":                     "",
-        "Office State":                    "",
-        "Working Since":                   "",
-        "Employment Type":                 user.employment_type,
-        "Salary ReceivedTypeId":           user.salary_received_type,
-        work_sector:                       "",
-        job_function:                      "",
-        organization:                      ""
-      },
-      "Financial Information": {
-        "Primary Existing Bank Name": "",
-        "Account number":             "",
-        "IFSC Code":                  ""
-      },
-      "Partner Bank Details":  {
-        "Primary Existing Bank Name": "",
-        "Account number":             "",
-        "IFSC Code":                  "",
-        Remarks:                      ""
+        "Company Name":          user.company_name,
+        "Monthly Income":        user.monthly_income.to_s,
+        "Employment Type":       "Salaried",
+        "Salary ReceivedTypeId": user.salary_received_type
       },
       "Contact Information":   {
         Mobile:     user.mobile,
         "Email Id": user.email
       },
       "e-KYC Customer":        {
-        poa:                  {
-          co:      "",
-          street:  "",
-          house:   "",
-          lm:      "",
-          vtc:     "",
-          subdist: "",
-          dist:    "",
-          state:   "",
-          pc:      "",
-          po:      ""
-        },
-        aadhar_no:            "",
-        name:                 "",
-        dob:                  "",
-        gender:               user.gender.strip[0].capitalize,
         "compressed-address": user.home_address
       }
     }

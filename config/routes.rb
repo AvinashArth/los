@@ -23,7 +23,7 @@ Rails.application.routes.draw do
     post "filter/customer/list", to: "customer#filter_list"
     post "update/customer/info", to: "customer#update"
 
-    get "funnel/stats", to: "dashboard#funnel_data"
+    post "funnel/stats", to: "dashboard#funnel_data"
   end
 
   get "*path", to: "pages#index", via: :all

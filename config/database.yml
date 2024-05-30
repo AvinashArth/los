@@ -79,6 +79,6 @@ test:
 #
 production:
   <<: *default
-  database: los_production
-  username: los
-  password: <%= ENV["LOS_DATABASE_PASSWORD"] %>
+  database: ai_los_live
+  username: ai_los
+  password: <%= ENV["DATABASE_URL"] %>

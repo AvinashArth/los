@@ -8,13 +8,12 @@ class ApplicationController < ActionController::Base
 
   def encode_token(payload)
     secret_key = Rails.application.secrets.secret_key_base
-    encoded_token = JWT.encode(payload, secret_key, 'HS256')
-    encoded_token
+    JWT.encode(payload, secret_key, "HS256")
   end
 
   def decode_token(token)
     secret_key = Rails.application.secrets.secret_key_base
-    decoded_token = JWT.decode(token, secret_key, true, algorithm: 'HS256')[0]
+    decoded_token = JWT.decode(token, secret_key, true, algorithm: "HS256")[0]
     HashWithIndifferentAccess.new(decoded_token)
   rescue JWT::DecodeError => e
     puts "JWT Decode Error: #{e.message}"
@@ -32,11 +31,7 @@ class ApplicationController < ActionController::Base
   end
 
   def verify_authenticity_token
-    if request.format.json?
-      true
-    else
-      true
-    end
+    true
   end
 
   private

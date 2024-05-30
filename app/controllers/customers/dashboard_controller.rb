@@ -4,20 +4,22 @@ module Customers
   class DashboardController < ApplicationController
     before_action :authorize_request
 
+    attr_reader :current_user
+
     def funnel_data
       result = {}
       if current_user.role.downcase == "admin"
         total_data = all_data("admin")
-        partner_leads = month_wise_lead("admin")
-        fetch_data = fetch_funnel_data("admin")
+        # partner_leads = month_wise_lead("admin")
+        graph_data = fetch_funnel_data("admin")
       else
         total_data = all_data(current_user.role_code)
-        partner_leads = month_wise_lead(current_user.role_code)
-        fetch_data = fetch_funnel_data(current_user.role_code)
+        # partner_leads = month_wise_lead(current_user.role_code)
+        graph_data = fetch_funnel_data(current_user.role_code)
       end
       result.merge!("total_data" => total_data)
-      result.merge!("partner_leads" => partner_leads)
-      result.merge!("fetch_data" => ddummy)
+      # result.merge!("partner_leads" => partner_leads)
+      result.merge!("fetch_data" => graph_data)
       render json: result
     end
 
@@ -65,83 +67,33 @@ module Customers
     end
 
     def fetch_funnel_data(code)
-      partners = if code == "admin"
-                   Partner.pluck(:code)
-                 else
-                   [current_user.code]
-                 end
+      partner_code = code == "admin" ? params[:partner_code] : current_user.code
+      start_date = params[:start_date].present? ? Date.parse(params[:start_date]) : 30.days.ago.beginning_of_day
+      end_date = params[:end_date].present? ? Date.parse(params[:end_date]) : Date.today.end_of_day
+
       lenders = Lender.pluck(:code)
-
       data = {}
-      partners.each do |partner|
-        partner_data = {}
-        partner_data[:total] = LoanProfile.where(partner_code: partner, created_at: 1.month.ago.beginning_of_day..1.month.ago.end_of_day).count
+      data[:start_date] = start_date
+      data[:end_date] = end_date
 
-        lender_data = {}
-        lenders.each do |lender|
-          lender_data[lender] = {
-            total_sent: LoanProfile.where(partner_code: partner, lender_code: lender, created_at: 1.month.ago.beginning_of_day..1.month.ago.end_of_day).count,
-            approved:   LoanProfile.where(partner_code: partner, lender_code: lender, status: "APPROVED", created_at: 1.month.ago.beginning_of_day..1.month.ago.end_of_day).count,
-            disbursed:  LoanProfile.where(partner_code: partner, lender_code: lender, status: "DISBURSED", created_at: 1.month.ago.beginning_of_day..1.month.ago.end_of_day).count,
-            rejected:   LoanProfile.where(partner_code: partner, lender_code: lender, status: "REJECTED", created_at: 1.month.ago.beginning_of_day..1.month.ago.end_of_day).count
+      partner_data = {}
+      partner_data[:total] = LoanProfile.where(partner_code: partner_code, created_at: start_date..end_date).count
+
+      approved_statuses = %w[ACEEPTED APPROVED ELIGIBLE INPROGRESS]
+      lender_data = {}
+
+      lenders.each do |lender|
+        lender_data[lender] = {
+          total_sent: LoanProfile.where(partner_code: partner_code, lender_code: lender, created_at: start_date..end_date).count,
+          approved:   LoanProfile.where(partner_code: partner_code, lender_code: lender, status: approved_statuses, created_at: start_date..end_date).count,
+          disbursed:  LoanProfile.where(partner_code: partner_code, lender_code: lender, status: "DISBURSED", created_at: start_date..end_date).count,
+          rejected:   LoanProfile.where(partner_code: partner_code, lender_code: lender, status: "REJECTED", created_at: start_date..end_date).count
         }
-        end
-        partner_data[:lenders] = lender_data
-        data[partner] = partner_data
       end
 
+      partner_data[:lenders] = lender_data
+      data[partner_code] = partner_data
       data
     end
-
-    def ddummy 
-    {
-      "Tide" => {
-        total: 100,
-        lenders: {
-          "Lender 1" => {
-            total_sent: 100,
-            approved: 10,
-            disbursed: 1,
-            rejected: 0
-          },
-          "Lender 2" => {
-            total_sent: 100,
-            approved: 10,
-            disbursed: 1,
-            rejected: 0
-          },
-          "Lender 3" => {
-            total_sent: 100,
-            approved: 10,
-            disbursed: 1,
-            rejected: 0
-          }
-        }
-      },
-      "Happy" => {
-        total: 300,
-        lenders: {
-          "Lender 1" => {
-            total_sent: 300,
-            approved: 100,
-            disbursed: 50,
-            rejected: 0
-          },
-          "Lender 2" => {
-            total_sent: 300,
-            approved: 100,
-            disbursed: 50,
-            rejected: 0
-          },
-          "Lender 3" => {
-            total_sent: 300,
-            approved: 100,
-            disbursed: 50,
-            rejected: 0
-          }
-        }
-      }
-    }
-  end
   end
 end

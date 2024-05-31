@@ -28,6 +28,8 @@ class CreateLenders < ActiveRecord::Migration[7.1]
       t.string :bank_name
       t.string :ifsc_code
       t.string :acc_holder_name
+      t.string :acc_number
+      t.string :email
       t.string :branch
 
       t.timestamps

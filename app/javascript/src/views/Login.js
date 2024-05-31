@@ -15,12 +15,13 @@ import {
   FormGroup,
   Input,
   Col,
+  Row,
   Alert
 } from "reactstrap";
 
 import { User } from "../backend-sdk/user.sdk";
 import { Image} from "react-bootstrap";
-import logo from '../assets/img/logo.jpg';
+import logo from '../assets/img/Medialogo.png';
 function Login(props) {
   const history = useHistory();
   const [email, setEmail] = useState("");
@@ -55,13 +56,27 @@ function Login(props) {
     }
 
   return (
-    <div>
-      <Col className="ml-auto mr-auto col-md-6 col-lg-4">
-        <Card>
-          <Form>
+    <div className="">
+      <Col className="ml-auto mr-auto col-md-8 col-lg-8">
+        <Card className="cardstyle" style={{marginTop:"8rem"}}>
+          <Row>
+            <Col lg="5" md="5" sm="5" style={{backgroundColor: "#3c266e"}}>
+            <div className="p-4">
+              <div className="d-flex justify-content-center mt-4">  <img style={{maxWidth:"122%"}} src={logo} />   </div>
+              <div className="authentication-info">
+                <div className="arth-auth-name">Happy</div>
+                <div className="auth-powring-msg">Powering Micro Businesses</div>
+                <div className="arth-copyright">
+                  © 2024 Happy
+                </div>
+              </div>
+            </div>
+            </Col>
+            <Col lg="7" md="7" sm="7">
+            <Form>
             <CardHeader>
-            <img style={{maxWidth:"38%", marginLeft:'20%'}} src={logo} />             
-          
+                    
+            Login
              {/* <CardTitle tag="h3">Wellcome To Login</CardTitle> */}
             </CardHeader>
             <CardBody>
@@ -98,8 +113,8 @@ function Login(props) {
             </CardBody>
             <CardFooter>
               <Button
-                className="btn-fill"
-                color="primary"
+                className="btn-fill login-button"
+                color=""
                 type="submit"
                 onClick={e => handleSubmit(e)}
               >
@@ -108,6 +123,9 @@ function Login(props) {
               </Button>
             </CardFooter>
           </Form>
+            </Col>
+          </Row>
+          
         </Card>
       </Col>
     </div>

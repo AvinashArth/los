@@ -111,7 +111,7 @@ function Sidebar(props) {
   return (
     // <BackgroundColorContext.Consumer>
     //   {({ color }) => (
-        <div className="sidebar" data={color}>
+        <div className="sidebar css-l57trc MuiDrawer-paper css-1l8j5k8" data={color}>
           <div className="sidebar-wrapper" ref={sidebarRef}>
             {logoImg !== null || logoText !== null ? (
               <div className="logo">
@@ -140,7 +140,7 @@ function Sidebar(props) {
                       onClick={props.toggleSidebar}
                     >
                       <i className={prop.icon} />
-                      <p>{rtlActive ? prop.rtlName : prop.name}</p>
+                      <p className="css-yb0lig">{rtlActive ? prop.rtlName : prop.name}</p>
                     </NavLink>
                   </li>
                 );

@@ -11,7 +11,7 @@ module Customers
       if current_user.role.downcase == "admin"
         total_data = all_data("admin")
         # partner_leads = month_wise_lead("admin")
-        graph_data = fetch_funnel_data("admin")
+        fetch_data = fetch_funnel_data("admin")
       else
         total_data = all_data(current_user.role_code)
         # partner_leads = month_wise_lead(current_user.role_code)

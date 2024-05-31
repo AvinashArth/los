@@ -14,7 +14,7 @@
   
       static async login(email, password) {
         const jsonData = { email: email, password: password };
-            const response = await fetch(`http://localhost:3000/login`, {
+            const response = await fetch(`${process.env.API_URL}login`, {
                 keepalive: true,
                 method: 'POST',
                 headers: {

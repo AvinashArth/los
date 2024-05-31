@@ -21,12 +21,14 @@ textarea{
 }
 .card{
   h1,h2,h3,h4,h5,h6,p{
-    color: $opacity-8;
+    // color: $opacity-8;
+    color: black;
   }
 }
 h1,h2,h3,h4,h5,h6{
     font-weight: $font-weight-normal;
-    color: $opacity-8;
+    // color: $opacity-8;
+    color: black;
 }
 
 a{
@@ -75,9 +77,13 @@ h6, .h6{
     font-weight: $font-weight-bold;
 }
 p{
-    color: $opacity-8;
-    margin-bottom: 5px;
-
+    // color: $opacity-8;
+          margin-bottom: 5px;
+        // color: rgba(255, 255, 255, 0.8);
+        // margin-bottom: 5px;
+        color: black !important;
+        font-weight: bold !important;
+    
     &.description{
         font-size: 1.14em;
     }

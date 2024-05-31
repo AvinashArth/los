@@ -10,7 +10,7 @@
 
   &:focus{
     border-color: $primary;
-    background-color: $input-bg;
+    // background-color: $input-bg;
     @include box-shadow(none);
 
     & + .input-group-append .input-group-text,
@@ -19,7 +19,7 @@
     & ~ .input-group-prepend .input-group-text{
         border: 1px solid $primary;
         border-left: none;
-        background-color: $transparent-bg;
+        // background-color: $transparent-bg;
     }
   }
 
@@ -54,7 +54,7 @@
 
   & + .input-group-append .input-group-text,
   & + .input-group-prepend .input-group-text{
-      background-color: $white;
+      // background-color: $white;
   }
 
 }
@@ -81,7 +81,7 @@
     background-color: rgba(222,222,222, .1);
 
     &:focus{
-        background-color: $transparent-bg;
+        // background-color: $transparent-bg;
     }
 }
 

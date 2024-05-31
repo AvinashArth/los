@@ -1,0 +1,338 @@
+.leads-funnel{
+
+    .card{ 
+      
+      .funnel-body {
+        padding: 2.5rem 1.75rem;
+  
+        .top-bar-funnel {
+          display: flex;
+          justify-content: space-between;
+          margin-bottom: 1rem;
+        }
+  
+        .colored-funnel {
+          // display: flex;
+          // justify-content: center;
+          // align-items: center;
+          border-radius: 0.25rem;
+          border: 1px solid #E9ECEF;
+          background: #FFF;
+          padding: 1rem;
+  
+          .funnel {
+  
+            display: flex;
+            justify-content: center;
+            align-items: center;
+  
+            .trapezoid-1 {
+              border-bottom: 6px solid transparent;
+              border-Top: 6px solid transparent;
+              border-left: 11vw solid #F84540;
+              height: 18.315rem;
+              border-radius: 5px;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+  
+              .rect-data {
+                left: 12%;
+  
+                .white-circle {
+                  color: #F84540;
+                }
+              }
+  
+            }
+  
+            .trapezoid-2 {
+              border-bottom: 6px solid transparent;
+              border-Top: 6px solid transparent;
+              border-left: 11vw solid #FA642D;
+              height: 17.6rem;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+  
+              .rect-data {
+                left: 26%;
+  
+                .white-circle {
+                  color: #FA642D;
+                }
+              }
+            }
+  
+            .trapezoid-3 {
+              border-bottom: 6px solid transparent;
+              border-Top: 6px solid transparent;
+              border-left: 11vw solid #FD8C15;
+              height: 16.95rem;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+  
+              .rect-data {
+                left: 38%;
+  
+                .white-circle {
+                  color: #FD8C15;
+                }
+              }
+            }
+  
+            .trapezoid-4 {
+              border-bottom: 6px solid transparent;
+              border-Top: 6px solid transparent;
+              border-left: 11vw solid #D19E0F;
+              height: 16.25rem;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+  
+              .rect-data {
+                left: 50%;
+  
+                .white-circle {
+                  color: #D19E0F;
+                }
+              }
+            }
+  
+            .trapezoid-5 {
+              border-bottom: 6px solid transparent;
+              border-Top: 6px solid transparent;
+              border-left: 11vw solid #A5A112;
+              height: 15.55rem;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+  
+              .rect-data {
+                left: 66%;
+  
+                .white-circle {
+                  color: #A5A112;
+                }
+              }
+            }
+  
+            .trapezoid-6 {
+              border-bottom: 6px solid transparent;
+              border-Top: 6px solid transparent;
+              border-left: 11vw solid #07AC1C;
+              height: 14.85rem;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+  
+              .rect-data {
+                left: 80%;
+  
+                .white-circle {
+                  color: #07AC1C;
+                }
+              }
+            }
+  
+            @media screen and (max-width: 600px) {
+              transform: rotate(90deg);
+  
+              .trapezoid-1 {
+                height: 60vw;
+  
+                .rect-data {
+                  display: flex;
+                  justify-content: space-between;
+                  transform: rotate(-180deg);
+  
+                  span {
+                    transform: rotate(90deg);
+                  }
+  
+                  .white-circle {
+                    width: 2.8rem;
+                    height: 2.8rem;
+                  }
+                }
+              }
+  
+              .trapezoid-2 {
+                height: 57vw;
+  
+                .rect-data {
+                  display: flex;
+                  justify-content: space-between;
+  
+                  span {
+                    transform: rotate(-90deg);
+                  }
+  
+                  .white-circle {
+                    width: 2.8rem;
+                    height: 2.8rem;
+                  }
+                }
+              }
+  
+              .trapezoid-3 {
+                height: 54.5vw;
+  
+                .rect-data {
+                  display: flex;
+                  justify-content: space-between;
+  
+                  span {
+                    transform: rotate(-90deg);
+                  }
+  
+                  .white-circle {
+                    width: 2.8rem;
+                    height: 2.8rem;
+                  }
+                }
+              }
+  
+              .trapezoid-4 {
+                height: 52vw;
+  
+                .rect-data {
+                  display: flex;
+                  justify-content: space-between;
+  
+                  span {
+                    transform: rotate(-90deg);
+                  }
+  
+                  .white-circle {
+                    width: 2.8rem;
+                    height: 2.8rem;
+                  }
+                }
+              }
+  
+              .trapezoid-5 {
+                height: 50vw;
+  
+                .rect-data {
+                  display: flex;
+                  justify-content: space-between;
+  
+                  span {
+                    transform: rotate(-90deg);
+                  }
+  
+                  .white-circle {
+                    width: 2.8rem;
+                    height: 2.8rem;
+                  }
+                }
+              }
+  
+              .trapezoid-6 {
+                height: 48vw;
+  
+                .rect-data {
+                  display: flex;
+                  justify-content: space-between;
+  
+                  span {
+                    transform: rotate(-90deg);
+                  }
+  
+                  .white-circle {
+                    width: 2.8rem;
+                    height: 2.8rem;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  
+  .rect-data {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    color: #FFF;
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.00875rem;
+    position: absolute;
+    // top: 45%;
+  
+    span{
+      max-width: 10rem;
+      text-align: center;
+    }
+  
+    .white-circle {
+      width: 4.375rem;
+      height: 4.375rem;
+      border-radius: 50%;
+      background-color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+  
+  .hover-effect {
+    transition: transform 0.3s ease;
+    cursor: pointer;
+  }
+  
+  .white-circle {
+    transition: transform 0.3s ease;
+  }
+  
+  .hover-effect:hover {
+    transform: scale(1.1);
+  }
+  
+  .hover-effect:hover .white-circle {
+    transform: scale(1.1);
+  }
+  
+  .np-funnel {
+    display: flex;
+    justify-content: space-between;
+    border-radius: 0.25rem;
+    border: 1px solid #E9ECEF;
+    background: #FFF;
+    padding: 1rem;
+    color: var(--Label-Primary, #707070);
+    font-size: 0.875rem;
+    font-weight: 500;
+    letter-spacing: 0.00875rem;
+  }
+  
+  .count-card {
+    color: var(--Label-Primary, #707070);
+    font-size: 0.875rem;
+    font-weight: 500;
+    letter-spacing: 0.00875rem;
+    display: flex;
+    justify-content: space-around;
+  
+    div {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      justify-content: center;
+      align-items: center;
+    }
+  
+    .count-card-click{
+      transform: rotate(180deg);
+    }
+  }
+  
+  
+  

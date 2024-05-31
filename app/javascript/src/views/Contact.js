@@ -30,7 +30,8 @@ import {
   CardFooter,
   Button,
   Form,
-  Col
+  Col,
+  Label
 } from "reactstrap";
 import "./Contact.css";
 import { Task } from "../backend-sdk/task.sdk";
@@ -162,7 +163,7 @@ const Contact = () => {
           <span class="circle two"></span>
           <Row>
           <Col md="12">
-            <Card>
+            <Card style={{backgroundColor:"rgb(60, 38, 110)"}}>
             <CardHeader>
                 <CardTitle tag="h4">Contact Us</CardTitle>
               </CardHeader>
@@ -175,18 +176,19 @@ const Contact = () => {
                   <Row>
                     <Col className="pl-md-1" md="12">
                       <FormGroup>
-                        <label htmlFor="exampleInputEmail1">
+                        <Label className="input-label" htmlFor="exampleInputEmail1">
                           Email address
-                        </label>
-                        <Input required placeholder="mike@email.com" type="email"  value={email} onChange={(e) => setEmail(e.target.value)}/>
+                        </Label>
+                        <Input className="form-controls" required placeholder="mike@email.com" type="email"  value={email} onChange={(e) => setEmail(e.target.value)}/>
                       </FormGroup>
                     </Col>
                   </Row>
                   <Row>
                     <Col className="pr-md-1" md="12">
                       <FormGroup>
-                        <label>Mobile Number</label>
+                        <label className="input-label">Mobile Number</label>
                         <Input
+                        className="form-controls"
                         required
                           // defaultValue="Mike"
                           placeholder="mobile Number"
@@ -200,8 +202,9 @@ const Contact = () => {
                   <Row>
                     <Col md="12">
                       <FormGroup>
-                        <label>Address</label>
+                        <label className="input-label">Address</label>
                         <Input
+                        className="form-controls"
                         required
                         //  cols="80"
                         //  rows="4"
@@ -216,8 +219,9 @@ const Contact = () => {
                   <Row>
                     <Col md="12">
                       <FormGroup>
-                        <label>Message</label>
+                        <label className="input-label" style={{color:"white !important"}}>Message</label>
                         <Input
+                        className="form-controls"
                         required
                          cols="80"
                          rows="4"

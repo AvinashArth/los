@@ -47,7 +47,7 @@ const CustomerDetailsForm = () => {
     business_type: '',
     monthly_income: '',
     loan_amount: '',
-    loan_category: '',
+    loan_category: 'business_loan',
     employment_type: '',
     salary_received_type: '',
     company_name: '',
@@ -195,17 +195,17 @@ const CustomerDetailsForm = () => {
       });
     
     // Implement form submission logic
-     console.log('Form submitted with data:', formData);
+    //  console.log('Form submitted with data:', formData);
   };
 
   return (
     <div className="">
       <Row>
         <Col className="ml-auto mr-auto col-md-8 col-lg-8">
-        <Card>
+        <Card className='card-color' style={{marginTop:"5rem"}}>
           <Form onSubmit={handleSubmit}>
           <CardHeader>
-              <CardTitle tag="h3">Loan Application Request Form</CardTitle>
+              <CardTitle tag="h1" style={{color: "#333"}}>Loan Application Request Form</CardTitle>
             </CardHeader>
             <CardBody>
             {/* <form onSubmit={handleSubmit}> */}
@@ -412,23 +412,7 @@ const CustomerDetailsForm = () => {
 />
 </FormGroup>
  </>)}
- <FormGroup>
-  <Label>Business Type</Label>
-  <Input
-  id="business_type"
-  name="business_type"
-  type="select"
-  className='form-control'
-  value={formData.business_type}
-  onChange={handleInputChange}
-  required
->
-  <option value="">Select</option>
-  <option value="Seller-Retailer">Seller-Retailer</option>
-  <option value="Seller-Wholesale">Seller-Wholesale</option>
-  <option value="agri-dairy value chain">Agri-Dairy Value Chain</option>
-</Input>
- </FormGroup>
+ 
 <FormGroup>
   <Label>Monthly Income (Numeric)</Label>
   <Input
@@ -443,7 +427,7 @@ const CustomerDetailsForm = () => {
 
 </FormGroup>
 <FormGroup>
-  <Label> Loan Amount (Numeric) </Label>
+  <Label>Request Loan Amount (Numeric) </Label>
   <Input
   type="number"
   id="loan_amount"
@@ -464,13 +448,14 @@ const CustomerDetailsForm = () => {
   name="loan_category"
   type="select"
   className='form-control'
+  defaultValue={"business_loan"}
   value={formData.loan_category}
   onChange={handleInputChange}
   required
 >
   <option value="">Select</option>
-  <option value="business_loan">Business Loan</option>
   <option value="personal_loan">Personal Loan</option>
+  <option value="business_loan">Business Loan</option>
 </Input>
 </FormGroup>
 {formData.loan_category && formData.loan_category === "personal_loan" && (<>
@@ -519,8 +504,25 @@ const CustomerDetailsForm = () => {
 />
 </FormGroup>
 </>)}
-
-<FormGroup>
+{formData.loan_category && formData.loan_category === "business_loan" && (<>
+  <FormGroup>
+  <Label>Business Type</Label>
+  <Input
+  id="business_type"
+  name="business_type"
+  type="select"
+  className='form-control'
+  value={formData.business_type}
+  onChange={handleInputChange}
+  required
+>
+  <option value="">Select</option>
+  <option value="Seller-Retailer">Seller-Retailer</option>
+  <option value="Seller-Wholesale">Seller-Wholesale</option>
+  <option value="agri-dairy value chain">Agri-Dairy Value Chain</option>
+</Input>
+ </FormGroup>
+ <FormGroup>
   <Label>Type of Business Loan</Label>
   <Input
   id="type_of_loan"
@@ -553,6 +555,26 @@ const CustomerDetailsForm = () => {
   <option value="Owned">Owned</option>
 </Input>
 </FormGroup>
+<FormGroup>
+  <Label>Shop Road Type</Label>
+  <Input
+  id="shop_road_type"
+  name="shop_road_type"
+  type="select"
+  className='form-control'
+  value={formData.shop_road_type}
+  onChange={handleInputChange}
+  required
+>
+  <option value="">Select</option>
+  <option value="Highway">Highway</option>
+  <option value="Street">Street</option>
+  <option value="Market">Market</option>
+  <option value="Village">Village</option>
+</Input>
+</FormGroup>
+</>) }
+
 <FormGroup>
   <Label>Education Level</Label>
   <Input
@@ -594,24 +616,7 @@ const CustomerDetailsForm = () => {
   <option value="None">None</option>
 </Input>
 </FormGroup>
-<FormGroup>
-  <Label>Shop Road Type</Label>
-  <Input
-  id="shop_road_type"
-  name="shop_road_type"
-  type="select"
-  className='form-control'
-  value={formData.shop_road_type}
-  onChange={handleInputChange}
-  required
->
-  <option value="">Select</option>
-  <option value="Highway">Highway</option>
-  <option value="Street">Street</option>
-  <option value="Market">Market</option>
-  <option value="Village">Village</option>
-</Input>
-</FormGroup>
+
 
 <FormGroup>
   <Label>Home Address (House No, Street as per Aadhaar)</Label>
@@ -667,7 +672,7 @@ pattern="\d{6}"
 />
 </FormGroup>
 <FormGroup>
-  <Label>Business Address (Shop No, Street)</Label>
+  <Label>Business or Office Address (Shop No, Street)</Label>
   <Input
   type="text"
   id="business_address"
@@ -686,7 +691,7 @@ pattern="\d{6}"
 /> */}
 <FormGroup>
   <Label>
-  Business City
+  Business or Office City
   </Label>
   <Input
   type="text"
@@ -707,7 +712,7 @@ pattern="\d{6}"
   required
 /> */}
 <FormGroup>
-  <Label>Business State</Label>
+  <Label>Business or Office State</Label>
   <Input
   id="business_state"
   name="business_state"
@@ -726,7 +731,7 @@ pattern="\d{6}"
 </Input>
 </FormGroup>
 <FormGroup>
-  <Label>Business Pincode (6 digits)</Label>
+  <Label>Business or Office Pincode (6 digits)</Label>
   <Input
   type="text"
   id="business_pincode"
@@ -746,7 +751,9 @@ pattern="\d{6}"
             </CardBody>
           </Form>
            <CardFooter>
-           <h4>Terms and Conditions</h4>
+           <h4>
+            <strong style={{textDecoration: "underline", color:'black'}}>Terms and Conditions</strong>
+            </h4>
            <p>We would like to inform you that the following information has been provided by you as per your discussion with Tide (Tide Platform Private Limited) regarding your loan request. Your information will be shared with their partner Happy and its lending institution, subject to approval. The lending institution will get in touch with you to meet your requirements. We prioritize your privacy and are committed to safeguarding your information. Rest assured, we will only use your details to assess your loan eligibility. Please provide accurate details to ensure the efficient processing of your loan application. By proceeding, you hereby give your consent to share this information.</p>
            </CardFooter>
           </Card>

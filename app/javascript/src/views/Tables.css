@@ -2,16 +2,31 @@
     padding: 0;
     margin: 0;
   }
+  .contact-forms {
+    padding: 1rem;
+  }
   .pagination-data li{
     list-style:none;
   }
   .table-filter-info{
     padding : 15px;
   }
+  .table>tbody>tr>td {
+ color: black !important; 
+ font-weight: bold;
+}
+
+  .tbody-primary tr td {
+    /* background-color: #3c266e;
+    border-color: #f8d7da; */
+    color: black !important;
+    font-weight: bold !important;
+}
   .thead-primary tr th {
-      background-color: #5a8dee;
-      border-color: #5a8dee;
-      color: #fff;
+      background-color: #3c266e;
+      border-color: #f8d7da;
+      color: white;
+      font-weight: bold;
   }
   
   .rc-pagination {

@@ -59,7 +59,12 @@ function Auth(props) {
         <React.Fragment>
           <div className="wrapper">
             <div className="main-panel" ref={mainPanelRef} data={color}>
-              <AuthNavbar brandText={getBrandText(location.pathname)} />
+              {location.pathname === "/auth/onboard"?(<>
+                <AuthNavbar brandText={getBrandText(location.pathname)} />
+              </>):(<>
+              
+              </>)}
+              
               <Switch>
                 {getRoutes(routes)}
                 <Redirect from="*" to="/auth/login" />

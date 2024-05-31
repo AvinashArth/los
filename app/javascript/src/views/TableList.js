@@ -136,12 +136,12 @@ const Tables = () => {
       <div className="content">
         <Row>
           <Col md="12">
-            <Card>
+            <Card className="cardstyle">
               <CardHeader>
-                <CardTitle tag="h4">Customer List</CardTitle>
+                <CardTitle tag="h4" className="title" style={{color:'black', fontWeight:'bold'}}>Customer List</CardTitle>
               </CardHeader>
               <CardBody>
-              <Form>
+              <Form className="contact-forms">
                   <Row>
                     <Col className="px-md-1" md="2">
                       <FormGroup>
@@ -189,36 +189,38 @@ const Tables = () => {
                         />
                       </FormGroup>
                     </Col>
-                    <Col className="px-md-1" md="2">
-                    {/* <FormGroup> */}
-                    <Button className="btn-fill" onClick={handleCustomerFilter} color="primary" >
+                      <Col className="px-md-1" md="2">
+                       
+                        <Button className="btn-fill" onClick={handleCustomerFilter} color="primary" >
                       Filter
                      </Button>
+                     </Col>
                      {/* </FormGroup> */}
-                    </Col>
-                    <Col className="px-md-1" md="2">
                       {/* <FormGroup> */}
+                      <Col className="px-md-1" md="2">
                     <Button className="btn-fill" onClick={handleclearFilter} color="" type="submit">
                       Clear
                      </Button>
+                        
+                    {/* <FormGroup> */}
+                   
                      {/* </FormGroup> */}
-                    </Col>
-                    
+                    </Col> 
                   </Row>
                 </Form>
                 <div className="table-responsive">
                 {/* customer_id, name, mobile, loan_amoun, onboard_at,partner name, lender_name,message,status, */}
                                 <table className="table table-text-small mb-0">
                                     <thead className="thead-primary table-sorting">
-                                        <tr>
-                                            <th>Customer Id</th>
-                                            <th>Customer Name</th>
-                                            <th>Mobile Number</th>
+                                        <tr className="background:#f8d7da">
+                                            <th className="td-table">Customer Id</th>
+                                            <th className="td-table">Customer Name</th>
+                                            <th className="td-table">Mobile Number</th>
                                             <th>Loan Amount</th>
-                                            {userDetails && userDetails.role !== null && userDetails.role === "Admin" ? <th>Partner Name</th> : null}
-                                            <th>Lender Name</th>
-                                            <th>Status</th>
-                                            <th>Onboarding At</th>
+                                            {userDetails && userDetails.role !== null && userDetails.role === "Admin" ? <th className="td-table">Partner Name</th> : null}
+                                            <th className="td-table">Lender Name</th>
+                                            <th className="td-table">Status</th>
+                                            <th className="td-table">Onboarding At</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -226,19 +228,20 @@ const Tables = () => {
                                             getData(current, size).map((data, index) => {
                                                 return (
                                                     <tr key={data.customer_info_id}>
-                                                        <td>{data.customer_info_id}</td>
-                                                        <td>{data.name}</td>
-                                                        <td>{data.mobile}</td>
-                                                        <td>{data.amount_offered}</td>
-                                                        {userDetails && userDetails.role !== null && userDetails.role === "Admin" ? <td>{data.partner_code}</td> : null}
-                                                        <td>{data.lender_code}</td>
-                                                        <td>{data.status}</td>
-                                                        <td>{data.created_at !== null ? convertDateTime(data.created_at):""}</td>
+                                                        <td className="td-table" style={{color:"black !important", fontWeight:"bold"}}>{data.customer_info_id}</td>
+                                                        <td className="td-table">{data.name}</td>
+                                                        <td className="td-table">{data.mobile}</td>
+                                                        <td className="td-table">{data.amount_offered}</td>
+                                                        {userDetails && userDetails.role !== null && userDetails.role === "Admin" ? <td className="td-table">{data.partner_code}</td> : null}
+                                                        <td className="td-table">{data.lender_code}</td>
+                                                        <td className="td-table">{data.status}</td>
+                                                        <td className="td-table">{data.created_at !== null ? convertDateTime(data.created_at):""}</td>
                                                     </tr>
                                                 )
                                             })
                                         }
                                     </tbody>
+                                    
                                 </table>
                  </div>
                   <div className="table-filter-info">

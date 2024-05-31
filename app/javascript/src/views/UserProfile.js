@@ -78,9 +78,9 @@ const UserProfile = ()  => {
       <div className="content">
         <Row>
           <Col md="12">
-            <Card>
+            <Card className="cardstyle">
               <CardHeader>
-                <h5 className="title">User Profile</h5>
+                <h5 className="title" style={{color:"black"}}>User Profile</h5>
               </CardHeader>
               <CardBody>
                 <Form>

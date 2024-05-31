@@ -45,13 +45,13 @@ import CardImg from "reactstrap";
 function AdminNavbar(props) {
   const [collapseOpen, setcollapseOpen] = React.useState(false);
   const [modalSearch, setmodalSearch] = React.useState(false);
-  const [color, setcolor] = React.useState("navbar-transparent");
+  const [color, setcolor] = React.useState("rgb(60, 38, 110)");
   const [comapnaylogo, setCompanyLogo] = React.useState("");
   const history = useHistory();
   
   React.useEffect(() => {
     const items = JSON.parse(localStorage.getItem('user'));
-    setCompanyLogo(items && items.logo === null ? {logo} : items.logo);
+    setCompanyLogo(items && items.logo === null ? {logo} : `${process.env.API_URL}packs/media/assets/img/${items.logo}`);
   },[])
 
   React.useEffect(() => {
@@ -64,17 +64,17 @@ function AdminNavbar(props) {
   // function that adds color white/transparent to the navbar on resize (this is for the collapse)
   const updateColor = () => {
     if (window.innerWidth < 993 && collapseOpen) {
-      setcolor("bg-white");
+      setcolor("rgb(60, 38, 110)");
     } else {
-      setcolor("navbar-transparent");
+      setcolor("rgb(60, 38, 110)");
     }
   };
   // this function opens and closes the collapse on small devices
   const toggleCollapse = () => {
     if (collapseOpen) {
-      setcolor("navbar-transparent");
+      setcolor("rgb(60, 38, 110)");
     } else {
-      setcolor("bg-white");
+      setcolor("rgb(60, 38, 110)");
     }
     setcollapseOpen(!collapseOpen);
   };
@@ -94,9 +94,10 @@ function AdminNavbar(props) {
       return;
     };
   }
+  // const color ="rgb(12, 20, 39) !important"
   return (
     <>
-      <Navbar className={classNames("navbar-absolute", color)} expand="lg">
+      <Navbar style={{background:"rgb(12, 20, 39) !important", backgroundColor:"rgb(12, 20, 39) !important"}} className={classNames("navbar-absolute css-1tgyln", color)} expand="lg">
         <Container fluid>
           <div className="navbar-wrapper">
             <div
@@ -112,7 +113,7 @@ function AdminNavbar(props) {
             </div>
             <NavbarBrand href="#pablo" onClick={(e) => e.preventDefault()}>
               {/* {props.brandText} */}
-              <img style={{maxWidth:"38%"}} src={comapnaylogo} />             
+              <img style={{maxWidth:"80%", maxHeight:"60%"}} src={comapnaylogo} />             
 
               {/* <CardImg src={logo}  /> */}
             </NavbarBrand>

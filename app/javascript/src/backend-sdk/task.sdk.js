@@ -13,7 +13,7 @@
       }
       static async customerList(id, token) {
         const jsonData = { id: id};
-            const response = await fetch(`http://localhost:3000/customer/list`, {
+            const response = await fetch(`${process.env.API_URL}customer/list`, {
                 keepalive: true,
                 method: 'GET',
                 headers: {
@@ -33,7 +33,7 @@
                 "key": "email",
                  "value": value
                 };
-                const response = await fetch(`http://localhost:3000/filter/customer/list`, {
+                const response = await fetch(`${process.env.API_URL}filter/customer/list`, {
          keepalive: true,
          method: 'POST',
           headers: {
@@ -48,7 +48,7 @@
                   "key": "customer_info_id",
                    "value": value
                  };
-                 const response = await fetch(`http://localhost:3000/filter/customer/list`, {
+                 const response = await fetch(`${process.env.API_URL}filter/customer/list`, {
          keepalive: true,
          method: 'POST',
           headers: {
@@ -80,7 +80,7 @@
               "key": "mobile",
               "value": value
                };
-               const response = await fetch(`http://localhost:3000/filter/customer/list`, {
+               const response = await fetch(`${process.env.API_URL}filter/customer/list`, {
          keepalive: true,
          method: 'POST',
           headers: {
@@ -95,7 +95,7 @@
                 "key": "amount_offered",
                 "value": value
                 };
-                const response = await fetch(`http://localhost:3000/filter/customer/list`, {
+                const response = await fetch(`${process.env.API_URL}filter/customer/list`, {
          keepalive: true,
          method: 'POST',
           headers: {
@@ -110,7 +110,7 @@
                "key": "status",
                 "value": value
               };
-              const response = await fetch(`http://localhost:3000/filter/customer/list`, {
+              const response = await fetch(`${process.env.API_URL}filter/customer/list`, {
          keepalive: true,
          method: 'POST',
           headers: {
@@ -129,7 +129,7 @@
         }
         
         static async contactForm(data, token) {
-                const response = await fetch(`http://localhost:3000/user/query`, {
+                const response = await fetch(`${process.env.API_URL}user/query`, {
                     keepalive: true,
                     method: 'POST',
                     headers: {
@@ -144,9 +144,9 @@
       
   //funnel/stats
   static async dashboardList(id,token) {
-        const response = await fetch(`http://localhost:3000/funnel/stats`, {
+        const response = await fetch(`${process.env.API_URL}funnel/stats`, {
             keepalive: true,
-            method: 'GET',
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
@@ -158,7 +158,7 @@
     //onboard/create
     static async createOnboard(data) {
       console.log("mkfk")
-          const response = await fetch(`http://localhost:3000/onboard/create`, {
+          const response = await fetch(`${process.env.API_URL}onboard/create`, {
               keepalive: true,
               method: 'POST',
               headers: {

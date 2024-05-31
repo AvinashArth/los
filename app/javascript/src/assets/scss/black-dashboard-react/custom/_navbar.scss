@@ -2,7 +2,8 @@
   padding: 10px 30px 10px 15px;
   width: 100%;
   z-index: 1050;
-  background: $navbar-color;
+  // background: $navbar-color;
+  background: #1e1e2d;
 
   .photo {
     display: inline-block;
@@ -36,7 +37,8 @@
 
 
   &.navbar-transparent{
-    background: transparent !important;
+    // background: transparent !important;
+    background: rgb(60, 38, 110) !important;
   }
 
   &.bg-white{
@@ -300,6 +302,7 @@
 
       &.bg-white:not(.navbar-transparent) .navbar-toggler-bar{
           background-color: $default;
+          background-color: rgb(60, 38, 110);
       }
 
       & .toggled .navbar-toggler-bar{

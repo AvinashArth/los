@@ -36,6 +36,14 @@ var routes = [
     component: Dashboard,
     layout: "/admin",
   },
+  {
+    path: "/CustomerList",
+    name: "Customer List",
+    rtlName: "قائمة الجدول",
+    icon: "tim-icons icon-puzzle-10",
+    component: TableList,
+    layout: "/admin",
+  },
   // {
   //   path: "/icons",
   //   name: "Icons",
@@ -68,14 +76,7 @@ var routes = [
     component: UserProfile,
     layout: "/admin",
   },
-  {
-    path: "/CustomerList",
-    name: "Customer List",
-    rtlName: "قائمة الجدول",
-    icon: "tim-icons icon-puzzle-10",
-    component: TableList,
-    layout: "/admin",
-  },
+  
   // {
   //   path: "/invoice",
   //   name: "Typography",

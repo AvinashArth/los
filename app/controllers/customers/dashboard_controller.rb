@@ -8,7 +8,7 @@ module Customers
       result = {}
       if current_user.role.downcase == "admin"
         total_data = all_data("admin")
-        partner_leads = month_wise_lead("admin")
+        # partner_leads = month_wise_lead("admin")
         fetch_data = fetch_funnel_data("admin")
       else
         total_data = all_data(current_user.role_code)

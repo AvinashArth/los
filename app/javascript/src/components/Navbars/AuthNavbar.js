@@ -29,11 +29,18 @@ import {
   Container,
   NavbarToggler,
 } from "reactstrap";
+import imageData from "../../assets/img/Happy-Tide.png";
+import { useLocation } from "react-router-dom";
+import { Image } from "react-bootstrap";
 
 function AdminNavbar(props) {
   const [collapseOpen, setcollapseOpen] = React.useState(false);
   const [modalSearch, setmodalSearch] = React.useState(false);
-  const [color, setcolor] = React.useState("navbar-transparent");
+  const location = useLocation();
+  const isLoginPage = location.pathname === "/auth/onboard";
+
+  const [color, setcolor] = React.useState(isLoginPage? "rgb(60, 38, 110)" : "transparent !important");
+  
   React.useEffect(() => {
     window.addEventListener("resize", updateColor);
     // Specify how to clean up after this effect:
@@ -41,20 +48,43 @@ function AdminNavbar(props) {
       window.removeEventListener("resize", updateColor);
     };
   });
+  // React.useEffect(() => {
+  //   if(location.pathname === "/auth/onboard"){
+
+  //   }
+  //    setLocationPath()
+  // },[])
   // function that adds color white/transparent to the navbar on resize (this is for the collapse)
   const updateColor = () => {
     if (window.innerWidth < 993 && collapseOpen) {
-      setcolor("bg-white");
+      if(!isLoginPage){
+        setcolor("transparent !important");
+      } else {
+        setcolor("rgb(60, 38, 110)");
+      }
+      
     } else {
-      setcolor("navbar-transparent");
+      if(!isLoginPage){
+        setcolor("transparent !important");
+      } else {
+        setcolor("rgb(60, 38, 110)");
+      }
     }
   };
   // this function opens and closes the collapse on small devices
   const toggleCollapse = () => {
     if (collapseOpen) {
-      setcolor("navbar-transparent");
+      if(isLoginPage){
+        setcolor("transparent !important");
+      } else {
+        setcolor("rgb(60, 38, 110)");
+      }
     } else {
-      setcolor("bg-white");
+      if(isLoginPage){
+        setcolor("transparent !important");
+      } else {
+        setcolor("rgb(60, 38, 110)");
+      }
     }
     setcollapseOpen(!collapseOpen);
   };
@@ -64,7 +94,8 @@ function AdminNavbar(props) {
   };
   return (
     <>
-      <Navbar className={classNames("", color)} expand="lg">
+    {isLoginPage ? (<>
+      <Navbar className={classNames("top_nav navbar-absolute css-1tgyln", color)} expand="lg">
         <Container fluid>
           <div className="navbar-wrapper">
             <div
@@ -79,7 +110,9 @@ function AdminNavbar(props) {
               </NavbarToggler>
             </div>
             <NavbarBrand href="#pablo" onClick={(e) => e.preventDefault()}>
-              {/* {props.brandText} */}
+            {isLoginPage ? (<>
+              <Image style={{maxWidth:"40%", maxHeight:"30%"}} src={imageData} />
+            </>):(<></>)}
             </NavbarBrand>
           </div>
           <NavbarToggler onClick={toggleCollapse}>
@@ -95,6 +128,45 @@ function AdminNavbar(props) {
           </Collapse>
         </Container>
       </Navbar>
+     </>):(<>
+     <div style={{backgroundColor:'transparent !important'}}>
+     <Navbar style={{backgroundColor:'ffffff !important'}} className={classNames("top_nav", "#ffffff")} expand="lg">
+        <Container fluid>
+          <div className="navbar-wrapper">
+            <div
+              className={classNames("navbar-toggle d-inline", {
+                toggled: props.sidebarOpened,
+              })}
+            >
+              <NavbarToggler onClick={props.toggleSidebar}>
+                <span className="navbar-toggler-bar bar1" />
+                <span className="navbar-toggler-bar bar2" />
+                <span className="navbar-toggler-bar bar3" />
+              </NavbarToggler>
+            </div>
+            <NavbarBrand href="#pablo" onClick={(e) => e.preventDefault()}>
+            {isLoginPage ? (<>
+              <Image style={{maxWidth:"40%", maxHeight:"30%"}} src={imageData} />
+            </>):(<></>)}
+            </NavbarBrand>
+          </div>
+          <NavbarToggler onClick={toggleCollapse}>
+            <span className="navbar-toggler-bar navbar-kebab" />
+            <span className="navbar-toggler-bar navbar-kebab" />
+            <span className="navbar-toggler-bar navbar-kebab" />
+          </NavbarToggler>
+          <Collapse navbar isOpen={collapseOpen}>
+            <Nav className="ml-auto" navbar>
+              <InputGroup className="search-bar"></InputGroup>
+              <li className="separator d-lg-none" />
+            </Nav>
+          </Collapse>
+        </Container>
+      </Navbar>
+     </div>
+     
+     </>)}
+     
     </>
   );
 }

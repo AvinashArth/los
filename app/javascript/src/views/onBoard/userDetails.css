@@ -24,6 +24,8 @@ label {
 }
 
 input[type="text"],
+input[type="number"],
+input[type="email"]
 input[type="submit"],
 select.form-control {
   width: 100%;
@@ -32,6 +34,7 @@ select.form-control {
   border: 1px solid #ccc;
   border-radius: 4px;
   box-sizing: border-box;
+  color: black;
 }
 
 input[type="submit"] {

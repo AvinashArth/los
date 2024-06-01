@@ -2,15 +2,15 @@
   "entrypoints": {
     "index": {
       "js": [
-        "/packs/js/index-ff800a1780045d73c85c.js"
+        "/packs/js/index-65fe93adea5101d91677.js"
       ],
       "js.map": [
-        "/packs/js/index-ff800a1780045d73c85c.js.map"
+        "/packs/js/index-65fe93adea5101d91677.js.map"
       ]
     }
   },
-  "index.js": "/packs/js/index-ff800a1780045d73c85c.js",
-  "index.js.map": "/packs/js/index-ff800a1780045d73c85c.js.map",
+  "index.js": "/packs/js/index-65fe93adea5101d91677.js",
+  "index.js.map": "/packs/js/index-65fe93adea5101d91677.js.map",
   "media/assets/img/anime3.png": "/packs/media/assets/img/anime3-4438e5067f2029f9e058dbf059d29ab5.png",
   "media/src/assets/fonts/nucleo.eot": "/packs/media/src/assets/fonts/nucleo-bd5cce8bf40be5947637d44c0ff5284e.eot",
   "media/src/assets/fonts/nucleo.ttf": "/packs/media/src/assets/fonts/nucleo-35b08447277ca7bf9f0971c97497892d.ttf",

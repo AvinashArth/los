@@ -5,8 +5,8 @@
   export class Task {
       static remote = new Remote("http://127.0.0.1:8083/Task")
   
-      static async customerList(id, token) {
-            const response = await fetch(`${process.env.API_URL}customer/list`, {
+      static async customerList(id, token, page) {
+            const response = await fetch(`${process.env.API_URL}customer/list?page=${page}`, {
                 keepalive: true,
                 method: 'GET',
                 headers: {
@@ -17,8 +17,8 @@
             // console.log("kk", token)
             return response.json();
         }
-        static async customerListFilter(id, token, label, value) {
-            console.log("filter", id, token, value, label)
+        static async customerListFilter(id, token, label, value, page) {
+            // console.log("filter", id, token, value, label)
             let payload = {};
         
              if (label === "email") {
@@ -26,7 +26,7 @@
                 "key": "email",
                  "value": value
                 };
-                const response = await fetch(`${process.env.API_URL}filter/customer/list`, {
+                const response = await fetch(`${process.env.API_URL}filter/customer/list?page=${page}`, {
          keepalive: true,
          method: 'POST',
           headers: {
@@ -41,7 +41,7 @@
                   "key": "customer_info_id",
                    "value": value
                  };
-                 const response = await fetch(`${process.env.API_URL}filter/customer/list`, {
+                 const response = await fetch(`${process.env.API_URL}filter/customer/list?page=${page}`, {
          keepalive: true,
          method: 'POST',
           headers: {
@@ -73,7 +73,7 @@
               "key": "mobile",
               "value": value
                };
-               const response = await fetch(`${process.env.API_URL}filter/customer/list`, {
+               const response = await fetch(`${process.env.API_URL}filter/customer/list?page=${page}`, {
          keepalive: true,
          method: 'POST',
           headers: {
@@ -88,7 +88,7 @@
                 "key": "amount_offered",
                 "value": value
                 };
-                const response = await fetch(`${process.env.API_URL}filter/customer/list`, {
+                const response = await fetch(`${process.env.API_URL}filter/customer/list=${page}`, {
          keepalive: true,
          method: 'POST',
           headers: {
@@ -103,7 +103,7 @@
                "key": "status",
                 "value": value
               };
-              const response = await fetch(`${process.env.API_URL}filter/customer/list`, {
+              const response = await fetch(`${process.env.API_URL}filter/customer/list=${page}`, {
          keepalive: true,
          method: 'POST',
           headers: {

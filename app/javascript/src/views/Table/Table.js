@@ -13,7 +13,7 @@ const TableComponent = ({ data }) => {
         <thead className="thead-primary table-sorting">
           <tr>
             <th>S.No.</th>
-            <th>Partner</th>
+            <th>Lender</th>
             <th>Total Sent</th>
             <th>Approved</th>
             <th>Disbursed</th>

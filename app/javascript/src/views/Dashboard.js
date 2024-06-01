@@ -27,7 +27,8 @@ function Dashboard()  {
  //dashboardList
  const [customerDetailsInfo, setCustomerDetailsInfo] = useState({});
  const [selectedDateRange, setSelectedDateRange] = useState(null);
-
+ const [startDate, setStartDate] = useState(null);
+const [endDate, setEndDate] = useState(null);
  const [userDetails, setUserDetails] = useState(null);
  const [funnelData, setFunnelData] = useState('');
  const [chartData, setChartData] = useState({});
@@ -107,8 +108,6 @@ useEffect(() => {
   };
 }, []);
 
-const [startDate, setStartDate] = useState(null);
-const [endDate, setEndDate] = useState(null);
 
  const handleCustomerFilter = () => {
   const data ={
@@ -118,10 +117,11 @@ const [endDate, setEndDate] = useState(null);
   }
   
   customerDetailsList(userDetails.token,data)
- } 
- const handleclearFilter = () => {
   setEndDate(null)
   setStartDate(null)
+ } 
+ const handleclearFilter = () => {
+  
   const data ={
     partner_code : userDetails.role === "Admin"? filterInput: userDetails.role_code,
     start_date: null,
@@ -129,7 +129,9 @@ const [endDate, setEndDate] = useState(null);
   }
   
   customerDetailsList(userDetails.token,data)
- }
+  setEndDate(null)
+  setStartDate(null)
+}
 
 const handlefilterInput = (value) => {
   setFilterInput(value)
@@ -264,7 +266,7 @@ const handlefilterInput = (value) => {
                       </FormGroup>
                     </Col>
                    
-                    <Col className="px-md-1" md="2" style={{marginTop:"-4%"}}>
+                    <Col className="px-md-1" md="2" >
                       <FormGroup>
                       <Input
                           placeholder={"Start Date"}
@@ -274,7 +276,7 @@ const handlefilterInput = (value) => {
                         />
                       </FormGroup>
                     </Col>
-                    <Col className="px-md-1" md="2" style={{marginTop:"-4%"}}>
+                    <Col className="px-md-1" md="2" >
                       <FormGroup>
                         <Input
                           placeholder={"End Date"}
@@ -284,13 +286,13 @@ const handlefilterInput = (value) => {
                         />
                       </FormGroup>
                     </Col>
-                      <Col className="px-md-1" md="2">
-                        <Button className="btn-fill" onClick={handleCustomerFilter} color="primary" >
+                      <Col className="px-md-1 p-button" md="2" >
+                        <Button style={{margin:"0%"}} className="btn-fill" onClick={handleCustomerFilter} color="primary" >
                       Filter
                      </Button>
                      </Col>
-                      <Col className="px-md-1" md="2">
-                    <Button className="btn-fill" onClick={handleclearFilter} color="" type="submit">
+                      <Col className="px-md-1 p-button" md="2">
+                    <Button style={{margin:"0%"}} className="btn-fill" onClick={handleclearFilter} color="" type="submit">
                       Clear
                      </Button>
                     </Col> 
@@ -323,13 +325,13 @@ const handlefilterInput = (value) => {
                         />
                       </FormGroup>
                     </Col>
-                      <Col className="px-md-1" md="2">
-                        <Button className="btn-fill" onClick={handleCustomerFilter} color="primary" >
+                      <Col className="px-md-1 p-button" md="2">
+                        <Button style={{margin:"0%"}} className="btn-fill" onClick={handleCustomerFilter} color="primary" >
                       Filter
                      </Button>
                      </Col>
-                      <Col className="px-md-1" md="2">
-                    <Button className="btn-fill" onClick={handleclearFilter} color="" type="submit">
+                      <Col className="px-md-1 p-button" md="2">
+                    <Button style={{margin:"0%"}} className="btn-fill" onClick={handleclearFilter} color="" type="submit">
                       Clear
                      </Button>
                     </Col> 

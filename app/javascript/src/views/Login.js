@@ -20,7 +20,6 @@ import {
 } from "reactstrap";
 
 import { User } from "../backend-sdk/user.sdk";
-import { Image} from "react-bootstrap";
 import logo from '../assets/img/Medialogo.png';
 function Login(props) {
   const history = useHistory();
@@ -30,9 +29,7 @@ function Login(props) {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   async function handleSubmit(event) {
-    // history.push("/admin/dashboard");
     setError(null);
-    // history.push("/admin/dashboard");
     event.preventDefault();
     if (!email || !password) {
       setError("All fields are mandatory");
@@ -43,13 +40,19 @@ function Login(props) {
     setIsSubmitting(true);
     User.login(email, password)
       .then((res) => {
-        setIsSubmitting(false);
-        localStorage.setItem("apiToken", res.token);
-        localStorage.setItem("user", JSON.stringify(res.user));
-        history.push("/admin/user_profile");
+        if(res.status ===200){
+          console.log(res)
+          setIsSubmitting(false);
+          localStorage.setItem("apiToken", res.token);
+          localStorage.setItem("user", JSON.stringify(res.user));
+          history.push("/admin/user_profile")
+        } else {
+          setError(res.errors);
+          setIsSubmitting(false);
+        }
       })
       .catch((err) => {
-        setError(err.msg);
+        setError(err.errors);
         console.log(err.error);
         setIsSubmitting(false);
       });
@@ -74,10 +77,8 @@ function Login(props) {
             </Col>
             <Col lg="7" md="7" sm="7">
             <Form>
-            <CardHeader>
-                    
+            <CardHeader>   
             Login
-             {/* <CardTitle tag="h3">Wellcome To Login</CardTitle> */}
             </CardHeader>
             <CardBody>
               <Alert isOpen={error != null} color="danger">
@@ -106,10 +107,6 @@ function Login(props) {
                   onChange={e => setPassword(e.target.value)}
                 />
               </FormGroup>
-
-              {/* <span>
-                Don't have an account? <a href="/auth/register">Register</a>
-              </span> */}
             </CardBody>
             <CardFooter>
               <Button

@@ -1,20 +1,3 @@
-/*!
-
-=========================================================
-* Black Dashboard React v1.2.1
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/black-dashboard-react
-* Copyright 2022 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/black-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React, { useState, useEffect } from "react";
 import Pagination  from "rc-pagination";
 // reactstrap components
@@ -66,24 +49,15 @@ const Tables = () => {
      function convertDateTime(dateTimeString) {
       // Create a new Date object with the given string
       const date = new Date(dateTimeString);
-  
       // Extract individual components
       const year = date.getFullYear();
       const month = date.getMonth() + 1; // January is 0
       const day = date.getDate();
-      // const hours = date.getHours();
-      // const minutes = date.getMinutes();
-      // const seconds = date.getSeconds();
-  
-      // Format the output as needed
       const formattedDateTime = `${year}-${month}-${day}`;
   
       return formattedDateTime;
   }
 
-     const userDetail = {
-       "role":"admin"
-     }
     const PerPageChange = (value) => {
         setSize(value);
         const newPerPage = Math.ceil(customerDetailsInfo.length / value);
@@ -111,22 +85,16 @@ const Tables = () => {
         }
         return originalElement;
     }
+   
+
     const handleCustomerFilter = () => {
-      console.log(userDetails && userDetails.id, userDetails && userDetails.token)
-      // const customerDetailsList = (id, token) => {
         Task.customerListFilter(userDetails && userDetails.id, userDetails && userDetails.token, filterInput, filterValue)
         .then((res) => {
-         
-          // if(res.length > 0){
             setCustomerDetailsInfo(res);
-          
-          // }
-          
         })
         .catch((err) => {
           // console.log(err.error);
         });
-      //  }
     }
     const handleclearFilter= () => {
       customerDetailsList(userDetails && userDetails.id, userDetails && userDetails.token) 
@@ -209,7 +177,6 @@ const Tables = () => {
                   </Row>
                 </Form>
                 <div className="table-responsive">
-                {/* customer_id, name, mobile, loan_amoun, onboard_at,partner name, lender_name,message,status, */}
                                 <table className="table table-text-small mb-0">
                                     <thead className="thead-primary table-sorting">
                                         <tr className="background:#f8d7da">
@@ -227,15 +194,15 @@ const Tables = () => {
                                         {
                                             getData(current, size).map((data, index) => {
                                                 return (
-                                                    <tr key={data.customer_info_id}>
-                                                        <td className="td-table" style={{color:"black !important", fontWeight:"bold"}}>{data.customer_info_id}</td>
-                                                        <td className="td-table">{data.name}</td>
-                                                        <td className="td-table">{data.mobile}</td>
-                                                        <td className="td-table">{data.amount_offered}</td>
+                                                    <tr key={data.customer_info_id} style={{backgroundColor: data.status === 'DISBURSED' ? 'green' : data.status === 'REJECTED' ? 'red' : ''}}>
+                                                        <td  style={{color:"black !important", fontWeight:"bold"}}>{data.customer_info_id}</td>
+                                                        <td >{data.name}</td>
+                                                        <td >{data.mobile}</td>
+                                                        <td >{data.amount_offered}</td>
                                                         {userDetails && userDetails.role !== null && userDetails.role === "Admin" ? <td className="td-table">{data.partner_code}</td> : null}
-                                                        <td className="td-table">{data.lender_code}</td>
-                                                        <td className="td-table">{data.status}</td>
-                                                        <td className="td-table">{data.created_at !== null ? convertDateTime(data.created_at):""}</td>
+                                                        <td >{data.lender_code}</td>
+                                                        <td >{data.status}</td>
+                                                        <td >{data.created_at !== null ? convertDateTime(data.created_at):""}</td>
                                                     </tr>
                                                 )
                                             })

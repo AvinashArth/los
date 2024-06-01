@@ -11,7 +11,7 @@ module Customers
       if current_user.role.downcase == "admin"
         total_data = all_data("admin")
         # partner_leads = month_wise_lead("admin")
-        fetch_data = fetch_funnel_data("admin")
+        graph_data = fetch_funnel_data("admin")
       else
         total_data = all_data(current_user.role_code)
         # partner_leads = month_wise_lead(current_user.role_code)
@@ -20,7 +20,7 @@ module Customers
       result.merge!("total_data" => total_data)
       # result.merge!("partner_leads" => partner_leads)
       result.merge!("fetch_data" => graph_data)
-      render json: result
+      render json: result, status: 200
     end
 
     def all_data(code)
@@ -67,14 +67,14 @@ module Customers
     end
 
     def fetch_funnel_data(code)
-      partner_code = code == "admin" ? params[:partner_code] : current_user.code
+      partner_code = code == "admin" ? params[:partner_code] : current_user.role_code
       start_date = params[:start_date].present? ? Date.parse(params[:start_date]) : 30.days.ago.beginning_of_day
       end_date = params[:end_date].present? ? Date.parse(params[:end_date]) : Date.today.end_of_day
 
       lenders = Lender.pluck(:code)
       data = {}
-      data[:start_date] = start_date
-      data[:end_date] = end_date
+      # data[:start_date] = start_date
+      # data[:end_date] = end_date
 
       partner_data = {}
       partner_data[:total] = LoanProfile.where(partner_code: partner_code, created_at: start_date..end_date).count
@@ -92,7 +92,7 @@ module Customers
       end
 
       partner_data[:lenders] = lender_data
-      data[partner_code] = partner_data
+      data["partner"] = partner_data
       data
     end
   end

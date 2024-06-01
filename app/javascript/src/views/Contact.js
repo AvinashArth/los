@@ -176,7 +176,7 @@ const Contact = () => {
                   <Row>
                     <Col className="pl-md-1" md="12">
                       <FormGroup>
-                        <Label className="input-label" htmlFor="exampleInputEmail1">
+                        <Label style={{color:"white !important"}} className="input-label" htmlFor="exampleInputEmail1">
                           Email address
                         </Label>
                         <Input className="form-controls" required placeholder="mike@email.com" type="email"  value={email} onChange={(e) => setEmail(e.target.value)}/>
@@ -186,7 +186,7 @@ const Contact = () => {
                   <Row>
                     <Col className="pr-md-1" md="12">
                       <FormGroup>
-                        <label className="input-label">Mobile Number</label>
+                        <label style={{color:"white !important"}} className="input-label">Mobile Number</label>
                         <Input
                         className="form-controls"
                         required
@@ -202,7 +202,7 @@ const Contact = () => {
                   <Row>
                     <Col md="12">
                       <FormGroup>
-                        <label className="input-label">Address</label>
+                        <label style={{color:"white !important"}} className="input-label">Address</label>
                         <Input
                         className="form-controls"
                         required

@@ -7,41 +7,42 @@ class SessionsController < ApplicationController
   # POST /signup
   def create
     if User.exists?(email: user_params[:email])
-      render json: {errors: ["Email already exists"]}, status: :unprocessable_entity
+      render json: {errors: ["Email already exists"], status: 400}
     else
       @user = User.new(user_params)
       if @user.save
-        render json: {status: "User created successfully"}, status: :ok
+        render json: {status: "User created successfully", status: 200}
       else
-        render json: {errors: @user.errors.full_messages}, status: :unprocessable_entity
+        render json: {errors: @user.errors.full_messages, status: 400}
       end
     end
   end
 
   # POST /login
   def login
+    
     @user = User.find_by(email: params[:email])
     if @user&.authenticate(params[:password])
       token = encode_token({user_id: @user.id})
       @user.update(token: token)
-      render json: {token: token, msg: "Login successful", user: @user}, status: :ok
+      render json: {token: token, msg: "Login successful", user: @user, status: 200}
     else
-      render json: {errors: "Invalid email or password"}, status: :unauthorized
+      render json: {errors: "Invalid email or password", status: 400}, status: 400
     end
   end
 
   # DELETE /logout
   def logout
-    render json: {status: "Logged out successfully"}, status: :ok
+    render json: {status: "Logged out successfully", status: 200}
   end
 
   # GET /get
   def fetch_user
     @user = User.find(params[:id])
     if @user
-      render json: {user: @user}, status: :ok
+      render json: {user: @user, status: 200}
     else
-      render json: {errors: "User data no present"}, status: :unauthorized
+      render json: {errors: "User data no present", status: 400}
     end
   end
 
@@ -51,9 +52,9 @@ class SessionsController < ApplicationController
     user_query.assign_attributes(query_params)
 
     if user_query.save
-      render json: {msg: "We received your query, our team will contact you shortly"}, status: :ok
+      render json: {msg: "We received your query, our team will contact you shortly", status: 200}
     else
-      render json: {errors: user_query.errors.full_messages}, status: :unprocessable_entity
+      render json: {errors: user_query.errors.full_messages, status: 400}
     end
   end
 

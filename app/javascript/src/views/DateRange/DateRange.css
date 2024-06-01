@@ -1,0 +1,41 @@
+.custom-input {
+    border-radius: 15px;
+    border: 1px #0c8af8 solid;
+    padding: 4px 12px;
+    background-color: white;
+    /* height: 34px; */
+    box-shadow: 0 0 2px #0074d9;
+  }
+  
+  .custom-input:focus {
+    outline: none;
+    border: 1px solid #0c8af8;
+    box-shadow: 0 0 10px 2px #0074d9;
+  }
+  .custom-calendar.rmdp-wrapper,
+.rmdp-container .custom-calendar.ep-arrow::after {
+  /* background-color: bisque; */
+  /* position: relative; */
+  /* position: absolute;
+    left: 0px;
+    top: 0px;
+    will-change: transform;
+    visibility: visible;
+    z-index: 100;
+    transform: translate(-10px, -311px); */
+
+}
+.rmdp-input{
+    border: 1px solid #c0c4d6;
+    border-radius: 5px;
+    height: 5% !important;
+    margin: 1px 0;
+    padding: 2px 5px;
+}
+.rmdp-container .custom-calendar.ep-arrow[direction="bottom"] {
+  border-top: 1px solid bisque;
+}
+
+.rmdp-container .custom-calendar.ep-arrow[direction="top"] {
+  border-bottom: 1px solid bisque;
+}

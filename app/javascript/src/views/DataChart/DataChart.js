@@ -3,54 +3,56 @@ import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, LinearScale, CategoryScale, BarElement } from 'chart.js';
 ChartJS.register(ArcElement, Tooltip, Legend, LinearScale, CategoryScale, BarElement);
 function DataChart({ datacharts }) {
-  // console.log("data", datacharts)
-  // Flatten the nested data structure
-  const flattenedData = Object.entries(datacharts).map(([key, value]) => ({
-    category: key,
-    total: value.total,
-    lenders: Object.entries(value.lenders).map(([lender, lenderData]) => ({
-      lender,
-      total_sent: lenderData.total_sent,
-      approved: lenderData.approved,
-      disbursed: lenderData.disbursed,
-      rejected: lenderData.rejected
-    }))
-  }));
+  const lenders = Object.keys(datacharts.lenders);
+  const totalSentData = lenders.map(lender => datacharts.lenders[lender].total_sent);
+  const approvedData = lenders.map(lender => datacharts.lenders[lender].approved);
+  const disbursedData = lenders.map(lender => datacharts.lenders[lender].disbursed);
+  const rejectedData = lenders.map(lender => datacharts.lenders[lender].rejected);
 
-  // Transform data into Chartjs-compatible format
   const chartData = {
-    labels: flattenedData.map(entry => entry.category),
+    labels: lenders,
     datasets: [
       {
         label: 'Total',
-        data: flattenedData.map(entry => entry.total),
-        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-        borderColor: 'rgba(75, 192, 192, 1)',
-        borderWidth: 1
+        backgroundColor: 'rgba(75, 192, 192)',
+        borderColor: 'rgba(75, 192, 192)',
+        borderWidth: 1,
+        data: totalSentData
       },
       {
         label: 'Approved',
-        data: flattenedData.map(entry => entry.lenders.reduce((sum, lender) => sum + lender.approved, 0)),
-        backgroundColor: 'rgba(255, 99, 132, 0.2)',
-        borderColor: 'rgba(255, 99, 132, 1)',
-        borderWidth: 1
+        backgroundColor: 'blue',
+        borderColor: 'blue',
+        borderWidth: 1,
+        data: approvedData
       },
       {
         label: 'Disbursed',
-        data: flattenedData.map(entry => entry.lenders.reduce((sum, lender) => sum + lender.disbursed, 0)),
-        backgroundColor: 'rgba(54, 162, 235, 0.2)',
-        borderColor: 'rgba(54, 162, 235, 1)',
-        borderWidth: 1
+        backgroundColor: 'green',
+        borderColor: 'green',
+        borderWidth: 1,
+        data: disbursedData
       },
       {
         label: 'Rejected',
-        data: flattenedData.map(entry => entry.lenders.reduce((sum, lender) => sum + lender.rejected, 0)),
-        backgroundColor: 'rgba(255, 206, 86, 0.2)',
-        borderColor: 'rgba(255, 206, 86, 1)',
-        borderWidth: 1
+        backgroundColor: 'red',
+        borderColor: 'red',
+        borderWidth: 1,
+        data: rejectedData
       }
     ]
   };
+
+  const options = {
+    scales: {
+      yAxes: [{
+        ticks: {
+          beginAtZero: true
+        }
+      }]
+    }
+  };
+
 
   return (
     <div>
@@ -60,7 +62,10 @@ function DataChart({ datacharts }) {
         options={{
           scales: {
             y: {
-              beginAtZero: true
+              beginAtZero: true,
+              ticks: {
+                stepSize: 50 // Set the interval to 50
+              }
             }
           }
         }}

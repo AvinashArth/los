@@ -11,7 +11,7 @@ module Customers
                                     .page(params[:page]).per(10)
                        else
                          LoanProfile.select(:customer_info_id, :name, :mobile, :lender_code, :status, :amount_offered, :external_loan_id, :message, :rejection_reason, :created_at)
-                                    .where(partner_code: current_user.code)
+                                    .where(partner_code: current_user.role_code)
                                     .order("customer_info_id DESC")
                                     .page(params[:page]).per(10)
                        end
@@ -25,7 +25,7 @@ module Customers
 
       valid_keys = %w[customer_info_id partner_code lender_code external_loan_id mobile name status]
       unless valid_keys.include?(key)
-        render json: {error: "Invalid key for filtering"}, status: :bad_request
+        render json: {error: "Invalid key for filtering", status: 400}
         return
       end
 
@@ -37,7 +37,7 @@ module Customers
                        else
                          LoanProfile.select(:customer_info_id, :name, :mobile, :lender_code, :status, :amount_offered,
                                             :external_loan_id, :message, :rejection_reason, :created_at)
-                                    .where(partner_code: current_user.code)
+                                    .where(partner_code: current_user.role_code)
                                     .where(key => value)
                                     .order("customer_info_id DESC")
                                     .page(params[:page]).per(10)

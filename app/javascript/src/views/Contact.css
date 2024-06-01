@@ -314,6 +314,12 @@
     transform: translate(181%, 11%);
     opacity: 0.2;
   }
+   .labels {
+    font-size: .75rem;
+    margin-bottom: 5px;
+    color: white;
+    /* color: #707070 !important; */
+}
   
   @media (max-width: 850px) {
     .form {

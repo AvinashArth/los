@@ -68,7 +68,7 @@ const UserProfile = ()  => {
               <CardBody>
                 <Form>
                   <Row>
-                    <Col className="px-md-1" md="2">
+                    <Col className="px-md-1" md="3">
                       <FormGroup>
                         <label> Customer Id</label>
                         <Input
@@ -79,7 +79,7 @@ const UserProfile = ()  => {
                         />
                       </FormGroup>
                     </Col>
-                    <Col className="px-md-1" md="2">
+                    <Col className="px-md-1" md="3">
                       <FormGroup>
                         <label> Name</label>
                         <Input
@@ -90,7 +90,7 @@ const UserProfile = ()  => {
                         />
                       </FormGroup>
                     </Col>
-                    <Col className="pl-md-1" md="2">
+                    <Col className="pl-md-1" md="3">
                       <FormGroup>
                         <label htmlFor="exampleInputEmail1">
                           Email address
@@ -98,7 +98,7 @@ const UserProfile = ()  => {
                         <Input placeholder="mike@email.com" type="email"  value={email}/>
                       </FormGroup>
                     </Col>
-                    <Col className="pr-md-1" md="2">
+                    <Col className="pr-md-1" md="3">
                       <FormGroup>
                         <label>Mobile Number</label>
                         <Input
@@ -109,7 +109,7 @@ const UserProfile = ()  => {
                         />
                       </FormGroup>
                     </Col>
-                    <Col className="pl-md-1" md="2">
+                    <Col className="pl-md-1" md="3">
                       <FormGroup>
                         <label>Company Name</label>
                         <Input
@@ -120,7 +120,7 @@ const UserProfile = ()  => {
                         />
                       </FormGroup>
                     </Col>
-                    <Col className="pr-md-1" md="2">
+                    <Col className="pr-md-1" md="3">
                       <FormGroup>
                         <label>City</label>
                         <Input
@@ -131,7 +131,7 @@ const UserProfile = ()  => {
                         />
                       </FormGroup>
                     </Col>
-                    <Col md="4">
+                    <Col className="pr-md-1" md="3">
                       <FormGroup>
                         <label>Address</label>
                         <Input
@@ -143,7 +143,7 @@ const UserProfile = ()  => {
                       </FormGroup>
                     </Col>
                     
-                    <Col className="px-md-1" md="4">
+                    <Col className="px-md-1" md="3">
                       <FormGroup>
                         <label>Role</label>
                         <Input
@@ -154,7 +154,7 @@ const UserProfile = ()  => {
                         />
                       </FormGroup>
                     </Col>
-                    <Col className="px-md-1" md="4">
+                    <Col className="px-md-1" md="3">
                       <FormGroup>
                         <label>Created at</label>
                         <Input

@@ -133,12 +133,12 @@ const TableList = () => {
                       </FormGroup>
                     </Col>
                     <Col className="px-md-1 p-button" md="2" >
-                      <Button className="btn-fill" onClick={handleCustomerFilter} color="primary" >
+                      <Button style={{margin:"0%"}}  className="btn-fill" onClick={handleCustomerFilter} color="primary" >
                         Filter
                       </Button>
                     </Col>
                     <Col className="px-md-1 p-button" md="2">
-                      <Button className="btn-fill" onClick={handleClearFilter} color="" type="submit">
+                      <Button style={{margin:"0%"}}  className="btn-fill" onClick={handleClearFilter} color="" type="submit">
                         Clear
                       </Button>
                     </Col>

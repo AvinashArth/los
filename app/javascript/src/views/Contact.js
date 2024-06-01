@@ -39,7 +39,7 @@ import { Task } from "../backend-sdk/task.sdk";
 const Contact = () => {
     const [email, setEmail] = useState("");
     const [mobileNumber, setMobileNumber] = useState("");
-    const [address,setAddess] = useState("");
+    const [address,setAddress] = useState("");
     const [message,setMessage] = useState("");
     const [userDetails, setUserDetails] = useState(null);
     const [visible, setVisible] = useState(false);
@@ -75,7 +75,7 @@ const Contact = () => {
       .then((res) => {
         setVisible(true);
         setError(res.msg);
-        setAddess("");
+        setAddress("");
         setEmail("");
         setMobileNumber("");
         setMessage("");
@@ -87,7 +87,7 @@ const Contact = () => {
       .catch((err) => {
         setVisible(true);
         setError(err.msg);
-        setAddess("");
+        setAddress("");
         setEmail("");
         setMobileNumber("");
         setMessage("");
@@ -105,14 +105,9 @@ const Contact = () => {
       <div className="content">
         <Row>
           <Col md="12">
-            {/* <Card>
-              <CardHeader>
-                <CardTitle tag="h4">Simple Table</CardTitle>
-              </CardHeader>
-              <CardBody> */}
               <div class="container">
       <span class="big-circle"></span>
-      <img src="img/shape.png" class="square" alt="" />
+      {/* <img src="img/shape.png" class="square" alt="" /> */}
       <div class="form">
         <div class="contact-info">
           <h3 class="title">Let's get in touch</h3>
@@ -174,19 +169,13 @@ const Contact = () => {
               </Alert>
                 <Form >
                   <Row>
-                    <Col className="pl-md-1" md="12">
-                      <FormGroup>
-                        <Label style={{color:"white !important"}} className="input-label" htmlFor="exampleInputEmail1">
-                          Email address
-                        </Label>
-                        <Input className="form-controls" required placeholder="mike@email.com" type="email"  value={email} onChange={(e) => setEmail(e.target.value)}/>
-                      </FormGroup>
-                    </Col>
-                  </Row>
-                  <Row>
+                    
                     <Col className="pr-md-1" md="12">
                       <FormGroup>
-                        <label style={{color:"white !important"}} className="input-label">Mobile Number</label>
+                      <div className="labels">
+                         Mobile Number
+                        </div>
+                        {/* <label style={{color:"white !important"}} className="input-label">Mobile Number</label> */}
                         <Input
                         className="form-controls"
                         required
@@ -198,11 +187,28 @@ const Contact = () => {
                         />
                       </FormGroup>
                     </Col>
-                  </Row>
-                  <Row>
-                    <Col md="12">
+                    <Col className="pr-md-1" md="12">
                       <FormGroup>
-                        <label style={{color:"white !important"}} className="input-label">Address</label>
+                      <div className="labels">
+                          Email address
+                        </div>
+                        {/* <label style={{color:"white !important"}} className="input-label">Mobile Number</label> */}
+                        <Input
+                        className="form-controls"
+                        required 
+                        placeholder="mike@email.com"
+                         type="email"  
+                         value={email}
+                        onChange={(e) => setEmail(e.target.value)}/>
+                        
+                      </FormGroup>
+                    </Col>
+                    <Col className="pr-md-1" md="12">
+                      <FormGroup>
+                      <div className="labels">
+                         Address
+                        </div>
+                        {/* <label style={{color:"white !important"}} className="input-label">Address</label> */}
                         <Input
                         className="form-controls"
                         required
@@ -211,15 +217,16 @@ const Contact = () => {
                          type="text"
                           placeholder="Home Address"
                           value={address}
-                          onChange={(e) => setAddess(e.target.value)}
+                          onChange={(e) => setAddress(e.target.value)}
                         />
                       </FormGroup>
                     </Col>
-                  </Row>
-                  <Row>
-                    <Col md="12">
+                    <Col className="pr-md-1" md="12">
                       <FormGroup>
-                        <label className="input-label" style={{color:"white !important"}}>Message</label>
+                      <div className="labels">
+                         Message
+                        </div>
+                        {/* <label className="input-label" style={{color:"white !important"}}>Message</label> */}
                         <Input
                         className="form-controls"
                         required
@@ -236,9 +243,14 @@ const Contact = () => {
                 </Form>
               </CardBody>
               <CardFooter>
-                <Button   className="btn-fill btn" onClick={handleSubmit} color="primary" type="submit">
+              <Row>
+                <Col md="12">
+                    <Button  className="btn-fill btn" onClick={handleSubmit} color="primary" type="submit">
                   Save
                 </Button>
+                      </Col>
+                      </Row>
+                
               </CardFooter>
             </Card>
           </Col>

@@ -2,16 +2,17 @@
 
 module Customers
   class DashboardController < ApplicationController
-    before_action :authorize_request
+    # before_action :authorize_request
 
     attr_reader :current_user
 
     def funnel_data
+      @current_user = User.last
       result = {}
-      if current_user.role.downcase == "admin"
+      if @current_user.role.downcase == "admin"
         total_data = all_data("admin")
         # partner_leads = month_wise_lead("admin")
-        fetch_data = fetch_funnel_data("admin")
+        graph_data = fetch_funnel_data("admin")
       else
         total_data = all_data(current_user.role_code)
         # partner_leads = month_wise_lead(current_user.role_code)
@@ -67,7 +68,7 @@ module Customers
     end
 
     def fetch_funnel_data(code)
-      partner_code = code == "admin" ? params[:partner_code] : current_user.code
+      partner_code = code == "admin" ? params[:partner_code] : current_user.role_code
       start_date = params[:start_date].present? ? Date.parse(params[:start_date]) : 30.days.ago.beginning_of_day
       end_date = params[:end_date].present? ? Date.parse(params[:end_date]) : Date.today.end_of_day
 

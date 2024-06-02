@@ -11348,7 +11348,7 @@ hr {
   margin-top: 1rem;
   margin-bottom: 1rem; }
 
-.table > tbody > tr > td {
+.table>tbody>tr>td {
   color: black !important; 
    font-weight: bold !important;
 }

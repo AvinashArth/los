@@ -29,7 +29,7 @@ class OnboardController < ApplicationController
       id = nil
     end
 
-    render json: {message: message, id: id}, status: status
+    render json: {message: message, id: id, status: status}
   end
 
   def fetch_equifax_report
@@ -59,12 +59,12 @@ class OnboardController < ApplicationController
       if s3_url
         key = image_key == "selfie" ? :photo_url : :shop_img_url
         cust.update(key => s3_url)
-        render json: {message: "Images uploaded successfully"}, status: :ok
+        render json: {message: "Images uploaded successfully", status: 200}
       else
-        render json: {error: "Failed to upload images"}, status: :unprocessable_entity
+        render json: {error: "Failed to upload images", status: 400}
       end
     else
-      render json: {error: "Missing required parameters"}, status: :unprocessable_entity
+      render json: {error: "Missing required parameters", status: 400}
     end
   end
 
@@ -77,9 +77,9 @@ class OnboardController < ApplicationController
     mobile = params[:mobile]
     @customer = CustomerInfo.find_or_initialize_by(mobile: mobile)
     if @customer.update(cust_lat: params[:latitude], cust_lon: params[:longitude])
-      render json: {message: "Thanks for your consent. Our team will contact you to meet your requirements soon"}
+      render json: {message: "Thanks for your consent. Our team will contact you to meet your requirements soon", status: 200}
     else
-      render json: {message: @customer.errors.full_messages}
+      render json: {message: @customer.errors.full_messages, status: 400}
     end
   end
 

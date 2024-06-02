@@ -20,13 +20,13 @@ module Customers
       result.merge!("total_data" => total_data)
       # result.merge!("partner_leads" => partner_leads)
       result.merge!("fetch_data" => graph_data)
-      render json: result
+      render json: result, status: 200
     end
 
     def all_data(code)
       all_cust = code == "admin" ? CustomerInfo.all.count : CustomerInfo.where(partner_code: code).count
-      total_disburse_amount = code == "admin" ? LoanProfile.sum(:amount_disbursed) : LoanProfile.where(partner_code: code).sum(:amount_disbursed)
-      total_disburse_lead = code == "admin" ? LoanProfile.where(status: "disbursed").count : LoanProfile.where(status: "disbursed", partner_code: code).count
+      total_disburse_amount = code == "admin" ? LoanProfile.sum(:amount_disbursed).round : LoanProfile.where(partner_code: code).sum(:amount_disbursed).round
+      total_disburse_lead = code == "admin" ? LoanProfile.where(status: "DISBURSED").count : LoanProfile.where(status: "DISBURSED", partner_code: code).count
 
       {
         all_cust:              all_cust,
@@ -73,8 +73,8 @@ module Customers
 
       lenders = Lender.pluck(:code)
       data = {}
-      data[:start_date] = start_date
-      data[:end_date] = end_date
+      # data[:start_date] = start_date
+      # data[:end_date] = end_date
 
       partner_data = {}
       partner_data[:total] = LoanProfile.where(partner_code: partner_code, created_at: start_date..end_date).count

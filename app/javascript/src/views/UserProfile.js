@@ -1,20 +1,3 @@
-/*!
-
-=========================================================
-* Black Dashboard React v1.2.1
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/black-dashboard-react
-* Copyright 2022 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/black-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React,{useEffect, useState} from "react";
 
 // reactstrap components
@@ -85,18 +68,7 @@ const UserProfile = ()  => {
               <CardBody>
                 <Form>
                   <Row>
-                    {/* <Col className="pr-md-1" md="5">
-                      <FormGroup>
-                        <label>Company (disabled)</label>
-                        <Input
-                          defaultValue="Creative Code Inc."
-                          disabled
-                          placeholder="Company"
-                          type="text"
-                        />
-                      </FormGroup>
-                    </Col> */}
-                    <Col className="px-md-1" md="2">
+                    <Col className="px-md-1" md="3">
                       <FormGroup>
                         <label> Customer Id</label>
                         <Input
@@ -107,7 +79,7 @@ const UserProfile = ()  => {
                         />
                       </FormGroup>
                     </Col>
-                    <Col className="px-md-1" md="4">
+                    <Col className="px-md-1" md="3">
                       <FormGroup>
                         <label> Name</label>
                         <Input
@@ -118,7 +90,7 @@ const UserProfile = ()  => {
                         />
                       </FormGroup>
                     </Col>
-                    <Col className="pl-md-1" md="6">
+                    <Col className="pl-md-1" md="3">
                       <FormGroup>
                         <label htmlFor="exampleInputEmail1">
                           Email address
@@ -126,9 +98,7 @@ const UserProfile = ()  => {
                         <Input placeholder="mike@email.com" type="email"  value={email}/>
                       </FormGroup>
                     </Col>
-                  </Row>
-                  <Row>
-                    <Col className="pr-md-1" md="6">
+                    <Col className="pr-md-1" md="3">
                       <FormGroup>
                         <label>Mobile Number</label>
                         <Input
@@ -139,7 +109,7 @@ const UserProfile = ()  => {
                         />
                       </FormGroup>
                     </Col>
-                    <Col className="pl-md-1" md="6">
+                    <Col className="pl-md-1" md="3">
                       <FormGroup>
                         <label>Company Name</label>
                         <Input
@@ -150,22 +120,7 @@ const UserProfile = ()  => {
                         />
                       </FormGroup>
                     </Col>
-                  </Row>
-                  <Row>
-                    <Col md="12">
-                      <FormGroup>
-                        <label>Address</label>
-                        <Input
-                          // defaultValue="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09"
-                          placeholder="Home Address"
-                          type="text"
-                          value={address}
-                        />
-                      </FormGroup>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col className="pr-md-1" md="4">
+                    <Col className="pr-md-1" md="3">
                       <FormGroup>
                         <label>City</label>
                         <Input
@@ -176,7 +131,19 @@ const UserProfile = ()  => {
                         />
                       </FormGroup>
                     </Col>
-                    <Col className="px-md-1" md="4">
+                    <Col className="pr-md-1" md="3">
+                      <FormGroup>
+                        <label>Address</label>
+                        <Input
+                          // defaultValue="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09"
+                          placeholder="Home Address"
+                          type="text"
+                          value={address}
+                        />
+                      </FormGroup>
+                    </Col>
+                    
+                    <Col className="px-md-1" md="3">
                       <FormGroup>
                         <label>Role</label>
                         <Input
@@ -187,7 +154,7 @@ const UserProfile = ()  => {
                         />
                       </FormGroup>
                     </Col>
-                    <Col className="px-md-1" md="4">
+                    <Col className="px-md-1" md="3">
                       <FormGroup>
                         <label>Created at</label>
                         <Input

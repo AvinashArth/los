@@ -1,30 +1,28 @@
-//  import React from 'react';
-// import { DateRangePicker } from 'rsuite';
-// import 'rsuite/dist/rsuite.min.css';
+import React, { useState } from "react";
+import DatePicker from "react-multi-date-picker";
+import { RangePicker } from "react-multi-date-picker";
+import "./DateRange.css";
+import InputIcon from "react-multi-date-picker/components/input_icon"
 
-// const DateRange = ({identifier, handleInput}) => {
-//   console.log("kgkkg")
+const DateRange = ({startDates, endDates,handleStartDateChanges, handleEndDateChanges}) => {
+ console.log(startDates, endDates,handleStartDateChanges, handleEndDateChanges)
+  return (
+    <DatePicker
+    // multiple
+    range
+      value={[startDates, endDates]}
+      onChange={(date) => {
+        if (date && date.length === 2) {
+          handleStartDateChanges(date[0]);
+          handleEndDateChanges(date[1]);
+        }
+      }}
+      dateSeparator=" to "
+      plugins={<RangePicker />}
+      render={<InputIcon/>}
+      className="custom-calendar"
+    />
+  );
+};
 
-//     // const {identifier, handleInput} = props;
-  
-//     const handleDateRangeChange = (date) => {
-//     //   console.log(date);
-//       const startDate = formatDate(date[0]);
-//       const endDate = formatDate(date[1]);
-//       handleInput(identifier, {startDate, endDate});
-//     }
-  
-//     const formatDate = (date) => {
-//       console.log("kkffk")
-//       const day = String(date.getDate()).padStart(2, '0');
-//       const month = String(date.getMonth() + 1).padStart(2, '0');
-//       const year = date.getFullYear();
-//       return `${year}-${month}-${day}`;
-//     }
-  
-//     return (
-//       <DateRangePicker format="dd-MM-yyyy" block showOneCalendar placeholder='DD-MM-YYYY to DD-MM-YYYY'onChange={handleDateRangeChange}/>
-//     )
-//   }
-  
-//   export default DateRange;
+export default DateRange;

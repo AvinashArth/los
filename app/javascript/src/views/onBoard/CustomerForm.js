@@ -26,10 +26,6 @@ const CustomerDetailsForm = () => {
   const [visible, setVisible] = useState(false);
   const [error, setError] = useState("")
 
-  // State for captured images
-  const [selfieCaptured, setSelfieCaptured] = useState(false);
-  const [shopPhotoCaptured, setShopPhotoCaptured] = useState(false);
-
   // State for form fields
   const [formData, setFormData] = useState({
     first_name: '',
@@ -175,27 +171,22 @@ const CustomerDetailsForm = () => {
       longitude: longitude, 
       accuracy: accuracy
     }
-    // console.log("error", data)
     Task.createOnboard(data)
       .then((res) => {
         setVisible(true);
         setError(res.message);
         setTimeout(() => {
-          setVisible(false); // Set visibility to false after 1 second
+          setVisible(false); // Set visibility to false after 5 second
         }, 2000);
-        // console.log("jjdj", res);
       })
       .catch((err) => {
         setVisible(true);
         setError(err.message);
         setTimeout(() => {
-          setVisible(false); // Set visibility to false after 1 second
+          setVisible(false); // Set visibility to false after 5 second
         }, 2000);
         console.log(err.error);
       });
-    
-    // Implement form submission logic
-    //  console.log('Form submitted with data:', formData);
   };
 
   return (

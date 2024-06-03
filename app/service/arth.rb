@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class UpdateLoanStatusService
+class Arth
   attr_reader :mobile, :error_code, :result, :customer_info_id
 
   def initialize(mobile)

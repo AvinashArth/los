@@ -76,6 +76,10 @@ Rails.application.configure do
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).
   config.i18n.fallbacks = true
+  config.assets.js_compressor = :uglifier
+  config.assets.css_compressor = :sass
+  config.assets.compile = false
+  config.serve_static_assets = true
 
   # Don't log any deprecations.
   config.active_support.report_deprecations = false
@@ -83,8 +87,8 @@ Rails.application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 
-  config.hosts << "los-api.staging.happy-tech.in"
-  config.hosts << "los-api.happy-tech.in"
+  config.hosts << "los.staging.happy-tech.in"
+  config.hosts << "los.happy-tech.in"
   # Enable DNS rebinding protection and other `Host` header attacks.
   # config.hosts = [
   #   "example.com",     # Allow requests from example.com

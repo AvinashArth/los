@@ -7,12 +7,12 @@ class ApplicationController < ActionController::Base
   attr_reader :current_user
 
   def encode_token(payload)
-    secret_key = Rails.application.secrets.secret_key_base
+    secret_key = ENV["JWT_SECRET_KEY"]
     JWT.encode(payload, secret_key, "HS256")
   end
 
   def decode_token(token)
-    secret_key = Rails.application.secrets.secret_key_base
+    secret_key = ENV["JWT_SECRET_KEY"]
     decoded_token = JWT.decode(token, secret_key, true, algorithm: "HS256")[0]
     HashWithIndifferentAccess.new(decoded_token)
   rescue JWT::DecodeError => e

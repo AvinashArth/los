@@ -11,9 +11,10 @@ class Cashe
     partner = Partner.find_by(code: user.partner_code)
     @loan = LoanProfile.find_or_create_by(customer_info_id: @user.id, lender_name: "CASHE", mobile: user.mobile, partner_id: partner.id, partner_code: partner.code)
     dedupe_check
+    set_result
   end
 
-  attr_reader :user, :loan, :auth_key
+  attr_reader :user, :loan, :auth_key, :result
 
   def dedupe_check
     endpoint = "#{ENV.fetch('CASHE_BASE_URL', nil)}/partner/checkDuplicateCustomerInfo"
@@ -39,6 +40,7 @@ class Cashe
       create_customer
     else
       loan.update(response: response, status: response["payLoad"]["status"], rejection_reason: "Ineligible", name: user.full_name, message: "Ineligible")
+      @resp = "Ineligible"
     end
   end
 
@@ -51,11 +53,21 @@ class Cashe
   end
 
   def create_customer
-    endpoint = "#{ENV.fetch('CASHE_BASE_URL', nil)}/partner/create_customer"
     payload = create_customer_params
     key = hmac_encrypt(payload, auth_key)
-    headers = headers(key)
-    post(endpoint, payload, headers)
+    headers(key)
+    if response["payLoad"].present?
+      loan.update(response: response, external_loan_id: response["payLoad"])
+      @resp = ENV.fetch("CASHE_REDIRECT_URL", nil)
+      true
+    else
+      loan.update(response: response, status: "ERROR", rejection_reason: response["message"])
+      @resp = response["message"]
+    end
+  end
+
+  def set_result
+    @result ||= @resp
   end
 
   def check_status

@@ -17,12 +17,14 @@ class OnboardController < ApplicationController
     age = (Time.zone.now - dob.to_time) / 1.year.seconds
 
     if @customer_info.save
-      message, id, status =
-        if age < 21 || age > 55
-          ["You are not eligible because age must be between 21 and 55 years.", @customer_info.id, :ok]
-        else
-          ["Your data has been saved successfully. Our team will contact you to meet your requirements soon.", @customer_info.id, :ok]
-        end
+      message, id, status = if customer_lead_params[:loan_category] == "personal_loan"
+                              result = Cashe.new.perform(@customer_info.mobile)
+                              [result,  @customer_info.id, :ok]
+                            elsif age < 21 || age > 55
+                              ["You are not eligible because age must be between 21 and 55 years.", @customer_info.id, :ok]
+                            else
+                              ["Your data has been saved successfully. Our team will contact you to meet your requirements soon.", @customer_info.id, :ok]
+                            end
     else
       message = @customer_info.errors.full_messages
       status = :unprocessable_entity

@@ -15,23 +15,23 @@ module Customers
                                     .order("customer_info_id DESC")
                                     .page(params[:page]).per(10)
                        end
-    
+
       render json: {
         loan_profiles: @loan_profiles.as_json(only: %i[customer_info_id name mobile partner_code lender_code status amount_offered external_loan_id message rejection_reason created_at]),
-        pagination: {total_records: @loan_profiles.total_count, total_pages: @loan_profiles.total_pages, current_page: @loan_profiles.current_page, per_page: @loan_profiles.limit_value}
+        pagination:    {total_records: @loan_profiles.total_count, total_pages: @loan_profiles.total_pages, current_page: @loan_profiles.current_page, per_page: @loan_profiles.limit_value}
       }
     end
-    
+
     def filter_list
       key = params[:key]
       value = params[:value]
-    
+
       valid_keys = %w[customer_info_id partner_code lender_code external_loan_id mobile name status]
       unless valid_keys.include?(key)
-        render json: { error: "Invalid key for filtering", status: 400 }
+        render json: {error: "Invalid key for filtering", status: 400}
         return
       end
-    
+
       @loan_profiles = if current_user.role.downcase == "admin"
                          LoanProfile.select(:customer_info_id, :name, :mobile, :partner_code, :lender_code, :status, :amount_offered, :external_loan_id, :message, :rejection_reason, :created_at)
                                     .where(key => value)
@@ -44,13 +44,12 @@ module Customers
                                     .order("customer_info_id DESC")
                                     .page(params[:page]).per(10)
                        end
-    
+
       render json: {
         loan_profiles: @loan_profiles.as_json(only: %i[customer_info_id name mobile partner_code lender_code status amount_offered external_loan_id message rejection_reason created_at]),
-        pagination: {total_records: @loan_profiles.total_count, total_pages: @loan_profiles.total_pages, current_page: @loan_profiles.current_page, per_page: @loan_profiles.limit_value}
+        pagination:    {total_records: @loan_profiles.total_count, total_pages: @loan_profiles.total_pages, current_page: @loan_profiles.current_page, per_page: @loan_profiles.limit_value}
       }
     end
-    
 
     def update
       customer_info = CustomerInfo.find(params[:id])

@@ -69,6 +69,6 @@ Rails.application.configure do
 
   # Raise error when a before_action's only/except options reference missing actions
   config.action_controller.raise_on_missing_callback_actions = true
-  config.hosts << "los-api.staging.happy-tech.in"
-  config.hosts << "los-api.happy-tech.in"
+  config.hosts << "los.staging.happy-tech.in"
+  config.hosts << "los.happy-tech.in"
 end

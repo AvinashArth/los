@@ -25,7 +25,7 @@ class Cashe
     response = post(endpoint, payload, headers)
     if response["duplicateStatusCode"] == 3
       loan.update(response: response, status: "REJECTED", rejection_reason: "Duplicate lead", name: user.full_name, message: "Duplicate lead")
-      @resp = { is_success: false, msg: "You are not eligible this time. You can apply again after a period of one month." }
+      @resp = {is_success: false, msg: "You are not eligible this time. You can apply again after a period of one month."}
     else
       pre_approval
     end
@@ -42,7 +42,7 @@ class Cashe
       create_customer
     else
       loan.update(response: response, status: response["payLoad"]["status"], rejection_reason: "Ineligible", name: user.full_name, message: "Ineligible")
-      @resp = { is_success: false, msg: "You are not eligible this time. You can apply again after a period of one month." }
+      @resp = {is_success: false, msg: "You are not eligible this time. You can apply again after a period of one month."}
     end
   end
 
@@ -61,11 +61,11 @@ class Cashe
     response = post(endpoint, payload, headers)
     if response["payLoad"].present?
       loan.update(response: response, external_loan_id: response["payLoad"])
-      @resp = { is_success: true, msg: ENV.fetch("CASHE_REDIRECT_URL", nil)}
+      @resp = {is_success: true, msg: ENV.fetch("CASHE_REDIRECT_URL", nil)}
       true
     else
       loan.update(response: response, status: "ERROR", rejection_reason: response["message"])
-      @resp = { is_success: false, msg: response["message"]}
+      @resp = {is_success: false, msg: response["message"]}
     end
   end
 

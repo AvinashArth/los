@@ -155,6 +155,7 @@ const TableList = () => {
                         {userDetails && userDetails.role !== null && userDetails.role === "Admin" ? <th className="td-table">Partner Name</th> : null}
                         <th className="td-table">Lender Name</th>
                         <th className="td-table">Status</th>
+                        <th className="td-table">Message</th>
                         <th className="td-table">Onboarding At</th>
                       </tr>
                     </thead>
@@ -169,6 +170,7 @@ const TableList = () => {
                             {userDetails && userDetails.role !== null && userDetails.role === "Admin" ? <td className="td-table">{data.partner_code}</td> : null}
                             {userDetails && userDetails.role !== null && userDetails.role === "Admin" ? <td>{data.lender_code}</td>: <td>{data.lender_code[0]}L </td>}
                             <td>{data.status}</td>
+                            <td>{data.message}</td>
                             <td>{data.created_at !== null ? convertDateTime(data.created_at) : ""}</td>
                           </tr>
                         ))

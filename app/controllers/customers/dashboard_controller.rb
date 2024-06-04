@@ -25,7 +25,7 @@ module Customers
 
     def all_data(code)
       all_cust = code == "admin" ? CustomerInfo.all.count : CustomerInfo.where(partner_code: code).count
-      total_disburse_amount = code == "admin" ? LoanProfile.sum(:amount_disbursed).round : LoanProfile.where(partner_code: code).sum(:amount_disbursed).round
+      total_disburse_amount = code == "admin" ? LoanProfile.sum(:amount_approved).round : LoanProfile.where(partner_code: code).sum(:amount_approved).round
       total_disburse_lead = code == "admin" ? LoanProfile.where(status: "DISBURSED").count : LoanProfile.where(status: "DISBURSED", partner_code: code).count
 
       {

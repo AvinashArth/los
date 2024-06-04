@@ -17,9 +17,9 @@ class OnboardController < ApplicationController
     age = (Time.zone.now - dob.to_time) / 1.year.seconds
 
     if @customer_info.save
-      message, id, status = if customer_lead_params[:loan_category] == "personal_loan"
-                              result = Cashe.new.perform(@customer_info.mobile)
-                              [result,  @customer_info.id, :ok]
+      message, id, status = if customer_info_params[:loan_category] == "personal_loan"
+                              resp = Cashe.new.perform(@customer_info.mobile)
+                              [resp,  @customer_info.id, :ok]
                             elsif age < 21 || age > 55
                               ["You are not eligible because age must be between 21 and 55 years.", @customer_info.id, :ok]
                             else
@@ -138,7 +138,7 @@ class OnboardController < ApplicationController
   end
 
   def customer_info_params
-    params.permit(
+    params.require(:onboard).permit(
       :first_name, :last_name, :guardian_name, :relation_with_guardian, :guardian_occupation, :dob, :pan_number, :partner_code,
       :mobile, :email, :gender, :occupation_category, :other_occupation, :business_type, :monthly_income, :loan_amount, :loan_category,
       :employment_type, :salary_received_type, :company_name, :type_of_loan, :shop_type, :education_level, :insurance, :shop_road_type,

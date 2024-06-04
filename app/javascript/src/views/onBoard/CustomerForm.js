@@ -103,21 +103,21 @@ const CustomerDetailsForm = () => {
       setError("Please enter the correct PAN number");
       setTimeout(() => {
         setVisible(false);
-      }, 1000);
+      }, 2000);
       return false;
     } else if (!mobileRegex.test(formData.mobile)) {
       setVisible(true);
       setError("Please enter the correct mobile number");
       setTimeout(() => {
         setVisible(false);
-      }, 1000);
+      }, 2000);
       return false;
     } else if (!emailRegex.test(formData.email)) {
       setVisible(true);
       setError("Please enter the correct email");
       setTimeout(() => {
         setVisible(false);
-      }, 1000);
+      }, 2000);
       return false;
     }
     
@@ -174,17 +174,29 @@ const CustomerDetailsForm = () => {
     Task.createOnboard(data)
       .then((res) => {
         setVisible(true);
-        setError(res.message);
+        if(formData.loan_category === "personal_loan"){
+          console.log(res)
+          if (res.message.is_success === true) {
+            window.open(res.message.msg, "_blank");
+          }
+          else {
+            setError(res.message.msg);
+          }
+        }
+        else {
+          setError(res.message);
+        }
         setTimeout(() => {
           setVisible(false); // Set visibility to false after 5 second
-        }, 2000);
+          window.location.reload();
+        }, 10000);
       })
       .catch((err) => {
         setVisible(true);
         setError(err.message);
         setTimeout(() => {
           setVisible(false); // Set visibility to false after 5 second
-        }, 2000);
+        }, 10000);
         console.log(err.error);
       });
   };
@@ -387,6 +399,7 @@ const CustomerDetailsForm = () => {
   <option value="salon">Salon/Cosmetics/Beauty Parlor/Fitness</option>
   <option value="apparels">Apparels/Clothing/Boutique/Garments/Tailoring/Footwear</option>
   <option value="restaurant">Restaurant/Food</option>
+  <option value="salaried employee">Salaried Employee</option>
   <option value="others">Others</option>
 </Input>
 </formData>
@@ -663,7 +676,7 @@ pattern="\d{6}"
 />
 </FormGroup>
 <FormGroup>
-  <Label>Business or Office Address (Shop No, Street)</Label>
+  <Label>Business or Office Address (Shop or Office No, Street)</Label>
   <Input
   type="text"
   id="business_address"

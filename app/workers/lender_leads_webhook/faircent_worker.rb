@@ -6,10 +6,10 @@ module LenderLeadsWebhook
 
     sidekiq_options queue: :cron
 
-    STATUSES = ["Application in Progress"].freeze
+    STATUSES = %w[ACEEPTED APPROVED ELIGIBLE INPROGRESS]
 
     def perform(_params={})
-      records = LoanProfile.where(lender_name: "CASHE", status: STATUSES)
+      records = LoanProfile.where(lender_code: "FAIRCENT", status: STATUSES)
       records.each do |record|
         Cashe.new.fetch_status(record.external_loan_id)
       end

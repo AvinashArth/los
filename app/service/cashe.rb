@@ -6,10 +6,11 @@ require "base64"
 
 class Cashe
   def perform(mobile)
+    @resp = {}
     @auth_key = ENV.fetch("ARTH_API_KEY", nil)
     @user = CustomerInfo.find_by(mobile: mobile)
-    partner = Partner.find_by(code: user.partner_code)
-    @loan = LoanProfile.find_or_create_by(customer_info_id: @user.id, lender_name: "CASHE", mobile: user.mobile, partner_id: partner.id, partner_code: partner.code)
+    partner = Partner.find_by(code: @user.partner_code)
+    @loan = LoanProfile.find_or_create_by(customer_info_id: @user.id, lender_code: "CASHE", mobile: user.mobile, partner_id: partner.id, partner_code: partner.code)
     dedupe_check
     set_result
   end
@@ -24,6 +25,7 @@ class Cashe
     response = post(endpoint, payload, headers)
     if response["duplicateStatusCode"] == 3
       loan.update(response: response, status: "REJECTED", rejection_reason: "Duplicate lead", name: user.full_name, message: "Duplicate lead")
+      @resp = { is_success: false, msg: "You are not eligible this time. You can apply again after a period of one month." }
     else
       pre_approval
     end
@@ -40,7 +42,7 @@ class Cashe
       create_customer
     else
       loan.update(response: response, status: response["payLoad"]["status"], rejection_reason: "Ineligible", name: user.full_name, message: "Ineligible")
-      @resp = "Ineligible"
+      @resp = { is_success: false, msg: "You are not eligible this time. You can apply again after a period of one month." }
     end
   end
 
@@ -55,14 +57,15 @@ class Cashe
   def create_customer
     payload = create_customer_params
     key = hmac_encrypt(payload, auth_key)
-    headers(key)
+    headers = headers(key)
+    response = post(endpoint, payload, headers)
     if response["payLoad"].present?
       loan.update(response: response, external_loan_id: response["payLoad"])
-      @resp = ENV.fetch("CASHE_REDIRECT_URL", nil)
+      @resp = { is_success: true, msg: ENV.fetch("CASHE_REDIRECT_URL", nil)}
       true
     else
       loan.update(response: response, status: "ERROR", rejection_reason: response["message"])
-      @resp = response["message"]
+      @resp = { is_success: false, msg: response["message"]}
     end
   end
 
@@ -102,8 +105,8 @@ class Cashe
       gender:             user.gender.strip[0].capitalize,
       loanAmount:         loan_amount(user.monthly_income),
       salary:             user.monthly_income,
-      employmentType:     user.employment_type,
-      salaryReceivedType: user.salary_received_type,
+      employmentType:     employment_types[user.employment_type],
+      salaryReceivedType: payment_methods[user.salary_received_type],
       companyName:        user.company_name
     }
   end
@@ -128,7 +131,7 @@ class Cashe
         "Company Name":          user.company_name,
         "Monthly Income":        user.monthly_income.to_s,
         "Employment Type":       "Salaried",
-        "Salary ReceivedTypeId": user.salary_received_type
+        "Salary ReceivedTypeId": payment_methods[user.salary_received_type]
       },
       "Contact Information":   {
         Mobile:     user.mobile,
@@ -137,6 +140,22 @@ class Cashe
       "e-KYC Customer":        {
         "compressed-address": user.home_address
       }
+    }
+  end
+
+  def payment_methods
+    {
+      "Cash"                    => 1,
+      "Cheque"                  => 2,
+      "Direct Account Transfer" => 3
+    }
+  end
+
+  def employment_types
+    {
+      "Salaried full-time" => 1,
+      "Unemployed"         => 2,
+      "Self-Employed"      => 3
     }
   end
 

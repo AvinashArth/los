@@ -7,7 +7,7 @@ class Arth
     @user = CustomerInfo.find_by(mobile: mobile)
     @customer_info_id = @user.id
     partner = Partner.find_by(code: user.partner_code)
-    @loan = LoanProfile.find_or_create_by(customer_info_id: @user.id, lender_name: "ARTH", mobile: user.mobile, partner_id: partner.id, partner_code: partner.code)
+    @loan = LoanProfile.find_or_create_by(customer_info_id: @user.id, lender_code: "ARTH", mobile: user.mobile, partner_id: partner.id, partner_code: partner.code)
     dedupe_check
     @error_code = "INVALID"
   end

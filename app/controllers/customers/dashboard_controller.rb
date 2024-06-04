@@ -35,36 +35,36 @@ module Customers
       }
     end
 
-    def month_wise_lead(code)
-      current_year = Date.current.year
-      query = CustomerInfo.where("extract(year from created_at) = ?", current_year)
-      query = query.where(partner_code: code) unless code.eql?("admin")
+    # def month_wise_lead(code)
+    #   current_year = Date.current.year
+    #   query = CustomerInfo.where("extract(year from created_at) = ?", current_year)
+    #   query = query.where(partner_code: code) unless code.eql?("admin")
 
-      if code.eql?("admin")
-        partners_data = {}
-        partners = CustomerInfo.distinct.pluck(:partner_code)
-        partners.each do |partner|
-          monthly_data = query.where(partner_code: partner)
-                              .group_by_month(:created_at, format: "%B %Y")
-                              .count
-          all_months_data = Date::MONTHNAMES[1..].to_h {|month| [month, 0] }
-          monthly_data.each {|month, count| all_months_data[Date.parse(month).strftime("%B")] = count }
-          partners_data[partner] = {
-            labels:   all_months_data.keys,
-            datasets: all_months_data.values
-          }
-        end
-        partners_data
-      else
-        monthly_data = query.group_by_month(:created_at, format: "%B %Y").count
-        all_months_data = Date::MONTHNAMES[1..].to_h {|month| [month, 0] }
-        monthly_data.each {|month, count| all_months_data[Date.parse(month).strftime("%B")] = count }
-        {
-          labels:   all_months_data.keys,
-          datasets: all_months_data.values
-        }
-      end
-    end
+    #   if code.eql?("admin")
+    #     partners_data = {}
+    #     partners = CustomerInfo.distinct.pluck(:partner_code)
+    #     partners.each do |partner|
+    #       monthly_data = query.where(partner_code: partner)
+    #                           .group_by_month(:created_at, format: "%B %Y")
+    #                           .count
+    #       all_months_data = Date::MONTHNAMES[1..].to_h {|month| [month, 0] }
+    #       monthly_data.each {|month, count| all_months_data[Date.parse(month).strftime("%B")] = count }
+    #       partners_data[partner] = {
+    #         labels:   all_months_data.keys,
+    #         datasets: all_months_data.values
+    #       }
+    #     end
+    #     partners_data
+    #   else
+    #     monthly_data = query.group_by_month(:created_at, format: "%B %Y").count
+    #     all_months_data = Date::MONTHNAMES[1..].to_h {|month| [month, 0] }
+    #     monthly_data.each {|month, count| all_months_data[Date.parse(month).strftime("%B")] = count }
+    #     {
+    #       labels:   all_months_data.keys,
+    #       datasets: all_months_data.values
+    #     }
+    #   end
+    # end
 
     def fetch_funnel_data(code)
       partner_code = code == "admin" ? params[:partner_code] : current_user.role_code
@@ -83,7 +83,8 @@ module Customers
       lender_data = {}
 
       lenders.each do |lender|
-        lender_data[lender] = {
+        lender_name = current_user.role.downcase == "admin" ? lender : "#{lender[0]}L"
+        lender_data[lender_name] = {
           total_sent: LoanProfile.where(partner_code: partner_code, lender_code: lender, created_at: start_date..end_date).count,
           approved:   LoanProfile.where(partner_code: partner_code, lender_code: lender, status: approved_statuses, created_at: start_date..end_date).count,
           disbursed:  LoanProfile.where(partner_code: partner_code, lender_code: lender, status: "DISBURSED", created_at: start_date..end_date).count,

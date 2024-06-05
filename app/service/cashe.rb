@@ -4,7 +4,7 @@ require "json"
 require "openssl"
 require "base64"
 
-class Cashe
+class Cashe < Base
   def perform(mobile)
     @resp = {}
     @auth_key = ENV.fetch("ARTH_API_KEY", nil)
@@ -18,13 +18,13 @@ class Cashe
   attr_reader :user, :loan, :auth_key, :result
 
   def dedupe_check
-    endpoint = "#{ENV.fetch('CASHE_BASE_URL', nil)}/partner/checkDuplicateCustomerInfo"
+    endpoint = "/partner/checkDuplicateCustomerLead"
     payload = dedupe_params
     key = hmac_encrypt(payload, auth_key)
     headers = headers(key)
     response = post(endpoint, payload, headers)
     if response["duplicateStatusCode"] == 3
-      loan.update(response: response, status: "REJECTED", rejection_reason: "Duplicate lead", name: user.full_name, message: "Duplicate lead")
+      loan.update(response: response, status: "REJECTED", rejection_reason: "Duplicate lead", name: user.full_name, message: "Duplicate lead", response: response)
       @resp = {is_success: false, msg: "You are not eligible this time. You can apply again after a period of one month."}
     else
       pre_approval
@@ -32,22 +32,22 @@ class Cashe
   end
 
   def pre_approval
-    endpoint = "#{ENV.fetch('CASHE_BASE_URL', nil)}/report/getLoanApprovalDetails"
+    endpoint = "/report/getLoanApprovalDetails"
     payload = pre_approval_params
     key = hmac_encrypt(payload, auth_key)
     headers = headers(key)
     response = post(endpoint, payload, headers)
     if response["payLoad"].present? && %w[pre_approved pre_qualified_high pre_qualified_low].include?(response["payLoad"]["status"])
-      loan.update(response: response, status: "APPROVED", amount: response["payLoad"]["amount"] || 0, name: user.full_name)
+      loan.update(response: response, status: "APPROVED", amount: response["payLoad"]["amount"] || 0, name: user.full_name, response: response)
       create_customer
     else
-      loan.update(response: response, status: response["payLoad"]["status"], rejection_reason: "Ineligible", name: user.full_name, message: "Ineligible")
+      loan.update(response: response, status: "REJECETED", rejection_reason: "Ineligible", name: user.full_name, message: "Ineligible", response: response)
       @resp = {is_success: false, msg: "You are not eligible this time. You can apply again after a period of one month."}
     end
   end
 
   def fetch_plan
-    endpoint = "#{ENV.fetch('CASHE_BASE_URL', nil)}/partner/fetchCashePlans/salary"
+    endpoint = "/partner/fetchCashePlans/salary"
     payload = {partner_name: ENV.fetch("CASHE_APPLICATION_NAME", nil), salary: user.monthly_income}
     key = hmac_encrypt(payload, auth_key)
     headers = headers(key)
@@ -55,16 +55,17 @@ class Cashe
   end
 
   def create_customer
+    endpoint = "/partner/create_customer"
     payload = create_customer_params
     key = hmac_encrypt(payload, auth_key)
     headers = headers(key)
     response = post(endpoint, payload, headers)
     if response["payLoad"].present?
-      loan.update(response: response, external_loan_id: response["payLoad"])
+      loan.update(response: response, external_loan_id: response["payLoad"], response: response)
       @resp = {is_success: true, msg: ENV.fetch("CASHE_REDIRECT_URL", nil)}
       true
     else
-      loan.update(response: response, status: "ERROR", rejection_reason: response["message"])
+      loan.update(response: response, status: "ERROR", rejection_reason: response["message"], response: response)
       @resp = {is_success: false, msg: response["message"]}
     end
   end
@@ -73,12 +74,24 @@ class Cashe
     @result ||= @resp
   end
 
-  def check_status
-    endpoint = "#{ENV.fetch('CASHE_BASE_URL', nil)}/partner/customer_status"
-    payload = {partner_name: ENV.fetch("CASHE_APPLICATION_NAME", nil), partner_customer_id: loan.external_loan_id}
+  def fetch_status(application_id)
+    data = LoanProfile.find_by(external_loan_id: application_id)
+    return unless data
+
+    endpoint = "/partner/customer_status"
+    payload = {partner_name: ENV.fetch("CASHE_APPLICATION_NAME", nil), partner_customer_id: data.external_loan_id}
     key = hmac_encrypt(payload, auth_key)
     headers = headers(key)
-    post(endpoint, payload, headers)
+    headers.merge!(Is_Encryption_Enabled: false)
+    response = post(endpoint, payload, headers)
+    statuses = ["NOT YET REGISTERED", "REGISTRATION IN PROGRESS", "REGISTRATION COMPLETE", "LOAN REQUEST RECEIVED", "VERIFICATION IN PROGRESS", "CREDIT DECLINED"]
+    if response["payload"] == "LOAN REQUEST PROCESSED"
+      data.update(status: "DISBURSED", message: response["message"], response: response)
+    elsif statuses.include?(response["payload"])
+      data.update(status: "INPROGRESS", message: response["message"], response: response)
+    else
+      data.update(status: "REJECTED", message: response["message"], rejection_reason: response["message"], response: response)
+    end
   end
 
   def dedupe_params
@@ -92,7 +105,7 @@ class Cashe
   def pre_approval_params
     {
       partner_name:       ENV.fetch("CASHE_APPLICATION_NAME", nil),
-      name:               use.first_name + user.last_name,
+      name:               "#{user.first_name} #{user.last_name}",
       dob:                dob(user),
       pan:                user.pan_number.upcase,
       mobileNo:           user.mobile,

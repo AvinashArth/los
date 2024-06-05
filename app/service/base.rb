@@ -5,7 +5,7 @@ class Base
     uri = URI(base_url + endpoint)
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true
-    request = Net::HTTP::Post.new(uri.path, headers)
+    request = Net::HTTP::Post.new(uri, headers)
     request.body = data.to_json
     response = http.request(request)
     JSON.parse(response.read_body)

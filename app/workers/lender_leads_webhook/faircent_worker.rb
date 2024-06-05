@@ -11,7 +11,7 @@ module LenderLeadsWebhook
     def perform(_params={})
       records = LoanProfile.where(lender_code: "FAIRCENT", status: STATUSES)
       records.each do |record|
-        Cashe.new.fetch_status(record.external_loan_id)
+        Faircent.new.fetch_status(record.external_loan_id)
       end
     end
   end

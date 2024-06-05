@@ -46,7 +46,7 @@ class OnboardController < ApplicationController
                           end
 
     @customer_info.update(bureau_score: resp["credit_score"], equifax_response: resp, is_bureau_approved: @is_bureau_approved)
-    Faircent.new.register_lead(@customer_info.mobile) unless @is_bureau_approved
+    Faircent.new.perform(@customer_info.mobile) unless @is_bureau_approved
     Lendingkart.new.perform(@customer_info.mobile)
     Cashe.new.perform(@customer_info.mobile)
   end

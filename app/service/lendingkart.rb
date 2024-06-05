@@ -11,7 +11,7 @@ class Lendingkart < Base
   end
 
   def dedupe_check
-    endpoint = "https://api.lendingkart.com/v2/partner/leads/lead-exists-status"
+    endpoint = "/lead-exists-status"
     response = post(endpoint, dedupe_payload, headers)
     if response["leadExists"]
       loan.update(response: response, status: "REJECTED", rejection_reason: "Duplicate Lead", name: user.full_name, message: "Duplicate Lead")
@@ -22,7 +22,7 @@ class Lendingkart < Base
   end
 
   def lead_creation
-    endpoint = "https://api.lendingkart.com/v2/partner/leads/create-application"
+    endpoint = "/create-application"
     response = post(endpoint, lead_creation_payload, headers)
     if response["message"] == "ELIGIBLE"
       loan.update(response: response, status: response["message"], external_loan_id: response["applicationId"], name: user.full_name)
@@ -32,7 +32,7 @@ class Lendingkart < Base
   end
 
   def fetch_status(application_id)
-    endpoint = "https://api.lendingkart.com/v2/partner/leads/applicationStatus/#{application_id}"
+    endpoint = "/applicationStatus/#{application_id}"
     response = get(endpoint, headers, nil)
 
     return unless response && response["applicationStatus"].present?
@@ -55,7 +55,7 @@ class Lendingkart < Base
   end
 
   def base_url
-    ""
+    ENV.fetch("LENDINGKART_BASE_URL", nil)
   end
 
   def lead_creation_payload
@@ -65,7 +65,7 @@ class Lendingkart < Base
       email:             user.email.strip,
       mobile:            user.mobile,
       businessAge:       36,
-      businessRevenue:   user.monthly_income * 12,
+      businessRevenue:   (user.monthly_income * 12).to_i,
       registeredAs:      "Proprietorship",
       personalDob:       user.dob.strftime("%Y-%m-%d"),
       personalPAN:       user.pan_number.upcase,
@@ -114,7 +114,7 @@ class Lendingkart < Base
 
   def headers
     {
-      "X-Api-Key":    "0fcf2ef8-0aeb-4a65-bca3-beba0e190ca1",
+      "X-Api-Key":    ENV.fetch("LENDINGKART_API_KEY", nil),
       "Content-Type": "application/json",
       Accept:         "application/json"
     }

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Faircent
-  def register_lead(mobile)
+  def perform(mobile)
     endpoint = "https://api.faircent.com/v1/api/aggregrator/register/user"
     user = CustomerInfo.find_by(mobile: mobile)
     partner = Partner.find_by(code: user.partner_code)
@@ -14,7 +14,6 @@ class Faircent
 
     payload = create_payload(user)
     response = post(endpoint, payload, headers)
-
     if response["result"].present?
       status = response.dig("result", "status").eql?("Reject") ? "REJECTED" : response.dig("result", "status")
       reason = status.downcase == "reject" ? (response.dig("result", "msg") || "Bureau Rejected") : ""
